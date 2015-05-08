@@ -20,7 +20,7 @@ I like the idea to write one from scratch with some tricks used in __pspe4all__,
 Dunno. Having both __ps1e4all__ and __pspe4all__ is quite a big task.
 
 ## pspe4all
-While there were two previous versions (__PCSP__ and old __PSPE4ALL__ with Qt 4.8), they suffered some drawbacks which made me to reconsider a new version of pspe4all without Qt. But helas without HLE and GE for the moment too as they need a major rewriting. It is also the first time I added an X86-64 dynarec to emulate Allegrex in __pspe4all__.  
+While there were two previous versions (__PCSP__ and old __PSPE4ALL__ with Qt 4.8), they suffered some drawbacks which made me to reconsider a new version of pspe4all without Qt. But alas without HLE and GE for the moment too as they need a major rewriting. It is also the first time I added an X86-64 dynarec to emulate Allegrex in __pspe4all__.  
 
 ### Limitations
 * __Memory__: pspe4all emulates the PSP user-mode environment, which uses 32-bit addresses. This reflects on the CPU / Memory related code, and could cause issues if you use it for other platforms, or for designing a low-level PSP emulator.
