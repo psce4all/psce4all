@@ -11,7 +11,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+#*.dll
 
 # Fortran module files
 *.mod
@@ -20,9 +20,43 @@
 *.lai
 *.la
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
 *.out
 *.app
+
+# Visual Studio
+*.opensdf
+*.sdf
+*.pdb
+*.exp
+*.idb
+*.ilk
+*.suo
+
+# ps1e4all
+ps1e4all/tmp/
+ps1e4all/lib/
+ps1e4all/ipch/
+ps1e4all/bin/
+
+# pspe4all
+pspe4all/tmp/
+pspe4all/lib/
+pspe4all/ipch/
+pspe4all/bin/
+
+# ps2e4all
+ps1e4all/tmp/
+ps1e4all/lib/
+ps1e4all/ipch/
+ps1e4all/bin/
+
+# Miscelaneous
+Debug/
+Release/
+x64/Debug/
+x64/Release/
+GeneratedFiles/
