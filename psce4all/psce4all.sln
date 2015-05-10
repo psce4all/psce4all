@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{55C7E9E0-A082-444F-8286-6D3A3830EF08}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pspe4all-emu", "..\pspe4all-emu\pspe4all-emu.vcxproj", "{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EXE", "EXE", "{C35B4479-D88A-4774-9698-BD0F5F9FC265}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pspe4all-run", "..\pspe4all-run\pspe4all-run.vcxproj", "{154DE838-8EB3-46E6-8227-7657CADB8B41}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5} = {BD2E17D5-B393-42D5-94EC-C95B9F2503A5}
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E} = {B4193BEB-27E9-4FA6-A612-2F21D102974E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pspe4all-hal.video.OGL4", "..\pspe4all-hal.video.OGL4\pspe4all-hal.video.OGL4.vcxproj", "{B4193BEB-27E9-4FA6-A612-2F21D102974E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ps1e4all]", "[ps1e4all]", "{770A5389-401D-428D-AB77-4C7648DBCB0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ps2e4all]", "[ps2e4all]", "{61E4167D-3568-4334-8DD8-0A3A78182A6F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[pspe4all]", "[pspe4all]", "{33F195C8-22A5-4C94-8F2D-931E130DCE32}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Debug|x64.ActiveCfg = Debug|x64
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Debug|x64.Build.0 = Debug|x64
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Release|x64.ActiveCfg = Release|x64
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Release|x64.Build.0 = Release|x64
+		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Debug|x64.ActiveCfg = Debug|x64
+		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Debug|x64.Build.0 = Debug|x64
+		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Release|x64.ActiveCfg = Release|x64
+		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Release|x64.Build.0 = Release|x64
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Debug|x64.ActiveCfg = Debug|x64
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Debug|x64.Build.0 = Debug|x64
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Release|x64.ActiveCfg = Release|x64
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{55C7E9E0-A082-444F-8286-6D3A3830EF08} = {33F195C8-22A5-4C94-8F2D-931E130DCE32}
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5} = {55C7E9E0-A082-444F-8286-6D3A3830EF08}
+		{C35B4479-D88A-4774-9698-BD0F5F9FC265} = {33F195C8-22A5-4C94-8F2D-931E130DCE32}
+		{154DE838-8EB3-46E6-8227-7657CADB8B41} = {C35B4479-D88A-4774-9698-BD0F5F9FC265}
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E} = {55C7E9E0-A082-444F-8286-6D3A3830EF08}
+	EndGlobalSection
+EndGlobal
