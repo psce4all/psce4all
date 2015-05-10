@@ -8,12 +8,12 @@
 // Working demos            |    Real     | Interpreter-like |   Full
 //                          | Interpreter |     Dynarec      |  Dynarec
 //--------------------------+-------------+------------------+----------
-// - minifire.pbp           |     yes     |       yes        |    yes  
-// - psphelloworld.pbp      |     yes     |       yes        |    yes  
+// - minifire.pbp           |     yes     |       yes        |    yes
+// - psphelloworld.pbp      |     yes     |       yes        |    yes
 // - compilerPref.pbp*      |    cross    |       yes        |     no
 //
 // *: special version for pspe4all which can be used as a benchmark with jpcsp, ppsspp, etc.
- 
+
 #include "hal.dbg.h"
 #include "hal.npa.h"
 #include "hal.AsyncFile.h"

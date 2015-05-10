@@ -4,7 +4,7 @@
 */
 
 // THIS IS A TEMPORARY STUFF UNTIL TRUE THREADMANAGER WORKS
- 
+
 #pragma once
 
 #include "hal.Atomic.h"
