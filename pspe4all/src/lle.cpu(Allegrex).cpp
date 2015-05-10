@@ -10,7 +10,7 @@ bool Allegrex::use_real_interpreter = false;
 bool Allegrex::use_cross_interpreter = false;
 bool Allegrex::interpreter_like_mode = false;
 bool Allegrex::no_register_allocation = false;
-bool Allegrex::trace_instruction = true;
+bool Allegrex::trace_instruction = false;
 bool Allegrex::jitasm_trace_cfg = false;
 
 namespace emu

@@ -102,7 +102,7 @@ namespace Allegrex
             virtual void InternalMain() override;
 
 #define __cross_interpret__ if (CROSS_INTERPRETER) { extern bool cross_interpreter_cmp; mov(dword_ptr[rsp], cross_interpreter_cmp ? address : (address + 1)); call(qword_ptr[rsi+s32(offsetof(lle::cpu::Context, Context::cross_interpret_address))], true); cross_interpreter_cmp = false; }
-#define __label__ if (!delayslot) { L(address); target_address_done.insert(address); source(address); __cross_interpret__ } else source(address); if (0/*TRACE_ALLEGREX*/) { mov(dword_ptr[rsp], address); call(qword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::trace_address))], true); }
+#define __label__ if (!delayslot) { L(address); target_address_done.insert(address); source(address); __cross_interpret__ } else source(address); if (TRACE_ALLEGREX_INSTRUCTION) { mov(dword_ptr[rsp], address); call(qword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::trace_address))], true); }
 #define __target_label__(address1, address2) u32 target_address = address1; if ((address2)) target_address_next.insert((address2)); target_address_next.insert((address1))
 #define __skip_label__(address) u32 skip_address = address
 
