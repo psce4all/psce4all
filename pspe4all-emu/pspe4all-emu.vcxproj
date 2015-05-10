@@ -1,0 +1,330 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>pspe4allemu</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)d</TargetName>
+    <IntDir>..\pspe4all\tmp\$(Configuration)\$(TargetName)\</IntDir>
+    <OutDir>..\pspe4all\lib\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\pspe4all\lib\</OutDir>
+    <IntDir>..\pspe4all\tmp\$(Configuration)\$(TargetName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;_DEBUG;_WINDOWS;_USRDLL;GLEW_STATIC;EMU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>gdi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\pspe4all\lib;..\pspe4all\ext\ntdll\lib;..\pspe4all\ext\capstone\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;NDEBUG;_WINDOWS;_USRDLL;GLEW_STATIC;EMU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
+      <StringPooling>true</StringPooling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <BrowseInformation>true</BrowseInformation>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\pspe4all\lib;..\pspe4all\ext\ntdll\lib;..\pspe4all\ext\capstone\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <PostBuildEvent>
+      <Command>@robocopy ..\pspe4all\lib ..\pspe4all\bin $(TargetName).dll /NP
+@if %ERRORLEVEL% LSS 4 @cmd /c "exit /B 0" </Command>
+      <Message>Copy $(TargetName).dll to binaries directory</Message>
+    </PostBuildEvent>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\psce4all\ext\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="..\psce4all\src\emu.cpp" />
+    <ClCompile Include="..\psce4all\src\emu.log.cpp" />
+    <ClCompile Include="..\psce4all\src\emu.Module.cpp" />
+    <ClCompile Include="..\psce4all\src\emu.StartupCleanup.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.dbg.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.hmm.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.MPSCQueue.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.npa.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.os.Clock.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.os.Module.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.os.UmsThread.cpp" />
+    <ClCompile Include="..\pspe4all\src\emu.minifire.cpp" />
+    <ClCompile Include="..\pspe4all\src\hal.video.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(audio.prx)sceAudio.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(ctrl.prx)sceCtrl.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(display.prx)sceDisplay.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(ge.prx)sceGe_user.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(hpremote.prx)sceHprm.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(impose.prx)sceAudioRouting.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(impose.prx)sceImpose.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(interruptman.prx)InterruptManager.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(iofilemgr.prx)IoFileMgrForUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(iofilemgr.prx)StdioForUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(libatrac3plus.prx)sceAtrac3plus.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(loadexec.prx)LoadExecForUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(mediaman.prx)sceUmdUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(mesg_led.prx)scePauth.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(mesg_led.prx)sceResmgr.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(modulemgr.prx)ModuleMgrForUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(openpsid.prx)sceDdrdb.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(openpsid.prx)sceOpenPSID.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(power.prx)scePower.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(registry.prx)sceReg.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(rtc.prx)sceRtc.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(sc_sascore.prx)sceP3da.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(sc_sascore.prx)sceSasCore.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(sircs.prx)sceSircs.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(sysmem.prx)sceSuspendForUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(sysmem.prx)SysMemUserForUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(sysmem.prx)UtilsForUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(threadman.prx)ThreadManForUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(usb.prx)sceUsb.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(usersystemlib.prx)Kernel_Library.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(utility.prx)sceUtility.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(utility.prx)sceUtility_netparam_internal.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(utility.prx)sceUtility_private.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(wlan.prx)sceWlanDrv.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.(wlan.prx)sceWlanDrv_lib.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ElfLoader.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.InterruptMan.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.InterruptMan.Intr.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.InterruptMan.SubIntr.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.LoadExecForUser.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ModuleMgr.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.Object.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.SysMem.Block.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.SysMem.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.SysMem.Heap.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.SysMem.Partition.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Callback.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.EventFlag.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.EventHandler.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Fpl.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.MsgBox.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.MsgPipe.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Scheduler.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Semaphore.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Thread.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadContext.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadQueue.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Timer.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Vpl.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.WaitQueue.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.syscalls.cpp" />
+    <ClCompile Include="..\pspe4all\src\hle.syscalls.Modules.cpp" />
+    <ClCompile Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Context.cpp" />
+    <ClCompile Include="..\pspe4all\src\lle.cpu%28Allegrex%29.cpp" />
+    <ClCompile Include="..\pspe4all\src\lle.cpu%28Allegrex%29.jitasm.x86-64.cpp" />
+    <ClCompile Include="..\pspe4all\src\lle.cpu(Allegrex).Emitter.cpp" />
+    <ClCompile Include="..\pspe4all\src\lle.cpu(Allegrex).ICache.cpp" />
+    <ClCompile Include="..\pspe4all\src\lle.mmu.cpp" />
+    <ClCompile Include="..\pspe4all\src\lle.sys.Clock.cpp" />
+    <ClCompile Include="pspe4all-emu.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\psce4all\ext\tinyxml2\tinyxml2.h" />
+    <ClInclude Include="..\psce4all\src\emu.h" />
+    <ClInclude Include="..\psce4all\src\emu.log.h" />
+    <ClInclude Include="..\psce4all\src\emu.Module.h" />
+    <ClInclude Include="..\psce4all\src\hal.AsyncFile.h" />
+    <ClInclude Include="..\psce4all\src\hal.Atomic.h" />
+    <ClInclude Include="..\psce4all\src\hal.dbg.h" />
+    <ClInclude Include="..\psce4all\src\hal.hmm.h" />
+    <ClInclude Include="..\psce4all\src\hal.IntrusivePointer.h" />
+    <ClInclude Include="..\psce4all\src\hal.LinkedList.h" />
+    <ClInclude Include="..\psce4all\src\hal.LRUCache.h" />
+    <ClInclude Include="..\psce4all\src\hal.MPSCQueue.h" />
+    <ClInclude Include="..\psce4all\src\hal.npa.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.Clock.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.CommandQueue.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.CriticalSection.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.Module.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.Thread.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.UmsThread.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.win32.h" />
+    <ClInclude Include="..\psce4all\src\hal.win32.h" />
+    <ClInclude Include="..\psce4all\src\psce4all.pch.h" />
+    <ClInclude Include="..\pspe4all\src\emu.minifire.h" />
+    <ClInclude Include="..\pspe4all\src\hal.video.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadContext.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu(Allegrex).Emitter.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.jitasm.x86-64.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(audio.prx)sceAudio.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(ctrl.prx)sceCtrl.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(display.prx)sceDisplay.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(ge.prx)sceGe_user.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(hpremote.prx)sceHprm.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(impose.prx)sceAudioRouting.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(impose.prx)sceImpose.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(interruptman.prx)InterruptManager.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(iofilemgr.prx)IoFileMgrForUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(iofilemgr.prx)StdioForUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(libatrac3plus.prx)sceAtrac3plus.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(loadexec.prx)LoadExecForUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(mediaman.prx)sceUmdUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(mesg_led.prx)scePauth.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(mesg_led.prx)sceResmgr.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(modulemgr.prx)ModuleMgrForUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(openpsid.prx)sceDdrdb.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(openpsid.prx)sceOpenPSID.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(power.prx)scePower.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(registry.prx)sceReg.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(rtc.prx)sceRtc.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(sc_sascore.prx)sceP3da.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(sc_sascore.prx)sceSasCore.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(sircs.prx)sceSircs.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(sysmem.prx)sceSuspendForUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(sysmem.prx)SysMemUserForUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(sysmem.prx)UtilsForUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(threadman.prx)ThreadManForUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(usb.prx)sceUsb.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(usersystemlib.prx)Kernel_Library.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(utility.prx)sceUtility.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(utility.prx)sceUtility_netparam_internal.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(utility.prx)sceUtility_private.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(wlan.prx)sceWlanDrv.h" />
+    <ClInclude Include="..\pspe4all\src\hle.(wlan.prx)sceWlanDrv_lib.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.InterruptMan.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.InterruptMan.Intr.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.InterruptMan.SubIntr.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.LoadExecForUser.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ModuleMgr.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.Object.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.SysMem.Block.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.SysMem.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.SysMem.Heap.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.SysMem.Partition.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Callback.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.EventFlag.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.EventHandler.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Fpl.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.IntrSoft2.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.MsgBox.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.MsgPipe.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Scheduler.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Semaphore.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Thread.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadQueue.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Timer.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Vpl.h" />
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.WaitQueue.h" />
+    <ClInclude Include="..\pspe4all\src\hle.sce.h" />
+    <ClInclude Include="..\pspe4all\src\hle.syscalls.FunctionWrappers.h" />
+    <ClInclude Include="..\pspe4all\src\hle.syscalls.Modules.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Context.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Decoder.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Disassembler.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Host.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Instruction.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Instructions.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Interpreter.h" />
+    <ClInclude Include="..\pspe4all\src\lle.cpu(Allegrex).ICache.h" />
+    <ClInclude Include="..\pspe4all\src\lle.mmu.h" />
+    <ClInclude Include="..\pspe4all\src\lle.sys.Clock.h" />
+    <ClInclude Include="..\pspe4all\src\pspe4all.pch.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\pspe4all\src\hle.kd.ElfLoader.h" />
+    <None Include="..\pspe4all\src\lle.cpu%28Allegrex%29.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pspe4all-emu.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\pspe4all\res\pspe4all-nodisplay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="..\psce4all\src\emu.x64.asm" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

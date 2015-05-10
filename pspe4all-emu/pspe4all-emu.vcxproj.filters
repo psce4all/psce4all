@@ -1,0 +1,752 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Binary Files">
+      <UniqueIdentifier>{6b17607e-ed16-49cb-876f-a9a7b9b7b607}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\emu">
+      <UniqueIdentifier>{36b224ac-ef7a-42b3-baa7-2465900be8de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hal">
+      <UniqueIdentifier>{aea13521-6058-4a45-adaa-5f198977c681}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lle">
+      <UniqueIdentifier>{f2973d50-770a-4101-96b7-5fe60d9b8069}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hal\hal.fs">
+      <UniqueIdentifier>{366fe3dc-8e97-4bb8-9f11-0a099e31ea66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hal\hal.os">
+      <UniqueIdentifier>{f2ce83ed-2992-4814-a2de-f5f9a585efe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle">
+      <UniqueIdentifier>{66f6f16a-65d0-4483-b3df-e69bdfb1d8a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.kd">
+      <UniqueIdentifier>{7ebbfd77-5c4d-4fb0-8410-f2e074f25948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules">
+      <UniqueIdentifier>{bc6c9ba1-4306-46e8-8904-01cabdadda00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\audio.prx">
+      <UniqueIdentifier>{89f72433-808d-479e-8252-e8336dfcb3b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\ctrl.prx">
+      <UniqueIdentifier>{e26c00c4-7ebd-48b7-8948-e5626e4fd405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\display.prx">
+      <UniqueIdentifier>{a4972406-9d51-43f9-8fd3-726cd090136e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\ge.prx">
+      <UniqueIdentifier>{fb5ce02d-5f1a-475f-90ad-6098bb6083bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\hpremote.prx">
+      <UniqueIdentifier>{a715d97e-dfab-4e94-8de9-1b85c5ef7330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\impose.prx">
+      <UniqueIdentifier>{f44f6b13-afa4-4c3d-a8d8-00751414aa18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\interruptman.prx">
+      <UniqueIdentifier>{a3dc0a9e-d216-41bb-bc97-cd19a5a0f5c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\iofilemgr.prx">
+      <UniqueIdentifier>{62b8b2a9-6b20-49a2-917a-14f2b34f614a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\libatrac3plus">
+      <UniqueIdentifier>{da814a9f-ccb0-4afe-86de-5cf2c424fa9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\loadexec.prx">
+      <UniqueIdentifier>{835d53fa-4368-4352-8454-0c6bd8e732be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\mediaman.prx">
+      <UniqueIdentifier>{9fe69aa9-5c44-4ead-84e8-077bae9131f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\mesg_led.prx">
+      <UniqueIdentifier>{bd50e5aa-cfc2-48d2-a920-132ae5818681}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\modulemgr.prx">
+      <UniqueIdentifier>{5013c92e-fc36-40a1-8c50-fe67a5ff0772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\openpsid.prx">
+      <UniqueIdentifier>{ecb7185e-6c14-44fe-9537-dc9c9dadc8ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\power.prx">
+      <UniqueIdentifier>{517bd827-a1b4-4fa8-af0d-e619e83a1c76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\registry.prx">
+      <UniqueIdentifier>{662f9609-f6da-4b10-a0c9-74fd3421b9eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\rtc.prx">
+      <UniqueIdentifier>{8db25d8a-f028-4055-a068-181915c59781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\sc_sascore.prx">
+      <UniqueIdentifier>{78602fba-a455-48fa-9703-1c50cc961891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\sircs.prx">
+      <UniqueIdentifier>{2139c1e7-7a08-4159-8514-84719da77082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\sysmem.prx">
+      <UniqueIdentifier>{6fe8c156-aeb9-45d6-ac27-380a9ca12f8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\threadman.prx">
+      <UniqueIdentifier>{e85e2cf3-7ade-47a0-920a-9dc3f3f131fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\usb.prx">
+      <UniqueIdentifier>{e1e54917-a192-4615-8f53-de08c5c8b09c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\usersystemlib.prx">
+      <UniqueIdentifier>{9f2ffa7e-cf8e-4f0a-97cd-3e84c49fb69f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\utility.prx">
+      <UniqueIdentifier>{01583d54-8674-40dc-910d-dd8b17edf94d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.modules\wlan.prx">
+      <UniqueIdentifier>{25e78d4a-e93c-47b2-bac5-1e9708779863}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.kd\ongoing">
+      <UniqueIdentifier>{59b1ae01-8dea-4d7d-9f2e-da754ae0ded0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.kd\hle.kd.ThreadMan">
+      <UniqueIdentifier>{01641a5d-8ce3-4f2c-a163-7654d69fd13b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lle\lle.sys">
+      <UniqueIdentifier>{e7dbd177-9cae-4cd6-8782-e5c3e59409e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lle\lle.cpu">
+      <UniqueIdentifier>{201d894d-899c-4cb1-966d-27a0f2d5eaf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lle\lle.mmu">
+      <UniqueIdentifier>{6005c66f-8f83-4b02-a494-2442a8986c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.kd\hle.kd.InterruptMan">
+      <UniqueIdentifier>{e2920fa8-d8e4-4cc8-a770-0380d5330b17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.kd\hle.kd.SysMem">
+      <UniqueIdentifier>{581d1de8-fc10-4981-ad34-e8ae4d61e441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.kd\hle.kd.LoadExecForUser">
+      <UniqueIdentifier>{b359f6fa-3899-486d-9b4b-8b258d702a2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hle\hle.kd\hle.kd.ModuleMgr">
+      <UniqueIdentifier>{519a0fad-d0f4-45cf-a3d8-cceefe9b6fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ext">
+      <UniqueIdentifier>{20580bcd-8034-4b86-bde3-99304045ef66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ext\tinyxml2">
+      <UniqueIdentifier>{55231858-a438-47c0-b8a7-1ddeabcda5b5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pspe4all-emu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.syscalls.Modules.cpp">
+      <Filter>Source Files\hle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.Object.cpp">
+      <Filter>Source Files\hle\hle.kd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.cpp">
+      <Filter>Source Files\hle\hle.kd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(audio.prx)sceAudio.cpp">
+      <Filter>Source Files\hle\hle.modules\audio.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(ctrl.prx)sceCtrl.cpp">
+      <Filter>Source Files\hle\hle.modules\ctrl.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(display.prx)sceDisplay.cpp">
+      <Filter>Source Files\hle\hle.modules\display.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(ge.prx)sceGe_user.cpp">
+      <Filter>Source Files\hle\hle.modules\ge.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(hpremote.prx)sceHprm.cpp">
+      <Filter>Source Files\hle\hle.modules\hpremote.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(impose.prx)sceAudioRouting.cpp">
+      <Filter>Source Files\hle\hle.modules\impose.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(impose.prx)sceImpose.cpp">
+      <Filter>Source Files\hle\hle.modules\impose.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(interruptman.prx)InterruptManager.cpp">
+      <Filter>Source Files\hle\hle.modules\interruptman.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(iofilemgr.prx)IoFileMgrForUser.cpp">
+      <Filter>Source Files\hle\hle.modules\iofilemgr.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(iofilemgr.prx)StdioForUser.cpp">
+      <Filter>Source Files\hle\hle.modules\iofilemgr.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(libatrac3plus.prx)sceAtrac3plus.cpp">
+      <Filter>Source Files\hle\hle.modules\libatrac3plus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(loadexec.prx)LoadExecForUser.cpp">
+      <Filter>Source Files\hle\hle.modules\loadexec.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(mediaman.prx)sceUmdUser.cpp">
+      <Filter>Source Files\hle\hle.modules\mediaman.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(mesg_led.prx)scePauth.cpp">
+      <Filter>Source Files\hle\hle.modules\mesg_led.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(mesg_led.prx)sceResmgr.cpp">
+      <Filter>Source Files\hle\hle.modules\mesg_led.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(modulemgr.prx)ModuleMgrForUser.cpp">
+      <Filter>Source Files\hle\hle.modules\modulemgr.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(openpsid.prx)sceDdrdb.cpp">
+      <Filter>Source Files\hle\hle.modules\openpsid.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(openpsid.prx)sceOpenPSID.cpp">
+      <Filter>Source Files\hle\hle.modules\openpsid.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(power.prx)scePower.cpp">
+      <Filter>Source Files\hle\hle.modules\power.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(registry.prx)sceReg.cpp">
+      <Filter>Source Files\hle\hle.modules\registry.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(rtc.prx)sceRtc.cpp">
+      <Filter>Source Files\hle\hle.modules\rtc.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(sc_sascore.prx)sceP3da.cpp">
+      <Filter>Source Files\hle\hle.modules\sc_sascore.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(sc_sascore.prx)sceSasCore.cpp">
+      <Filter>Source Files\hle\hle.modules\sc_sascore.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(sircs.prx)sceSircs.cpp">
+      <Filter>Source Files\hle\hle.modules\sircs.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(sysmem.prx)sceSuspendForUser.cpp">
+      <Filter>Source Files\hle\hle.modules\sysmem.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(sysmem.prx)SysMemUserForUser.cpp">
+      <Filter>Source Files\hle\hle.modules\sysmem.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(sysmem.prx)UtilsForUser.cpp">
+      <Filter>Source Files\hle\hle.modules\sysmem.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(threadman.prx)ThreadManForUser.cpp">
+      <Filter>Source Files\hle\hle.modules\threadman.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(usb.prx)sceUsb.cpp">
+      <Filter>Source Files\hle\hle.modules\usb.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(usersystemlib.prx)Kernel_Library.cpp">
+      <Filter>Source Files\hle\hle.modules\usersystemlib.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(utility.prx)sceUtility.cpp">
+      <Filter>Source Files\hle\hle.modules\utility.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(utility.prx)sceUtility_netparam_internal.cpp">
+      <Filter>Source Files\hle\hle.modules\utility.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(utility.prx)sceUtility_private.cpp">
+      <Filter>Source Files\hle\hle.modules\utility.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(wlan.prx)sceWlanDrv.cpp">
+      <Filter>Source Files\hle\hle.modules\wlan.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.(wlan.prx)sceWlanDrv_lib.cpp">
+      <Filter>Source Files\hle\hle.modules\wlan.prx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadQueue.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.WaitQueue.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\lle.sys.Clock.cpp">
+      <Filter>Source Files\lle\lle.sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Context.cpp">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\lle.cpu%28Allegrex%29.cpp">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\lle.mmu.cpp">
+      <Filter>Source Files\lle\lle.mmu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Callback.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Timer.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.EventHandler.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.EventFlag.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Semaphore.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.MsgBox.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.MsgPipe.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Fpl.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Vpl.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Thread.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.Scheduler.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.InterruptMan.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.InterruptMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.InterruptMan.Intr.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.InterruptMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.InterruptMan.SubIntr.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.InterruptMan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.SysMem.Block.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.SysMem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.SysMem.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.SysMem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.SysMem.Heap.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.SysMem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.SysMem.Partition.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.SysMem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.LoadExecForUser.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.LoadExecForUser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ModuleMgr.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ModuleMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\lle.cpu%28Allegrex%29.jitasm.x86-64.cpp">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\lle.cpu(Allegrex).Emitter.cpp">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ElfLoader.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ModuleMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.syscalls.cpp">
+      <Filter>Source Files\hle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\lle.cpu(Allegrex).ICache.cpp">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\emu.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\emu.log.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\emu.Module.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\emu.StartupCleanup.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\emu.minifire.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\ext\tinyxml2\tinyxml2.cpp">
+      <Filter>Source Files\ext\tinyxml2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.os.Clock.cpp">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.os.UmsThread.cpp">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.dbg.cpp">
+      <Filter>Source Files\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.hmm.cpp">
+      <Filter>Source Files\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.MPSCQueue.cpp">
+      <Filter>Source Files\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.npa.cpp">
+      <Filter>Source Files\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hal.video.cpp">
+      <Filter>Source Files\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.os.Module.cpp">
+      <Filter>Source Files\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadContext.cpp">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.syscalls.Modules.h">
+      <Filter>Source Files\hle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.syscalls.FunctionWrappers.h">
+      <Filter>Source Files\hle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.Object.h">
+      <Filter>Source Files\hle\hle.kd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.h">
+      <Filter>Source Files\hle\hle.kd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(audio.prx)sceAudio.h">
+      <Filter>Source Files\hle\hle.modules\audio.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(ctrl.prx)sceCtrl.h">
+      <Filter>Source Files\hle\hle.modules\ctrl.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(display.prx)sceDisplay.h">
+      <Filter>Source Files\hle\hle.modules\display.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(ge.prx)sceGe_user.h">
+      <Filter>Source Files\hle\hle.modules\ge.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(hpremote.prx)sceHprm.h">
+      <Filter>Source Files\hle\hle.modules\hpremote.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(impose.prx)sceAudioRouting.h">
+      <Filter>Source Files\hle\hle.modules\impose.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(impose.prx)sceImpose.h">
+      <Filter>Source Files\hle\hle.modules\impose.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(interruptman.prx)InterruptManager.h">
+      <Filter>Source Files\hle\hle.modules\interruptman.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(iofilemgr.prx)IoFileMgrForUser.h">
+      <Filter>Source Files\hle\hle.modules\iofilemgr.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(iofilemgr.prx)StdioForUser.h">
+      <Filter>Source Files\hle\hle.modules\iofilemgr.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(libatrac3plus.prx)sceAtrac3plus.h">
+      <Filter>Source Files\hle\hle.modules\libatrac3plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(loadexec.prx)LoadExecForUser.h">
+      <Filter>Source Files\hle\hle.modules\loadexec.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(mediaman.prx)sceUmdUser.h">
+      <Filter>Source Files\hle\hle.modules\mediaman.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(mesg_led.prx)scePauth.h">
+      <Filter>Source Files\hle\hle.modules\mesg_led.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(mesg_led.prx)sceResmgr.h">
+      <Filter>Source Files\hle\hle.modules\mesg_led.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(modulemgr.prx)ModuleMgrForUser.h">
+      <Filter>Source Files\hle\hle.modules\modulemgr.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(openpsid.prx)sceDdrdb.h">
+      <Filter>Source Files\hle\hle.modules\openpsid.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(openpsid.prx)sceOpenPSID.h">
+      <Filter>Source Files\hle\hle.modules\openpsid.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(power.prx)scePower.h">
+      <Filter>Source Files\hle\hle.modules\power.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(registry.prx)sceReg.h">
+      <Filter>Source Files\hle\hle.modules\registry.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(rtc.prx)sceRtc.h">
+      <Filter>Source Files\hle\hle.modules\rtc.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(sc_sascore.prx)sceP3da.h">
+      <Filter>Source Files\hle\hle.modules\sc_sascore.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(sc_sascore.prx)sceSasCore.h">
+      <Filter>Source Files\hle\hle.modules\sc_sascore.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(sircs.prx)sceSircs.h">
+      <Filter>Source Files\hle\hle.modules\sircs.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(sysmem.prx)sceSuspendForUser.h">
+      <Filter>Source Files\hle\hle.modules\sysmem.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(sysmem.prx)SysMemUserForUser.h">
+      <Filter>Source Files\hle\hle.modules\sysmem.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(sysmem.prx)UtilsForUser.h">
+      <Filter>Source Files\hle\hle.modules\sysmem.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(threadman.prx)ThreadManForUser.h">
+      <Filter>Source Files\hle\hle.modules\threadman.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(usb.prx)sceUsb.h">
+      <Filter>Source Files\hle\hle.modules\usb.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(usersystemlib.prx)Kernel_Library.h">
+      <Filter>Source Files\hle\hle.modules\usersystemlib.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(utility.prx)sceUtility.h">
+      <Filter>Source Files\hle\hle.modules\utility.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(utility.prx)sceUtility_netparam_internal.h">
+      <Filter>Source Files\hle\hle.modules\utility.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(utility.prx)sceUtility_private.h">
+      <Filter>Source Files\hle\hle.modules\utility.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(wlan.prx)sceWlanDrv.h">
+      <Filter>Source Files\hle\hle.modules\wlan.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.(wlan.prx)sceWlanDrv_lib.h">
+      <Filter>Source Files\hle\hle.modules\wlan.prx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.sce.h">
+      <Filter>Source Files\hle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.IntrSoft2.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadQueue.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.WaitQueue.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.sys.Clock.h">
+      <Filter>Source Files\lle\lle.sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Context.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Decoder.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Disassembler.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Host.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Instruction.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Instructions.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.Interpreter.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.mmu.h">
+      <Filter>Source Files\lle\lle.mmu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Callback.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Timer.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.EventHandler.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.EventFlag.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Semaphore.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.MsgBox.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.MsgPipe.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Fpl.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Vpl.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Thread.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.Scheduler.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.InterruptMan.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.InterruptMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.InterruptMan.Intr.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.InterruptMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.InterruptMan.SubIntr.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.InterruptMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.SysMem.Block.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.SysMem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.SysMem.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.SysMem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.SysMem.Heap.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.SysMem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.SysMem.Partition.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.SysMem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.LoadExecForUser.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.LoadExecForUser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ModuleMgr.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ModuleMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu(Allegrex).Emitter.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu%28Allegrex%29.jitasm.x86-64.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.cpu(Allegrex).ICache.h">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\emu.h">
+      <Filter>Source Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\emu.log.h">
+      <Filter>Source Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\emu.Module.h">
+      <Filter>Source Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\emu.minifire.h">
+      <Filter>Source Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\ext\tinyxml2\tinyxml2.h">
+      <Filter>Source Files\ext\tinyxml2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.Clock.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.CommandQueue.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.CriticalSection.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.Thread.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.UmsThread.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.win32.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.AsyncFile.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.Atomic.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.dbg.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.hmm.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.IntrusivePointer.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.LinkedList.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.LRUCache.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.MPSCQueue.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.npa.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.win32.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hal.video.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.Module.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\pspe4all.pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\psce4all.pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadContext.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pspe4all-emu.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\pspe4all\res\pspe4all-nodisplay.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\pspe4all\src\lle.cpu%28Allegrex%29.def">
+      <Filter>Source Files\lle\lle.cpu</Filter>
+    </None>
+    <None Include="..\pspe4all\src\hle.kd.ElfLoader.h">
+      <Filter>Source Files\hle\hle.kd\hle.kd.ModuleMgr</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="..\psce4all\src\emu.x64.asm">
+      <Filter>Source Files\emu</Filter>
+    </MASM>
+  </ItemGroup>
+</Project>
