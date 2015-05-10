@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\hal">
+      <UniqueIdentifier>{2efaf580-7419-4dd6-9248-652557f68481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hal\hal.ogl">
+      <UniqueIdentifier>{5320ba87-1e69-4a05-a92f-e7ad535bab6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lle">
+      <UniqueIdentifier>{51a9efe4-5828-44f6-a572-4676a3801f18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\emu">
+      <UniqueIdentifier>{b089d6a9-1447-4b63-b7ce-872349adeb11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hal\hal.os">
+      <UniqueIdentifier>{f743b7c3-1c80-40c4-bb1e-a902aa628043}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pspe4all-hal.video.OGL4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\emu.log.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\emu.Module.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.ogl.Core.cpp">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.ogl.Texture.cpp">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.os.Clock.cpp">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.os.Module.cpp">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\pspe4all\src\pspe4all.pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\hal.video.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\lle.mmu.h">
+      <Filter>Source Files\lle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\emu.h">
+      <Filter>Source Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\emu.log.h">
+      <Filter>Source Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\emu.Module.h">
+      <Filter>Source Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.BufferObject.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.Core.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.DeletableObject.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.FrameBufferObject.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.IndexBufferObject.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.OcclusionQuery.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.Program.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.ProgramPipeline.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.RenderBufferObject.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.SamplerObject.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.SeparateProgram.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.Shader.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.States.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.Subroutine.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.Texture.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.TransformFeedback.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.UnifiedProgram.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.VertexArrayObject.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.VertexBufferObject.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.ogl.VertexProgram.h">
+      <Filter>Source Files\hal\hal.ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.dbg.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all-emu\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.Clock.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.Module.h">
+      <Filter>Source Files\hal\hal.os</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

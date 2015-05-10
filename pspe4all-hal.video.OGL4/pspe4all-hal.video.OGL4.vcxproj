@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B4193BEB-27E9-4FA6-A612-2F21D102974E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>pspe4allhalvideoOpenGL4</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\pspe4all\lib\</OutDir>
+    <IntDir>..\pspe4all\tmp\$(Configuration)\$(TargetName)\</IntDir>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\pspe4all\lib\</OutDir>
+    <IntDir>..\pspe4all\tmp\$(Configuration)\$(TargetName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;GLEW_STATIC;_DEBUG;_WINDOWS;_USRDLL;PSPE4ALLHALVIDEOOGL4_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\pspe4all\lib;..\psce4all\ext\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;GLEW_STATIC;NDEBUG;_WINDOWS;_USRDLL;PSPE4ALLHALVIDEOOGL4_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <StringPooling>true</StringPooling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <BrowseInformation>true</BrowseInformation>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\pspe4all\lib;..\psce4all\ext\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <PostBuildEvent>
+      <Command>@robocopy ..\pspe4all\lib ..\pspe4all\bin $(TargetName).dll /NP
+@if %ERRORLEVEL% LSS 4 @cmd /c "exit /B 0"</Command>
+    </PostBuildEvent>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\psce4all\src\emu.log.cpp" />
+    <ClCompile Include="..\psce4all\src\emu.Module.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.ogl.Core.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.ogl.Texture.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.os.Clock.cpp" />
+    <ClCompile Include="..\psce4all\src\hal.os.Module.cpp" />
+    <ClCompile Include="pspe4all-hal.video.OGL4.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\psce4all\src\emu.h" />
+    <ClInclude Include="..\psce4all\src\emu.log.h" />
+    <ClInclude Include="..\psce4all\src\emu.Module.h" />
+    <ClInclude Include="..\psce4all\src\hal.dbg.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.BufferObject.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.Core.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.DeletableObject.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.FrameBufferObject.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.IndexBufferObject.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.OcclusionQuery.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.Program.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.ProgramPipeline.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.RenderBufferObject.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.SamplerObject.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.SeparateProgram.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.Shader.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.States.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.Subroutine.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.Texture.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.TransformFeedback.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.UnifiedProgram.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.VertexArrayObject.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.VertexBufferObject.h" />
+    <ClInclude Include="..\psce4all\src\hal.ogl.VertexProgram.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.Clock.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.h" />
+    <ClInclude Include="..\psce4all\src\hal.os.Module.h" />
+    <ClInclude Include="..\pspe4all-emu\resource.h" />
+    <ClInclude Include="..\pspe4all\src\hal.video.h" />
+    <ClInclude Include="..\pspe4all\src\lle.mmu.h" />
+    <ClInclude Include="..\pspe4all\src\pspe4all.pch.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
