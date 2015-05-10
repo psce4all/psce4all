@@ -95,7 +95,7 @@ void Allegrex::ICache::UnwindInfoFrame0::InternalMain() // for thread_code, reco
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     dd((1/*Version*/) << 0 | (0/*Flags*/) << 3 | (16/*SizeOfProlog*/) << 8 | (9/*CountOfCodes*/) << 16 | (0/*FrameRegister*/) << 24 | (0/*FrameOffset*/) << 28);
     dw(0x0C | (UWOP_ALLOC_SMALL/*UnwindOp*/) << 8 | ((0x28 / 8 - 1)/*OpInfo*/) << 12);
@@ -125,7 +125,7 @@ void Allegrex::ICache::UnwindInfoFrame1::InternalMain() // for trace_code, cross
     // | RDX                         |
     // | RCX                         |
     // | RAX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     // | ---                         |
     // | ---                         |
@@ -140,7 +140,7 @@ void Allegrex::ICache::UnwindInfoFrame1::InternalMain() // for trace_code, cross
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     dd((1/*Version*/) << 0 | (0/*Flags*/) << 3 | (16/*SizeOfProlog*/) << 8 | (9/*CountOfCodes*/) << 16 | (0/*FrameRegister*/) << 24 | (0/*FrameOffset*/) << 28);
     dw(0x0C | (UWOP_ALLOC_SMALL/*UnwindOp*/) << 8 | ((0x28 / 8 - 1)/*OpInfo*/) << 12);
@@ -162,7 +162,7 @@ void Allegrex::ICache::UnwindInfoFrame2::InternalMain() // for syscall_code
     // | ---                         |
     // | ---                         |
     // | ---                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     // | ---                         |
     // | ---                         |
@@ -177,7 +177,7 @@ void Allegrex::ICache::UnwindInfoFrame2::InternalMain() // for syscall_code
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     dd((1/*Version*/) << 0 | (0/*Flags*/) << 3 | (4/*SizeOfProlog*/) << 8 | (1/*CountOfCodes*/) << 16 | (0/*FrameRegister*/) << 24 | (0/*FrameOffset*/) << 28);
     dw(0x00 | (UWOP_ALLOC_SMALL/*UnwindOp*/) << 8 | ((0x28 / 8 - 1)/*OpInfo*/) << 12);
@@ -409,12 +409,12 @@ void Allegrex::ICache::RecompileCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     L(label_p32); // call through a 'jmp'
     mov(rcx, rsi);
     // +-----------------------------+ RSP
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +---------------------------- + CALL
     // | ---                         |
     // | ---                         |
@@ -429,7 +429,7 @@ void Allegrex::ICache::RecompileCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     call(qword_rip_ptr[label_p64]);
     // +-----------------------------+ RSP
@@ -446,7 +446,7 @@ void Allegrex::ICache::RecompileCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     jmp(rax);
 
@@ -474,7 +474,7 @@ void Allegrex::ICache::TrampolineCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     mov(edx, ICACHE_MEMORY_ADDRESS);
     mov(ebp, dword_ptr[rsi + s32(offsetof(Allegrex::Context, Allegrex::Context::pc))]);
@@ -494,7 +494,7 @@ void Allegrex::ICache::TrampolineCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     jmp(rbp);
 }
@@ -508,7 +508,7 @@ void Allegrex::ICache::TraceCode::InternalMain()
     };
 
     // +-----------------------------+ RSP
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+ CALL
     // | ---                         |
     // | ---                         |
@@ -523,7 +523,7 @@ void Allegrex::ICache::TraceCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     L(label_p32); // call through a 'call'
     push(rax);
@@ -538,7 +538,7 @@ void Allegrex::ICache::TraceCode::InternalMain()
     sub(rsp, 0x28); // 4 registers w/ 16-byte alignment
     mov(rcx, rsi);
     // +-----------------------------+ RSP
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+ CALL QWORD PTR[label_p64]
     // | ---                         |
     // | ---                         |
@@ -553,7 +553,7 @@ void Allegrex::ICache::TraceCode::InternalMain()
     // | RDX                         |
     // | RCX                         |
     // | RAX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     // | ---                         |
     // | ---                         |
@@ -568,7 +568,7 @@ void Allegrex::ICache::TraceCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     call(qword_rip_ptr[label_p64]);
     add(rsp, 0x28);
@@ -595,7 +595,7 @@ void Allegrex::ICache::TraceCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
 
     auto function = &Context::Trace;
@@ -614,7 +614,7 @@ void Allegrex::ICache::SyscallCode::InternalMain()
     };
 
     // +-----------------------------+ RSP
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+ CALL
     // | ---                         |
     // | ---                         |
@@ -629,20 +629,20 @@ void Allegrex::ICache::SyscallCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     L(label_p32); // call through a 'call'
     sub(rsp, 0x28); // 4 registers w/ 16-byte alignment
     mov(rcx, rsi);
     // +-----------------------------+ RSP
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+ CALL QWORD PTR[label_p64]
     // | ---                         |
     // | ---                         |
     // | ---                         |
     // | ---                         |
     // | ---                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     // | ---                         |
     // | ---                         |
@@ -657,7 +657,7 @@ void Allegrex::ICache::SyscallCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     call(qword_rip_ptr[label_p64]);
     add(rsp, 0x28);
@@ -676,7 +676,7 @@ void Allegrex::ICache::SyscallCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
 
     auto function = &Context::Syscall;
@@ -695,7 +695,7 @@ void Allegrex::ICache::CrossInterpretCode::InternalMain()
     };
 
     // +-----------------------------+ RSP
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+ CALL
     // | ---                         |
     // | ---                         |
@@ -710,7 +710,7 @@ void Allegrex::ICache::CrossInterpretCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     L(label_p32); // call through a 'call'
     push(rax);
@@ -725,7 +725,7 @@ void Allegrex::ICache::CrossInterpretCode::InternalMain()
     sub(rsp, 0x28); // 4 registers w/ 16-byte alignment
     mov(rcx, rsi);
     // +-----------------------------+ RSP
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+ CALL QWORD PTR[label_p64]
     // | ---                         |
     // | ---                         |
@@ -740,7 +740,7 @@ void Allegrex::ICache::CrossInterpretCode::InternalMain()
     // | RDX                         |
     // | RCX                         |
     // | RAX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     // | ---                         |
     // | ---                         |
@@ -755,7 +755,7 @@ void Allegrex::ICache::CrossInterpretCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
     call(qword_rip_ptr[label_p64]);
     add(rsp, 0x28);
@@ -782,7 +782,7 @@ void Allegrex::ICache::CrossInterpretCode::InternalMain()
     // | RSI                         |
     // | RBP                         |
     // | RBX                         |
-    // | EIP - Return Caller Address |
+    // | RIP - Return Caller Address |
     // +-----------------------------+
 
     auto function = &Context::CrossInterpret;

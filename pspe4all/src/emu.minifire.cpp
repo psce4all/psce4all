@@ -8,11 +8,12 @@
 // Working demos            |    Real     | Interpreter-like |   Full
 //                          | Interpreter |     Dynarec      |  Dynarec
 //--------------------------+-------------+------------------+----------
-// - minifire.pbp           |     yes     |       yes        |    yes
-// - psphelloworld.pbp      |     yes     |       yes        |    yes
-// - compilerPref.pbp*      |    cross    |       yes        |     no
+// - minifire.pbp           |     yes     |       yes        |    yes**
+// - psphelloworld.pbp      |     yes     |       yes        |    yes**
+// - compilerPref.pbp*      |    cross    |       yes        |     no**
 //
-// *: special version for pspe4all which can be used as a benchmark with jpcsp, ppsspp, etc.
+// * : special version for pspe4all which can be used as a benchmark with jpcsp, ppsspp, etc.
+// **: due to last changes, full dynarec mode may not work as focus is mainly upon interpreter-like mode now. 
 
 #include "hal.dbg.h"
 #include "hal.npa.h"
