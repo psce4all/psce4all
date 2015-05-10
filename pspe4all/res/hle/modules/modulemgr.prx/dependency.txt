@@ -1,0 +1,8 @@
+KDebugForKernel|sysmem.prx
+SysMemForKernel|sysmem.prx
+LoadCoreForKernel|loadcore.prx
+InterruptManagerForKernel|interruptman.prx
+SysclibForKernel|sysmem.prx
+ThreadManForKernel|threadman.prx
+IoFileMgrForKernel|iofilemgr.prx
+UtilsForKernel|sysmem.prx

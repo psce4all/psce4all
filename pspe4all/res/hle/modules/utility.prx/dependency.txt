@@ -1,0 +1,14 @@
+sceReg_driver|registry.prx
+scePower_driver|power.prx
+sceCtrl_driver|ctrl.prx
+SysclibForKernel|sysmem.prx
+InterruptManagerForKernel|interruptman.prx
+ThreadManForKernel|threadman.prx
+ModuleMgrForKernel|modulemgr.prx
+IoFileMgrForKernel|iofilemgr.prx
+sceSysEventForKernel|sysmem.prx
+sceSuspendForKernel|sysmem.prx
+KDebugForKernel|sysmem.prx
+SysMemForKernel|sysmem.prx
+InitForKernel|init.prx
+sceMeCore_driver|me_wrapper.prx

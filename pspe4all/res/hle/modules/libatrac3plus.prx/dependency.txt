@@ -1,0 +1,2 @@
+Kernel_Library|usersystemlib.prx
+sceAudiocodec|avcodec.prx

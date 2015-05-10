@@ -1,0 +1,10 @@
+SysMemForKernel|sysmem.prx
+sceSuspendForKernel|sysmem.prx
+sceSysEventForKernel|sysmem.prx
+KDebugForKernel|sysmem.prx
+InterruptManagerForKernel|interruptman.prx
+SysclibForKernel|sysmem.prx
+ThreadManForKernel|threadman.prx
+SysTimerForKernel|systimer.prx
+sceDisplay_driver|display_02g.prx
+sceSyscon_driver|syscon.prx

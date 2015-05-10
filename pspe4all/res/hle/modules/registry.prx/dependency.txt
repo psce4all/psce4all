@@ -1,0 +1,5 @@
+ThreadManForKernel|threadman.prx
+SysclibForKernel|sysmem.prx
+IoFileMgrForKernel|iofilemgr.prx
+sceSuspendForKernel|sysmem.prx
+UtilsForKernel|sysmem.prx

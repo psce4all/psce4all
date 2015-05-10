@@ -1,0 +1,9 @@
+SysMemForKernel|sysmem.prx
+sceSuspendForKernel|sysmem.prx
+KDebugForKernel|sysmem.prx
+sceSysEventForKernel|sysmem.prx
+InterruptManagerForKernel|interruptman.prx
+SysclibForKernel|sysmem.prx
+ThreadManForKernel|threadman.prx
+sceSysreg_driver|lowio.prx
+sceSyscon_driver|syscon.prx

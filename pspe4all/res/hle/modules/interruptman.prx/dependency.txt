@@ -1,0 +1,5 @@
+ExceptionManagerForKernel|exceptionman.prx
+LoadCoreForKernel|loadcore.prx
+SysMemForKernel|sysmem.prx
+SysclibForKernel|sysmem.prx
+sceSuspendForKernel|sysmem.prx

@@ -1,0 +1,12 @@
+ThreadManForKernel|threadman.prx
+DmacManForKernel|dmacman.prx
+UtilsForKernel|sysmem.prx
+SysclibForKernel|sysmem.prx
+InterruptManagerForKernel|interruptman.prx
+sceSysEventForKernel|sysmem.prx
+SysMemForKernel|sysmem.prx
+sceClockgen_driver|clockgen.prx
+sceCodec_driver|codec.prx
+sceDdr_driver|lowio.prx
+sceSysreg_driver|lowio.prx
+sceGpio_driver|lowio.prx

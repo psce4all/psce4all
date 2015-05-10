@@ -1,0 +1,3 @@
+SysMemUserForUser|sysmem.prx
+InterruptManager|interruptman.prx
+ThreadManForUser|threadman.prx

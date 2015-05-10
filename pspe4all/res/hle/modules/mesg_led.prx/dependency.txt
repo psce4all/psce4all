@@ -1,0 +1,2 @@
+ThreadManForKernel|threadman.prx
+semaphore|memlmd_02g.prx

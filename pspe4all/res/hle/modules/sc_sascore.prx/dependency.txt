@@ -1,0 +1,5 @@
+sceMeCore_driver|me_wrapper.prx
+sceMeMemory_driver|me_wrapper.prx
+UtilsForKernel|sysmem.prx
+ThreadManForKernel|threadman.prx
+SysMemForKernel|sysmem.prx

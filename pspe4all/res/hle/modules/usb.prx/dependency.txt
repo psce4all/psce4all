@@ -1,0 +1,14 @@
+InterruptManagerForKernel|interruptman.prx
+SysclibForKernel|sysmem.prx
+sceSysEventForKernel|sysmem.prx
+SysMemForKernel|sysmem.prx
+sceSuspendForKernel|sysmem.prx
+ThreadManForKernel|threadman.prx
+UtilsForKernel|sysmem.prx
+sceDdr_driver|lowio.prx
+sceGpio_driver|lowio.prx
+sceIdStorage_driver|idstorage.prx
+sceOpenPSID_driver|openpsid.prx
+scePower_driver|power.prx
+sceSyscon_driver|syscon.prx
+sceSysreg_driver|lowio.prx

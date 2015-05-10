@@ -1,0 +1,6 @@
+EADB1BD7|sceSuspendForUser|sceKernelPowerLock|gg|int sceKernelPowerLock(int locktype)
+3AEE7261|sceSuspendForUser|sceKernelPowerUnlock|gg|int sceKernelPowerUnlock(int locktype)
+090CCB3F|sceSuspendForUser|sceKernelPowerTick|gg|int sceKernelPowerTick(int ticktype)
+3E0271D3|sceSuspendForUser|sceKernelVolatileMemLock|gggg|int sceKernelVolatileMemLock(int arg, void * * ppAdr, unsigned int * puiSize)
+A14F40B2|sceSuspendForUser|sceKernelVolatileMemTryLock|gggg|int sceKernelVolatileMemTryLock(int arg, void * * ppAdr, unsigned int * puiSize)
+A569E425|sceSuspendForUser|sceKernelVolatileMemUnlock|gg|int sceKernelVolatileMemUnlock(int arg)

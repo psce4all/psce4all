@@ -1,0 +1,4 @@
+28235C56|sceAudioRouting|sceAudioRoutingGetVolumeMode|g|??? sceAudioRoutingGetVolumeMode()
+36FD8AA9|sceAudioRouting|sceAudioRoutingSetMode|g|??? sceAudioRoutingSetMode()
+39240E7D|sceAudioRouting|sceAudioRoutingGetMode|g|??? sceAudioRoutingGetMode()
+BB548475|sceAudioRouting|sceAudioRoutingSetVolumeMode|g|??? sceAudioRoutingSetVolumeMode()

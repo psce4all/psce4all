@@ -1,0 +1,7 @@
+BD2F1094|LoadExecForUser|sceKernelLoadExec|ggg|int sceKernelLoadExec(const char * file, const SceKernelLoadExecParam * param)
+05572A5F|LoadExecForUser|sceKernelExitGame|g|int sceKernelExitGame(void)
+2AC9954B|LoadExecForUser|sceKernelExitGameWithStatus|gg|int sceKernelExitGameWithStatus(int status)
+4AC57943|LoadExecForUser|sceKernelRegisterExitCallback|gg|int sceKernelRegisterExitCallback(SceUID cbid)
+362A956B|LoadExecForUser|LoadExecForUser_362A956B|g|??? LoadExecForUser_362A956B()
+8ADA38D3|LoadExecForUser|LoadExecForUser_8ADA38D3|g|??? LoadExecForUser_8ADA38D3()
+D1FB50DC|LoadExecForUser|LoadExecForUser_D1FB50DC|g|??? LoadExecForUser_D1FB50DC()

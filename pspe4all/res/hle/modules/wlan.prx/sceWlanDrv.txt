@@ -1,0 +1,3 @@
+0C622081|sceWlanDrv|sceWlanGetEtherAddr|gg|int sceWlanGetEtherAddr(char * etherAddr)
+93440B11|sceWlanDrv|sceWlanDevIsPowerOn|g|int sceWlanDevIsPowerOn(void)
+D7763699|sceWlanDrv|sceWlanGetSwitchState|g|int sceWlanGetSwitchState(void)

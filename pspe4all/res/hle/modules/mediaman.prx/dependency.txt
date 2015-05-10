@@ -1,0 +1,5 @@
+InterruptManagerForKernel|interruptman.prx
+IoFileMgrForKernel|iofilemgr.prx
+ThreadManForKernel|threadman.prx
+SysclibForKernel|sysmem.prx
+SysMemForKernel|sysmem.prx

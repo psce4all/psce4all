@@ -1,0 +1,2 @@
+71EEF62D|sceSircs|sceSircsSend|ggg|int sceSircsSend(struct sircs_data * sd, int count)
+83381633|sceSircs|sceSircsReceive|g|??? sceSircsReceive()

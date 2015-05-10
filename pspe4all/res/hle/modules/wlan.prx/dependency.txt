@@ -1,0 +1,14 @@
+DmacManForKernel|dmacman.prx
+sceSysEventForKernel|sysmem.prx
+ModuleMgrForKernel|modulemgr.prx
+sceSysreg_driver|lowio.prx
+sceSyscon_driver|syscon.prx
+sceLed_driver|led.prx
+sceIdStorage_driver|idstorage.prx
+scePower_driver|power.prx
+sceNetIfhandle_driver|ifhandle.prx
+SysclibForKernel|sysmem.prx
+ThreadManForKernel|threadman.prx
+InterruptManagerForKernel|interruptman.prx
+UtilsForKernel|sysmem.prx
+KDebugForKernel|sysmem.prx

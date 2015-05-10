@@ -1,0 +1,7 @@
+InterruptManagerForKernel|interruptman.prx
+ExceptionManagerForKernel|exceptionman.prx
+SysMemForKernel|sysmem.prx
+KDebugForKernel|sysmem.prx
+sceSuspendForKernel|sysmem.prx
+SysclibForKernel|sysmem.prx
+LoadCoreForKernel|loadcore.prx

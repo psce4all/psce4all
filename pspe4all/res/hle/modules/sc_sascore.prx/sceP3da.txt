@@ -1,0 +1,3 @@
+013016F3|sceP3da|sceP3daBridgeCore|g|??? sceP3daBridgeCore()
+374500A5|sceP3da|sceP3daBridgeInit|g|??? sceP3daBridgeInit()
+43F756A2|sceP3da|sceP3daBridgeExit|g|??? sceP3daBridgeExit()

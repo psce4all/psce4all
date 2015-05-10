@@ -1,0 +1,12 @@
+SysMemForKernel|sysmem.prx
+sceSuspendForKernel|sysmem.prx
+KDebugForKernel|sysmem.prx
+LoadCoreForKernel|loadcore.prx
+InterruptManagerForKernel|interruptman.prx
+SysclibForKernel|sysmem.prx
+ThreadManForKernel|threadman.prx
+IoFileMgrForKernel|iofilemgr.prx
+ModuleMgrForKernel|modulemgr.prx
+InitForKernel|init.prx
+memlmd|memlmd_02g.prx
+UtilsForKernel|sysmem.prx

@@ -1,0 +1,3 @@
+ThreadManForKernel|threadman.prx
+sceIdStorage_driver|idstorage.prx
+semaphore|memlmd_02g.prx

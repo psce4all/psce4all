@@ -1,0 +1,7 @@
+sceSysEventForKernel|sysmem.prx
+IoFileMgrForKernel|iofilemgr.prx
+InterruptManagerForKernel|interruptman.prx
+ThreadManForKernel|threadman.prx
+sceSuspendForKernel|sysmem.prx
+sceSysreg_driver|lowio.prx
+sceGpio_driver|lowio.prx
