@@ -1,9 +1,11 @@
-#ifndef emu_settings_h__
-#define emu_settings_h__
+/**
+* (c) 2015 psce4all project. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
 
+#pragma once
 
 #include <string>
-#include <map>
 
 namespace emu
 {
@@ -24,5 +26,3 @@ namespace emu
 
     extern Settings * settings;
 }
-
-#endif

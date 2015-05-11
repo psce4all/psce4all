@@ -12,8 +12,8 @@
 // - helloworldpsp.pbp      |     yes     |       yes        |    yes**
 // - compilerPref.pbp*      |    cross    |       yes        |     no**
 //
-// * : special version for pspe4all which can be used as a benchmark with jpcsp, ppsspp, etc.
-// **: due to last changes, full dynarec mode may not work as focus is mainly upon interpreter-like mode now. 
+// * : special version for pspe4all which can be used as a benchmark with jpcsp, ppsspp, etc. without pad input and screen output.
+// **: due to last changes, full dynarec mode may not work as focus is mainly upon interpreter-like mode now.
 
 #include "hal.dbg.h"
 #include "hal.npa.h"
@@ -533,17 +533,31 @@ void lle::cpu::Context::do$SYSCALL(u32 code)
         }
         break;
 
+    case 0x00004055: // sceKernelGetSystemTime
+        if (true)
+        {
+            //forcef(hle, "!!!sceKernelGetSystemTime");
+            u32 addr = gpr[4];
+            FILETIME ft;
+            ::GetSystemTimeAsFileTime(&ft);
+            *lle::mmu::Addr< u64 >(addr) = (*((u64 *)&ft) / 10ULL);
+            gpr[2] = SCE_KERNEL_ERROR_OK;
+            //forcef(hle, "!!!sceKernelGetSystemTime-> %u", gpr[2]);
+        }
+        break;
+
     case 0x00004057: // sceKernelGetSystemTimeLow
         if (true)
         {
-            forcef(hle, "!!!sceKernelGetSystemTimeLow");
+            //forcef(hle, "!!!sceKernelGetSystemTimeLow");
             FILETIME ft;
             ::GetSystemTimeAsFileTime(&ft);
-            auto time = *((unsigned long long *)&ft);
+            auto time = *((u64 *)&ft);
             gpr[2] = u32(time / 10ULL);
-            forcef(hle, "!!!sceKernelGetSystemTimeLow -> %u", gpr[2]);
+            //forcef(hle, "!!!sceKernelGetSystemTimeLow -> %u", gpr[2]);
         }
         break;
+
 
     case 0x00004073: // sceKernelCreateCallback
         if (true)

@@ -1,6 +1,15 @@
 #include "emu.Settings.h"
-#include "tinyxml2.h"
+/**
+* (c) 2015 psce4all project. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #include "emu.log.h"
+#include "emu.Settings.h"
+
+#include "tinyxml2.h"
+
+//#include <map>
 
 using namespace tinyxml2;
 
@@ -45,7 +54,6 @@ void emu::Settings::Save(char const * filename)
     pElement->InsertEndChild(pListElement2);
 
     pRoot->InsertEndChild(pElement);
-
 
     xmlDoc.SaveFile(filename);
 }
