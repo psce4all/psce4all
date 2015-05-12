@@ -64,26 +64,10 @@ namespace lle
             {
                 bool ok;
 
-                ok = (NULL != ::MapViewOfFileEx(psp_memory_handle, FILE_MAP_READ|FILE_MAP_WRITE, 0, offset, size, (LPVOID)(cache + address + 0x00000000)));
+                ok = (NULL != ::MapViewOfFileEx(psp_memory_handle, FILE_MAP_READ|FILE_MAP_WRITE, 0, offset, size, (LPVOID)(cache + address)));
                 if (!ok)
                 {
-                    fatalf(mmu, "^--- fails to map 0x%08X-0x%08X ---> 0x%016I64X-0x%016I64X", (address + 0x00000000), (address + 0x00000000 + size - 1), cache + address + 0x00000000, cache + address + 0x00000000 + size - 1);
-                }
-                else
-                {
-                    ok = (NULL != ::MapViewOfFileEx(psp_memory_handle, FILE_MAP_READ|FILE_MAP_WRITE, 0, offset, size, (LPVOID)(cache + address + 0x40000000)));
-                    if (!ok)
-                    {
-                        fatalf(mmu, "^--- fails to map 0x%08X-0x%08X ---> 0x%016I64X-0x%016I64X", (address + 0x40000000), (address + 0x40000000 + size - 1), cache + address + 0x40000000, cache + address + 0x40000000 + size - 1);
-                    }
-                    else if (DCACHE_MEMORY_ADDRESS == cache)
-                    {
-                        ok = (NULL != ::MapViewOfFileEx(psp_memory_handle, FILE_MAP_READ|FILE_MAP_WRITE, 0, offset, size, (LPVOID)(cache + address + 0x80000000)));
-                        if (!ok)
-                        {
-                            fatalf(mmu, "^--- fails to map 0x%08X-0x%08X ---> 0x%016I64X-0x%016I64X", (address + 0x80000000), (address + 0x80000000 + size - 1), cache + address + 0x80000000, cache + address + 0x80000000 + size - 1);
-                        }
-                    }
+                    fatalf(mmu, "^--- fails to map 0x%08X-0x%08X ---> 0x%016I64X-0x%016I64X", (address), (address + size - 1), cache + address, cache + address + size - 1);
                 }
 
                 return ok;
@@ -92,11 +76,6 @@ namespace lle
             static __forceinline void UnmapView(uintptr_t cache, uintptr_t address, u32 /*offset*/, u32 /*size*/)
             {
                 ::UnmapViewOfFile((LPVOID)(cache + address + 0x00000000));
-                ::UnmapViewOfFile((LPVOID)(cache + address + 0x40000000));
-                if (DCACHE_MEMORY_ADDRESS == cache)
-                {
-                    ::UnmapViewOfFile((LPVOID)(cache + address + 0x80000000));
-                }
             }
 
         public:
@@ -145,7 +124,7 @@ namespace lle
 
                 uintptr_t p = address;
 
-                infof(mmu, "%-8s - 0x%08X-0x%08X ---> 0x%016I64X-0x%016I64X", (name ? name : "------       "), p, p + size * uintptr_t(times) - 1, cache + p, cache + p + size * uintptr_t(times) - 1);
+                infof(mmu, "%-18s - 0x%08X-0x%08X ---> 0x%016I64X-0x%016I64X", (name ? name : "------            "), p, p + size * uintptr_t(times) - 1, cache + p, cache + p + size * uintptr_t(times) - 1);
 
                 if (!MapView(cache, p, offset, size))
                 {
@@ -195,31 +174,69 @@ namespace lle
         // 0x08000000 - 0x02000000 (32 MiB)     Lower main ram
         // 0x0A000000 - 0x02000000 (32 MiB)     Upper main ram (SLIM only)
 
-        UnusedSegment dpad0(DCACHE_MEMORY_ADDRESS, 0x00000000, 0x0000FFFF);
-        UnusedSegment dpad1(DCACHE_MEMORY_ADDRESS, 0x00014000, 0x03FFFFFF);
-        UnusedSegment dpad2(DCACHE_MEMORY_ADDRESS, 0x05000000, 0x07FFFFFF);
-        UnusedSegment dpad3(DCACHE_MEMORY_ADDRESS, 0x0C000000, 0x0FFFFFFF);
+        UnusedSegment dpad0_0(DCACHE_MEMORY_ADDRESS, 0x00000000, 0x0000FFFF);
+        UnusedSegment dpad0_4(DCACHE_MEMORY_ADDRESS, 0x40000000, 0x4000FFFF);
+        UnusedSegment dpad0_8(DCACHE_MEMORY_ADDRESS, 0x80000000, 0x8000FFFF);
+        UnusedSegment dpad1_0(DCACHE_MEMORY_ADDRESS, 0x00014000, 0x03FFFFFF);
+        UnusedSegment dpad1_4(DCACHE_MEMORY_ADDRESS, 0x40014000, 0x43FFFFFF);
+        UnusedSegment dpad1_8(DCACHE_MEMORY_ADDRESS, 0x80014000, 0x83FFFFFF);
+        UnusedSegment dpad2_0(DCACHE_MEMORY_ADDRESS, 0x05000000, 0x07FFFFFF);
+        UnusedSegment dpad2_4(DCACHE_MEMORY_ADDRESS, 0x45000000, 0x47FFFFFF);
+        UnusedSegment dpad2_8(DCACHE_MEMORY_ADDRESS, 0x85000000, 0x87FFFFFF);
+        UnusedSegment dpad3_0(DCACHE_MEMORY_ADDRESS, 0x0C000000, 0x0FFFFFFF);
+        UnusedSegment dpad3_4(DCACHE_MEMORY_ADDRESS, 0x4C000000, 0x4FFFFFFF);
+        UnusedSegment dpad3_8(DCACHE_MEMORY_ADDRESS, 0x8C000000, 0x8FFFFFFF);
 
-        MappedSegment dseg0(DCACHE_MEMORY_ADDRESS, 0x00010000, 1, 2*MRAM_SIZE + 1*VRAM_SIZE + 0*4*SRAM_SIZE, SRAM_SIZE, "[SRAM] dcache");
-        MappedSegment dseg1(DCACHE_MEMORY_ADDRESS, 0x04000000, 4, 2*MRAM_SIZE + 0*VRAM_SIZE + 0*4*SRAM_SIZE, VRAM_SIZE, "[VRAM] dcache");
-        MappedSegment dseg2(DCACHE_MEMORY_ADDRESS, 0x04800000, 4, 2*MRAM_SIZE + 0*VRAM_SIZE + 0*4*SRAM_SIZE, VRAM_SIZE, "[VRAM] dcache");
-        MappedSegment dseg3(DCACHE_MEMORY_ADDRESS, 0x08000000, 1, 0*MRAM_SIZE + 0*VRAM_SIZE + 0*4*SRAM_SIZE, MRAM_SIZE, "[MRAM] dcache");
+        MappedSegment dseg0_0(DCACHE_MEMORY_ADDRESS, 0x00010000, 1, 3 * MRAM_SIZE + 1 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, SRAM_SIZE, "[SRAM] dcache (c)");
+        MappedSegment dseg0_4(DCACHE_MEMORY_ADDRESS, 0x40010000, 1, 3 * MRAM_SIZE + 1 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, SRAM_SIZE, "[SRAM] dcache (u)");
+        MappedSegment dseg0_8(DCACHE_MEMORY_ADDRESS, 0x80010000, 1, 3 * MRAM_SIZE + 1 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, SRAM_SIZE, "[SRAM] dcache (k)");
+        MappedSegment dseg1_0(DCACHE_MEMORY_ADDRESS, 0x04000000, 4, 3 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, VRAM_SIZE, "[VRAM] dcache (c)");
+        MappedSegment dseg1_4(DCACHE_MEMORY_ADDRESS, 0x44000000, 4, 3 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, VRAM_SIZE, "[VRAM] dcache (u)");
+        MappedSegment dseg1_8(DCACHE_MEMORY_ADDRESS, 0x84000000, 4, 3 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, VRAM_SIZE, "[VRAM] dcache (k)");
+        MappedSegment dseg2_0(DCACHE_MEMORY_ADDRESS, 0x04800000, 4, 3 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, VRAM_SIZE, "[VRAM] dcache (c)");
+        MappedSegment dseg2_4(DCACHE_MEMORY_ADDRESS, 0x44800000, 4, 3 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, VRAM_SIZE, "[VRAM] dcache (u)");
+        MappedSegment dseg2_8(DCACHE_MEMORY_ADDRESS, 0x84800000, 4, 3 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, VRAM_SIZE, "[VRAM] dcache (k)");
+        MappedSegment dseg3_0(DCACHE_MEMORY_ADDRESS, 0x08000000, 1, 0 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, MRAM_SIZE, "[MRAM] dcache (c)");
+        MappedSegment dseg3_4(DCACHE_MEMORY_ADDRESS, 0x48000000, 1, 0 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, MRAM_SIZE, "[MRAM] dcache (u)");
+        MappedSegment dseg3_8(DCACHE_MEMORY_ADDRESS, 0x88000000, 1, 0 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, MRAM_SIZE, "[MRAM] dcache (k)");
 
-        MappedSegment iseg0(ICACHE_MEMORY_ADDRESS, 0x00010000, 1, 2*MRAM_SIZE + 1*VRAM_SIZE + 1*4*SRAM_SIZE, SRAM_SIZE, "[SRAM] icache");
-        MappedSegment iseg3(ICACHE_MEMORY_ADDRESS, 0x08000000, 1, 1*MRAM_SIZE + 0*VRAM_SIZE + 0*4*SRAM_SIZE, MRAM_SIZE, "[MRAM] icache");
+        MappedSegment iseg0_0(ICACHE_MEMORY_ADDRESS, 0x00010000, 1, 3 * MRAM_SIZE + 1 * VRAM_SIZE + 1 * 4 * SRAM_SIZE, SRAM_SIZE, "[SRAM] icache (c)");
+        MappedSegment iseg0_4(ICACHE_MEMORY_ADDRESS, 0x40010000, 1, 3 * MRAM_SIZE + 1 * VRAM_SIZE + 2 * 4 * SRAM_SIZE, SRAM_SIZE, "[SRAM] icache (u)");
+        MappedSegment iseg3_0(ICACHE_MEMORY_ADDRESS, 0x08000000, 1, 1 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, MRAM_SIZE, "[MRAM] icache (c)");
+        MappedSegment iseg3_4(ICACHE_MEMORY_ADDRESS, 0x48000000, 1, 2 * MRAM_SIZE + 0 * VRAM_SIZE + 0 * 4 * SRAM_SIZE, MRAM_SIZE, "[MRAM] icache (u)");
 
         Segment * segment_array[] =
         {
-            &dpad0,
-            &dseg0,
-            &iseg0,
-            &dpad1,
-            &dseg1,
-            &dseg2,
-            &dpad2,
-            &dseg3,
-            &iseg3,
-            &dpad3
+            &dpad0_0,
+            &dseg0_0,
+            &iseg0_0,
+            &dpad1_0,
+            &dseg1_0,
+            &dseg2_0,
+            &dpad2_0,
+            &dseg3_0,
+            &iseg3_0,
+            &dpad3_0,
+
+            &dpad0_4,
+            &dseg0_4,
+            &iseg0_4,
+            &dpad1_4,
+            &dseg1_4,
+            &dseg2_4,
+            &dpad2_4,
+            &dseg3_4,
+            &iseg3_4,
+            &dpad3_4,
+
+            &dpad0_8,
+            &dseg0_8,
+            &dpad1_8,
+            &dseg1_8,
+            &dseg2_8,
+            &dpad2_8,
+            &dseg3_8,
+            &dpad3_8
         };
 
         static void * jitasm_base = 0;
@@ -227,7 +244,7 @@ namespace lle
 
         bool Reserve()
         {
-            psp_memory_handle = ::CreateFileMappingA(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, PAGE64K_ALIGN(2*4*SRAM_SIZE + 1*VRAM_SIZE + 2*MRAM_SIZE + 1*GARB_SIZE - 1), 0);
+            psp_memory_handle = ::CreateFileMappingA(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, PAGE64K_ALIGN(3*4*SRAM_SIZE + 1*VRAM_SIZE + 3*MRAM_SIZE + 1*GARB_SIZE - 1), 0);
             if (!psp_memory_handle)
             {
                 return false;
