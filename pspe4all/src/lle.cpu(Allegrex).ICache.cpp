@@ -183,6 +183,25 @@ void Allegrex::ICache::UnwindInfoFrame2::InternalMain() // for syscall_code
     dw(0x00 | (UWOP_ALLOC_SMALL/*UnwindOp*/) << 8 | ((0x28 / 8 - 1)/*OpInfo*/) << 12);
 }
 
+
+void Allegrex::ICache::SharedContext::InternalMain()
+{
+
+    dq(0); // exit_address
+    dq(0); // syscall_address;
+    dq(0); // recompile_address;
+    dq(0); // trampoline_address;
+    dq(0); // cross_interpret_address;
+    dq(0); // trace_address;
+
+    // PSP 16-KByte icache consists of 64-byte cache blocks using a 2-way set associative configuration with 8-KByte per way.
+    // 2 sets. Each set consist of 128 lines. 16 instructions per 64-byte.
+    for (auto i = 0; i < 2*128*16; ++i)
+    {
+        dd(0);
+    }
+}
+
 void Allegrex::ICache::ThreadCode::InternalMain()
 {
     enum
@@ -201,26 +220,17 @@ void Allegrex::ICache::ThreadCode::InternalMain()
     sub(rsp, 0x28); // 4 registers w/ 16-byte alignment (http://blogs.msdn.com/b/oldnewthing/archive/2004/01/14/58579.aspx)
 
     mov(rsi, rcx);
-    mov(edi, uint32_t(Allegrex::icache.syscall_code.GetCode()));
-    mov(ebx, uint32_t(Allegrex::icache.recompile_code.GetCode()));
+    mov(rdi, uint32_t(Allegrex::icache.shared_context.GetData()));
     lea(eax, qword_rip_ptr[label_exit]);
-    mov(edx, uint32_t(Allegrex::icache.trampoline_code.GetCode()));
-    mov(r15d, uint32_t(Allegrex::icache.crossinterpret_code.GetCode()));
-    mov(r14d, uint32_t(Allegrex::icache.trace_code.GetCode()));
     lea(rbp, qword_ptr[rsp - 8]);
-    mov(dword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::exit_address))], eax);
-    mov(qword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::return_address))], rbp);
-    mov(dword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::syscall_address))], edi);
-    mov(dword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::recompile_address))], ebx);
-    mov(dword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::trampoline_address))], edx);
-    mov(qword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::cross_interpret_address))], r15);
-    mov(qword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::trace_address))], r14);
+    mov(dword_ptr[rdi][s32(offsetof(SharedContext::Data, Data::exit_address))], eax);
+    mov(qword_ptr[rsi][s32(offsetof(Context, Context::return_address))], rbp);
 
     mov(edx, ICACHE_MEMORY_ADDRESS);
-    mov(eax, dword_ptr[rsi + s32(offsetof(Allegrex::Context, Allegrex::Context::pc))]);
+    mov(eax, dword_ptr[rsi + s32(offsetof(Context, Context::pc))]);
     add(rdx, rax);  // it is important to keep the translated address into rdx because the function at address rax may need it to recompile
-    mov(eax, dword_ptr[rdx]);
-    jmp(rax);
+    mov(ebp, dword_ptr[rdx]);
+    jmp(rbp);
 
     L(label_exit);
     add(rsp, 0x28);
@@ -245,13 +255,20 @@ void Allegrex::ICache::Start()
     auto unwind_info_frame1_pointer = icache.unwind_info_frame1.GetCode();
     auto unwind_info_frame2_pointer = icache.unwind_info_frame2.GetCode();
 
+    auto shared_context_pointer = shared_context.GetData();
+
     auto trace_pointer = icache.trace_code.GetCode();
     auto crossinterpret_pointer = icache.crossinterpret_code.GetCode();
     auto syscall_pointer = icache.syscall_code.GetCode();
     auto thread_pointer = icache.thread_code.GetCode();
     auto recompile_pointer = icache.recompile_code.GetCode();
+    auto trampoline_pointer = icache.trampoline_code.GetCode();
 
-    icache.trampoline_code.GetCode();
+    shared_context_pointer->syscall_address = u64(syscall_pointer);
+    shared_context_pointer->recompile_address = u64(recompile_pointer);
+    shared_context_pointer->trampoline_address = u64(trampoline_pointer);
+    shared_context_pointer->cross_interpret_address = u64(crossinterpret_pointer);
+    shared_context_pointer->trace_address = u64(trace_pointer);
 
     // Initialize icache for SRAM address range
     for (auto pc = 0x00010000; pc < 0x00014000; pc += 4)
@@ -299,13 +316,54 @@ void Allegrex::ICache::Stop()
 
 static hal::npa::Event cpu_icache("CPU ICache Recompiler");
 
-__noinline u32 lle::cpu::Context::Recompile(Context * that, u32 address)
+__noinline u64 lle::cpu::Context::Recompile(Context * that, u32 address)
 {
     hal::npa::StartEvent(cpu_icache);
     u32 pc = address - ICACHE_MEMORY_ADDRESS;
-    icache.blocks[pc] = new ICache::CodeBlock(pc, 4);
+    if (ICACHE_SLOW_MODE)
+    {
+        auto pc_start = pc & -64;
+        for (auto pc = pc_start; pc < pc_start + 64; pc += 4)
+        {
+            auto & block = icache.blocks[pc];
+            if (block)
+            {
+                if (*p32u32(pc) != block->opcode)
+                {
+                    delete block;
+                    block = new ICache::CodeBlock(pc, 4);
+                }
+            }
+            else
+            {
+                block = new ICache::CodeBlock(pc, 4);
+            }
+        }
+    }
+    else
+    {
+        auto & block = icache.blocks[pc];
+        if (block)
+        {
+            if (*p32u32(pc) != block->opcode)
+            {
+                delete block;
+                block = new ICache::CodeBlock(pc, 4);
+            }
+        }
+        else
+        {
+            block = new ICache::CodeBlock(pc, 4);
+        }
+    }
     hal::npa::StopEvent(cpu_icache);
-    return *((u32 *)(address));
+    return (u64(address) << 32ULL) | *((u32 *)(address));
+}
+
+__noinline void lle::cpu::Context::SetTrampoline(u32 address)
+{
+    pc = address;
+    if (return_address) *return_address = icache.shared_context.GetData()->trampoline_address;
 }
 
 bool cross_interpreter_cmp = false;
@@ -315,6 +373,12 @@ __noinline void Allegrex::ICache::CodeBlock::InternalMain()
     u32    pc = initial_address;
     size_t end = 0ULL;
     size_t beg = 0ULL;
+
+    enum
+    {
+        icache_hit = 1,
+        icache_miss,
+    };
 
     if (CROSS_INTERPRETER)
     {
@@ -330,6 +394,26 @@ __noinline void Allegrex::ICache::CodeBlock::InternalMain()
             break;
         }
         auto opcode = *((p32u32)pc);
+        if (INTERPRETER_LIKE)
+        {
+            if (pc & 0x40000000)
+            {
+                cmp(dword_ptr[rdx + DCACHE_MEMORY_ADDRESS - ICACHE_MEMORY_ADDRESS], opcode);
+                jnz(icache_miss);
+            }
+            else if (ICACHE_SLOW_MODE)
+            {
+                auto index = s32(pc & (4*16*128-1));
+                mov(rcx, qword_ptr[rdi + 2 * index + s32(offsetof(SharedContext::Data, icache_tag[0]))]);
+                cmp(ecx, edx);
+                jz(icache_hit);
+                rol(rcx, 32);
+                cmp(ecx, edx);
+                jnz(icache_miss);
+                mov(qword_ptr[rdi + 2 * index + s32(offsetof(SharedContext::Data, icache_tag[0]))], rcx);
+                L(icache_hit);
+            }
+        }
         pc = EmitInstruction(pc, opcode, false);
         if (INTERPRETER_LIKE)
         {
@@ -364,11 +448,20 @@ __noinline void Allegrex::ICache::CodeBlock::InternalMain()
     }
     target_address_done.clear();
 
-    if (INTERPRETER_LIKE && pc)
+    if (INTERPRETER_LIKE)
     {
-        mov(edx, u32((pc)+ICACHE_MEMORY_ADDRESS));
-        mov(ebp, dword_ptr[rdx]);
-        jmp(rbp);
+        if (pc)
+        {
+            mov(edx, u32((pc)+ICACHE_MEMORY_ADDRESS));
+            mov(ebp, dword_ptr[rdx]);
+            jmp(rbp);
+        }
+        if (ICACHE_SLOW_MODE)
+        {
+            L(icache_miss);
+            mov(ebp, u32(icache.shared_context.GetData()->recompile_address));
+            jmp(rbp);
+        }
     }
 }
 
@@ -393,6 +486,7 @@ void Allegrex::ICache::RecompileCode::InternalMain()
     {
         label_p32,
         label_p64,
+        label_skip,
     };
 
     // +-----------------------------+ RSP
@@ -448,7 +542,20 @@ void Allegrex::ICache::RecompileCode::InternalMain()
     // | RBX                         |
     // | RIP - Return Caller Address |
     // +-----------------------------+
-    jmp(rax);
+    mov(rdx, rax);
+    mov(ebp, eax);
+    shr(rdx, 32);
+    if (ICACHE_SLOW_MODE)
+    {
+        test(edx, 0x40000000);
+        jnz(label_skip);
+        mov(rax, -s32(ICACHE_MEMORY_ADDRESS));
+        add(rax, rdx);
+        and(rax, 4*16*128-1);
+        mov(dword_ptr[rdi + 2 * rax + s32(offsetof(SharedContext::Data, icache_tag[0]))], edx);
+        L(label_skip);
+    }
+    jmp(rbp);
 
     auto function = &Context::Recompile;
 

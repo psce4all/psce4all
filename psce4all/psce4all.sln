@@ -26,21 +26,28 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
-		Release|x64 = Release|x64
+		Release AVX|x64 = Release AVX|x64
+		Release SSE|x64 = Release SSE|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Debug|x64.ActiveCfg = Debug|x64
 		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Debug|x64.Build.0 = Debug|x64
-		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Release|x64.ActiveCfg = Release|x64
-		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Release|x64.Build.0 = Release|x64
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Release AVX|x64.ActiveCfg = Release SSE|x64
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Release AVX|x64.Build.0 = Release SSE|x64
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Release SSE|x64.ActiveCfg = Release|x64
+		{BD2E17D5-B393-42D5-94EC-C95B9F2503A5}.Release SSE|x64.Build.0 = Release|x64
 		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Debug|x64.ActiveCfg = Debug|x64
 		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Debug|x64.Build.0 = Debug|x64
-		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Release|x64.ActiveCfg = Release|x64
-		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Release|x64.Build.0 = Release|x64
+		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Release AVX|x64.ActiveCfg = Release SSE|x64
+		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Release AVX|x64.Build.0 = Release SSE|x64
+		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Release SSE|x64.ActiveCfg = Release|x64
+		{154DE838-8EB3-46E6-8227-7657CADB8B41}.Release SSE|x64.Build.0 = Release|x64
 		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Debug|x64.ActiveCfg = Debug|x64
 		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Debug|x64.Build.0 = Debug|x64
-		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Release|x64.ActiveCfg = Release|x64
-		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Release|x64.Build.0 = Release|x64
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Release AVX|x64.ActiveCfg = Release SSE|x64
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Release AVX|x64.Build.0 = Release SSE|x64
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Release SSE|x64.ActiveCfg = Release|x64
+		{B4193BEB-27E9-4FA6-A612-2F21D102974E}.Release SSE|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

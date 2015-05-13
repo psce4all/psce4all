@@ -54,13 +54,6 @@ namespace Allegrex
     {
         u64 * return_address;
 
-        u32 exit_address;
-        u32 syscall_address;
-        u32 recompile_address;
-        u32 trampoline_address;
-        u64 cross_interpret_address;
-        u64 trace_address;
-
         __forceinline void reset_c0r()
         {
             ie = 1;
@@ -4384,7 +4377,7 @@ namespace Allegrex
 
         static void Syscall(Context * that, u32 code);
 
-        static u32  Recompile(Context * that, u32 address);
+        static u64  Recompile(Context * that, u32 address);
 
         static void CrossInterpret(Context * that, u32 address);
 

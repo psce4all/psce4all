@@ -780,12 +780,6 @@ void lle::cpu::Context::do$SYSCALL(u32 code)
     }
 }
 
-__noinline void lle::cpu::Context::SetTrampoline(u32 address)
-{
-    pc = address;
-    if (return_address) *return_address = u64(trampoline_address);
-}
-
 __noinline void lle::cpu::Context::Syscall(Context * that, u32 code)
 {
     if (CCpu::DoLeave != Cpu.syscall.code && code != 0x0000A001)
@@ -794,6 +788,6 @@ __noinline void lle::cpu::Context::Syscall(Context * that, u32 code)
     }
     else
     {
-        if (that->return_address) *that->return_address = u64(that->exit_address);
+        if (that->return_address) *that->return_address = u64(icache.shared_context.GetData()->exit_address);
     }
 }

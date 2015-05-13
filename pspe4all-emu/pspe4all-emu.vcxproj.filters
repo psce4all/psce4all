@@ -408,6 +408,9 @@
     <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadContext.cpp">
       <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
     </ClCompile>
+    <ClCompile Include="..\pspe4all\src\emu.Settings.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -724,6 +727,9 @@
     </ClInclude>
     <ClInclude Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadContext.h">
       <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pspe4all\src\emu.Settings.h">
+      <Filter>Source Files\emu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

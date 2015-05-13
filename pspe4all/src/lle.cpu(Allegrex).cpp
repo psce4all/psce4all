@@ -12,6 +12,7 @@ bool Allegrex::interpreter_like_mode = false;
 bool Allegrex::no_register_allocation = false;
 bool Allegrex::trace_instruction = false;
 bool Allegrex::jitasm_trace_cfg = false;
+bool Allegrex::icache_fast_mode = true;
 
 namespace emu
 {

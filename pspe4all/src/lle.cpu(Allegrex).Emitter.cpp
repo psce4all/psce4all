@@ -284,7 +284,7 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$SYSCALL(u32 address, u32 opcode
     auto IMM = Allegrex::Instruction::uimm20(opcode);
 
     mov(edx, IMM);
-    call(rdi); // call CCpu::naked_main::syscall
+    call(qword_ptr[rdi + s32(offsetof(SharedContext::Data, syscall_address))]);
 
     target_address_next.insert(address + 4);
 
@@ -1789,10 +1789,15 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$ADD_S(u32 address, u32 opcode, 
     auto $fs = fpr_w(FS);
     auto $ft = fpr_w(FT);
 
+#if !defined(__AVX__)
     movss(xmm0, $fs);
     addss(xmm0, $ft);
     movss($fd, xmm0);
-
+#else
+    vmovss(xmm0, $fs);
+    vaddss(xmm0, xmm0, $ft);
+    vmovss($fd, xmm0);
+#endif
     return address + 4;
 }
 
@@ -1815,9 +1820,15 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$MUL_S(u32 address, u32 opcode, 
     auto $fs = fpr_w(FS);
     auto $ft = fpr_w(FT);
 
+#if !defined(__AVX__)
     movss(xmm0, $fs);
     mulss(xmm0, $ft);
     movss($fd, xmm0);
+#else
+    vmovss(xmm0, $fs);
+    vmulss(xmm0, xmm0, $ft);
+    vmovss($fd, xmm0);
+#endif
 
     return address + 4;
 }
@@ -1835,9 +1846,15 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$DIV_S(u32 address, u32 opcode, 
     auto $fs = fpr_w(FS);
     auto $ft = fpr_w(FT);
 
+#if !defined(__AVX__)
     movss(xmm0, $fs);
     divss(xmm0, $ft);
     movss($fd, xmm0);
+#else
+    vmovss(xmm0, $fs);
+    vdivss(xmm0, xmm0, $ft);
+    vmovss($fd, xmm0);
+#endif
 
     return address + 4;
 }
@@ -1865,8 +1882,13 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$MOV_S(u32 address, u32 opcode, 
     auto $fd = fpr_w(FD);
     auto $fs = fpr_w(FS);
 
+#if !defined(__AVX__)
     movss(xmm0, $fs);
     movss($fd, xmm0);
+#else
+    vmovss(xmm0, $fs);
+    vmovss($fd, xmm0);
+#endif
 
     return address + 4;
 }
@@ -2014,8 +2036,13 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$CVT_S_W(u32 address, u32 opcode
     auto $fd = fpr_w(FD);
     auto $fs = fpr_w(FS);
 
+#if !defined(__AVX__)
     cvtsi2ss(xmm0, $fs);
     movss($fd, xmm0);
+#else
+    vcvtsi2ss(xmm0, xmm0, $fs);
+    vmovss($fd, xmm0);
+#endif
 
     return address + 4;
 }
@@ -3277,6 +3304,7 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$LWC1(u32 address, u32 opcode, b
     auto $rs = Gpr(RS);
     auto $rb = NO_REGISTER_ALLOCATION ? rdx : Reg64($rs);
 
+#if !defined(__AVX__)
     if (RS)
     {
         gen($rs);
@@ -3288,6 +3316,19 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$LWC1(u32 address, u32 opcode, b
         movss(xmm0, dword_ptr[s32(DCACHE_MEMORY_ADDRESS + IMM)]);
     }
     movss($ft, xmm0);
+#else
+    if (RS)
+    {
+        gen($rs);
+        if (NO_REGISTER_ALLOCATION) mov(edx, $rs);
+        vmovss(xmm0, dword_ptr[$rb + s32(DCACHE_MEMORY_ADDRESS + IMM)]);
+    }
+    else
+    {
+        vmovss(xmm0, dword_ptr[s32(DCACHE_MEMORY_ADDRESS + IMM)]);
+    }
+    vmovss($ft, xmm0);
+#endif
 
     return address + 4;
 }
@@ -4373,6 +4414,7 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$SWC1(u32 address, u32 opcode, b
     auto $rs = Gpr(RS);
     auto $rb = NO_REGISTER_ALLOCATION ? rdx : Reg64($rs);
 
+#if !defined(__AVX__)
     movss(xmm0, $ft);
     if (RS)
     {
@@ -4384,7 +4426,19 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$SWC1(u32 address, u32 opcode, b
     {
         movss(dword_ptr[s32(DCACHE_MEMORY_ADDRESS + IMM)], xmm0);
     }
-
+#else
+    vmovss(xmm0, $ft);
+    if (RS)
+    {
+        gen($rs);
+        if (NO_REGISTER_ALLOCATION) mov(edx, $rs);
+        vmovss(dword_ptr[$rb + s32(DCACHE_MEMORY_ADDRESS + IMM)], xmm0);
+    }
+    else
+    {
+        vmovss(dword_ptr[s32(DCACHE_MEMORY_ADDRESS + IMM)], xmm0);
+    }
+#endif
     return address + 4;
 }
 

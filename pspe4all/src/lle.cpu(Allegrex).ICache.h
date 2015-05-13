@@ -29,6 +29,27 @@ namespace Allegrex
             virtual void InternalMain() override;
         } unwind_info_frame2;
 
+        struct SharedContext : Allegrex::jitasm::Frontend
+        {
+            struct Data
+            {
+                u64 exit_address;
+                u64 syscall_address;
+                u64 recompile_address;
+                u64 trampoline_address;
+                u64 cross_interpret_address;
+                u64 trace_address;
+
+                // PSP 16-KByte icache consists of 64-byte cache blocks using a 2-way set associative configuration with 8-KByte per way.
+                // Each set consist of 128 lines.
+                u64 icache_tag[16*128]; // two-way set x 16 instructions x 128 lines
+            };
+
+            Data * GetData() { return (Data *)GetCode(); }
+
+            virtual void InternalMain() override;
+        } shared_context;
+
         struct ThreadCode : Allegrex::jitasm::Frontend
         {
             virtual void InternalMain() override;
@@ -67,7 +88,7 @@ namespace Allegrex
             {
             }
 
-            /**/  CodeBlock(u32 pc, size_t size) : initial_address(pc)
+            /**/  CodeBlock(u32 pc, size_t size) : initial_address(pc), opcode(*(p32dcache< u32 >(pc)))
             {
                 *(p32icache< u32 >(pc)) = u32(GetCode());
             }
@@ -101,8 +122,8 @@ namespace Allegrex
 
             virtual void InternalMain() override;
 
-#define __cross_interpret__ if (CROSS_INTERPRETER) { extern bool cross_interpreter_cmp; mov(dword_ptr[rsp], cross_interpreter_cmp ? address : (address + 1)); call(qword_ptr[rsi+s32(offsetof(lle::cpu::Context, Context::cross_interpret_address))], true); cross_interpreter_cmp = false; }
-#define __label__ if (!delayslot) { L(address); target_address_done.insert(address); source(address); __cross_interpret__ } else source(address); if (TRACE_ALLEGREX_INSTRUCTION) { mov(dword_ptr[rsp], address); call(qword_ptr[rsi + s32(offsetof(lle::cpu::Context, Context::trace_address))], true); }
+#define __cross_interpret__ if (CROSS_INTERPRETER) { extern bool cross_interpreter_cmp; mov(dword_ptr[rsp], cross_interpreter_cmp ? address : (address + 1)); call(qword_ptr[rdi+s32(offsetof(SharedContext::Data, cross_interpret_address))], true); cross_interpreter_cmp = false; }
+#define __label__ if (!delayslot) { L(address); target_address_done.insert(address); source(address); __cross_interpret__ } else source(address); if (TRACE_ALLEGREX_INSTRUCTION) { mov(dword_ptr[rsp], address); call(qword_ptr[rdi + s32(offsetof(SharedContext::Data, trace_address))], true); }
 #define __target_label__(address1, address2) u32 target_address = address1; if ((address2)) target_address_next.insert((address2)); target_address_next.insert((address1))
 #define __skip_label__(address) u32 skip_address = address
 
@@ -122,6 +143,7 @@ namespace Allegrex
 #include "lle.cpu(Allegrex).Emitter.h"
 
             u32             initial_address;
+            u32             opcode;
             std::set< u32 > target_address_next;
             std::set< u32 > target_address_done;
         };
@@ -129,6 +151,9 @@ namespace Allegrex
         std::map< u32, CodeBlock * > blocks;
 
         RUNTIME_FUNCTION runtime_function_array[4];
+
+        static u32 const cache_size = 16 * 1024;
+        static u32 const cache_lines = cache_size / 64;
     };
 
     extern ICache icache;

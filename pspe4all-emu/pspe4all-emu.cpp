@@ -362,13 +362,14 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
         { L"use-interpreter", required_argument, 0, L'1' },
         { L"use-cross-interpreter", no_argument, 0, L'2' },
         { L"no-register-allocation", no_argument, 0, L'3' },
-        { L"trace-allegrex", no_argument, 0, L'4' },
-        { L"jitasm-trace-cfg", no_argument, 0, L'5' },
+        { L"trace-allegrex", optional_argument, 0, L'4' },
+        { L"jitasm-trace-cfg", optional_argument, 0, L'5' },
+        { L"allegrex-icache", optional_argument, 0, L'6' },
         { L"help", no_argument, 0, L'h' },
         { 0, 0, 0, 0 }
     };
 
-    while (-1 != (c = getopt_long_only(argc, argv, _T("12:h"), long_options, &option_index)))
+    while (-1 != (c = getopt_long_only(argc, argv, L"123456h", long_options, &option_index)))
     {
         switch (c)
         {
@@ -401,6 +402,7 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
                 {
                     Allegrex::use_real_interpreter = false;
                     Allegrex::interpreter_like_mode = false;
+                    Allegrex::icache_fast_mode = true;
                 }
                 else
                 {
@@ -415,10 +417,67 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
                 Allegrex::no_register_allocation = true;
                 break;
             case L'4':
-                Allegrex::trace_instruction = true;
+                if (optarg)
+                {
+                    if (!wcsicmp(optarg, L"yes"))
+                    {
+                        Allegrex::trace_instruction = true;
+                    }
+                    else if (!wcsicmp(optarg, L"no"))
+                    {
+                        Allegrex::trace_instruction = false;
+                    }
+                    else
+                    {
+                        printf("option --trace-allegrex with unknown value `%ls'\n", optarg);
+                    }
+                }
+                else
+                {
+                    Allegrex::trace_instruction = true;
+                }
                 break;
             case L'5':
-                Allegrex::jitasm_trace_cfg = true;
+                if (optarg)
+                {
+                    if (!wcsicmp(optarg, L"yes"))
+                    {
+                        Allegrex::jitasm_trace_cfg = true;
+                    }
+                    else if (!wcsicmp(optarg, L"no"))
+                    {
+                        Allegrex::jitasm_trace_cfg = false;
+                    }
+                    else
+                    {
+                        printf("option --jitasm-trace-cfg with unknown value `%ls'\n", optarg);
+                    }
+                }
+                else
+                {
+                    Allegrex::jitasm_trace_cfg = true;
+                }
+                break;
+            case L'6':
+                if (optarg)
+                {
+                    if (!wcsicmp(optarg, L"fast"))
+                    {
+                        Allegrex::icache_fast_mode = true;
+                    }
+                    else if (!wcsicmp(optarg, L"slow") && Allegrex::interpreter_like_mode)
+                    {
+                        Allegrex::icache_fast_mode = false;
+                    }
+                    else
+                    {
+                        printf("option --allegrex-icache with unknown value `%ls'\n", optarg);
+                    }
+                }
+                else
+                {
+                    Allegrex::icache_fast_mode = true;
+                }
                 break;
             case '?':
                 break;
