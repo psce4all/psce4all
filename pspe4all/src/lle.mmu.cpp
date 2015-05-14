@@ -277,7 +277,7 @@ namespace lle
                     }
                     while (!ok && size > 64*1024*1024);
 
-                    forcef(mmu, "jitasm heap size = %f", size/1024./1024.);
+                    forcef(mmu, "jitasm heap size = %.0f Mbyte", size/1024./1024.);
 
                     if (ok)
                     {
