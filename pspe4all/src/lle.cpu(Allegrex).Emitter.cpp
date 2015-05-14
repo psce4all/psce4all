@@ -1016,7 +1016,64 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$MAX(u32 address, u32 opcode, bo
 /* MIN */
 __noinline u32 Allegrex::ICache::CodeBlock::emit$MIN(u32 address, u32 opcode, bool delayslot)
 {
-    static bool found = false; if (!found) forcef(emu, "needs emit$MIN"); found = true; __label__; return address + 4;
+    __label__;
+
+    auto RD = Allegrex::Instruction::rd(opcode);
+    auto RS = Allegrex::Instruction::rs(opcode);
+    auto RT = Allegrex::Instruction::rt(opcode);
+
+    auto $rd = Gpr(RD);
+    auto $rs = Gpr(RS);
+    auto $rt = Gpr(RT);
+
+    if (RD)
+    {
+        if (RS)
+        {
+            if (RT)
+            {
+                if (RT != RD)
+                {
+                    gen($rt);
+                    gen($rd, $rs);
+                    cmp($rd, $rt);
+                    cmovg($rd, $rt);
+                    kill($rd);
+                }
+                else
+                {
+                    gen($rs);
+                    gen($rd, $rt);
+                    cmp($rd, $rs);
+                    cmovg($rd, $rs);
+                    kill($rd);
+                }
+            }
+            else
+            {
+                gen($rs);
+                mov($rd, 0);
+                cmp($rd, $rs);
+                cmovg($rd, $rs);
+                kill($rd);
+            }
+        }
+        else if (RT)
+        {
+            gen($rt);
+            mov($rd, 0);
+            cmp($rd, $rt);
+            cmovg($rd, $rt);
+            kill($rd);
+        }
+        else
+        {
+            mov($rd, 0);
+            kill($rd);
+        }
+    }
+
+    return address + 4;
 }
 
 /* MSUB */
@@ -1789,15 +1846,8 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$ADD_S(u32 address, u32 opcode, 
     auto $fs = fpr_w(FS);
     auto $ft = fpr_w(FT);
 
-#if !defined(__AVX__)
-    movss(xmm0, $fs);
-    addss(xmm0, $ft);
-    movss($fd, xmm0);
-#else
-    vmovss(xmm0, $fs);
-    vaddss(xmm0, xmm0, $ft);
-    vmovss($fd, xmm0);
-#endif
+    __apply_aluss(addss, vaddss, xmm0, $fd, $fs, $ft);
+
     return address + 4;
 }
 
@@ -1820,15 +1870,7 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$MUL_S(u32 address, u32 opcode, 
     auto $fs = fpr_w(FS);
     auto $ft = fpr_w(FT);
 
-#if !defined(__AVX__)
-    movss(xmm0, $fs);
-    mulss(xmm0, $ft);
-    movss($fd, xmm0);
-#else
-    vmovss(xmm0, $fs);
-    vmulss(xmm0, xmm0, $ft);
-    vmovss($fd, xmm0);
-#endif
+    __apply_aluss(mulss, vmulss, xmm0, $fd, $fs, $ft);
 
     return address + 4;
 }
@@ -1846,15 +1888,7 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$DIV_S(u32 address, u32 opcode, 
     auto $fs = fpr_w(FS);
     auto $ft = fpr_w(FT);
 
-#if !defined(__AVX__)
-    movss(xmm0, $fs);
-    divss(xmm0, $ft);
-    movss($fd, xmm0);
-#else
-    vmovss(xmm0, $fs);
-    vdivss(xmm0, xmm0, $ft);
-    vmovss($fd, xmm0);
-#endif
+    __apply_aluss(divss, vdivss, xmm0, $fd, $fs, $ft);
 
     return address + 4;
 }
@@ -1882,13 +1916,7 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$MOV_S(u32 address, u32 opcode, 
     auto $fd = fpr_w(FD);
     auto $fs = fpr_w(FS);
 
-#if !defined(__AVX__)
-    movss(xmm0, $fs);
-    movss($fd, xmm0);
-#else
-    vmovss(xmm0, $fs);
-    vmovss($fd, xmm0);
-#endif
+    __apply_movss(xmm0, $fd, $fs);
 
     return address + 4;
 }

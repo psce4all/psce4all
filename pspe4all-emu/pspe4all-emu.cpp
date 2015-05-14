@@ -369,7 +369,7 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
         { 0, 0, 0, 0 }
     };
 
-    while (-1 != (c = getopt_long_only(argc, argv, L"123456h", long_options, &option_index)))
+    while (-1 != (c = getopt_long_only(argc, argv, L"1:234:5:6:h", long_options, &option_index)))
     {
         switch (c)
         {
@@ -406,7 +406,7 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
                 }
                 else
                 {
-                    printf("option --use-interpreter with unknown value `%ls'\n", optarg);
+                    fprintf(stderr, "option --use-interpreter with unknown value `%ls'\n", optarg);
                 }
                 break;
             case L'2':
@@ -429,7 +429,7 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
                     }
                     else
                     {
-                        printf("option --trace-allegrex with unknown value `%ls'\n", optarg);
+                        fprintf(stderr, "option --trace-allegrex with unknown value `%ls'\n", optarg);
                     }
                 }
                 else
@@ -450,7 +450,7 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
                     }
                     else
                     {
-                        printf("option --jitasm-trace-cfg with unknown value `%ls'\n", optarg);
+                        fprintf(stderr, "option --jitasm-trace-cfg with unknown value `%ls'\n", optarg);
                     }
                 }
                 else
@@ -471,13 +471,17 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
                     }
                     else
                     {
-                        printf("option --allegrex-icache with unknown value `%ls'\n", optarg);
+                        fprintf(stderr, "option --allegrex-icache with unknown value `%ls'\n", optarg);
                     }
                 }
                 else
                 {
                     Allegrex::icache_fast_mode = true;
                 }
+                break;
+            case ':':
+                /* missing option argument */
+                fprintf(stderr, "option --%s requires an argument\n", argv[0], long_options[option_index].name);
                 break;
             case '?':
                 break;

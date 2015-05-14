@@ -82,7 +82,9 @@ namespace Allegrex
 
         struct CodeBlock : Allegrex::jitasm::Frontend
         {
-            typedef Allegrex::jitasm::Gpr Gpr;
+            typedef Allegrex::jitasm::Gpr    Gpr;
+            typedef Allegrex::jitasm::XmmReg Fpr;
+            typedef Allegrex::jitasm::XmmReg Vpr;
 
             /**/  CodeBlock()
             {
@@ -117,6 +119,14 @@ namespace Allegrex
                 mov(dst, dst);
             }
 
+            template < typename Ldu, typename Alu, typename Stu >
+            __forceinline void alu(Ldu & lo, Alu & bo, Stu & so)
+            {
+                lo();
+                bo();
+                so();
+            }
+
             u32   EmitInstruction(u32 address, u32 opcode, bool delayslot);
             void  RewriteInstructions(size_t beg, size_t end);
 
@@ -129,6 +139,34 @@ namespace Allegrex
 
 #define __interpreter_jmp__(address) if (INTERPRETER_LIKE) if (!delayslot) { mov(edx, u32((address)+ICACHE_MEMORY_ADDRESS)); mov(ebp, dword_ptr[rdx]); jmp(rbp); }
 #define __interpreter_jmp_with_label__(label, address) if (INTERPRETER_LIKE)  { L(label); mov(edx, u32((address)+ICACHE_MEMORY_ADDRESS)); mov(ebp, dword_ptr[rdx]); jmp(rbp); }
+
+#if !defined(__AVX__) 
+#define __apply_aluss(alu1, alu2, reg, dst, src1, src2) do { \
+    auto lduss = [&]() { movss(reg, src1); }; \
+    auto aluss = [&]() { alu1(reg, src2); }; \
+    auto stuss = [&]() { movss(dst, reg); }; \
+    alu(lduss, aluss, stuss); } while(0)
+#else
+#define __apply_aluss(alu1, alu2, reg, dst, src1, src2) do { \
+    auto lduss = [&]() { vmovss(reg, src1); }; \
+    auto aluss = [&]() { alu2(reg, reg, src2); }; \
+    auto stuss = [&]() { vmovss(dst, reg); }; \
+    alu(lduss, aluss, stuss); } while(0)
+#endif
+
+#if !defined(__AVX__) 
+#define __apply_movss(reg, dst, src) do { \
+    auto lduss = [&]() { movss(reg, src); }; \
+    auto aluss = [&]() { }; \
+    auto stuss = [&]() { movss(dst, reg); }; \
+    alu(lduss, aluss, stuss); } while(0)
+#else
+#define __apply_movss(reg, dst, src) do { \
+    auto lduss = [&]() { vmovss(reg, src); }; \
+    auto aluss = [&]() { }; \
+    auto stuss = [&]() { vmovss(dst, reg); }; \
+    alu(lduss, aluss, stuss); } while(0)
+#endif
 
 #define gpr_w(r) (dword_ptr[rsi+s32(offsetof(lle::cpu::Context, gpr[r]))])
 #define gpr_h(r) (word_ptr[rsi+s32(offsetof(lle::cpu::Context, gpr[r]))])

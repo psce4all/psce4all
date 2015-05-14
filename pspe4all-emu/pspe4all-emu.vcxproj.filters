@@ -402,14 +402,14 @@
     <ClCompile Include="..\pspe4all\src\hal.video.cpp">
       <Filter>Source Files\hal</Filter>
     </ClCompile>
-    <ClCompile Include="..\psce4all\src\hal.os.Module.cpp">
-      <Filter>Source Files\hal</Filter>
-    </ClCompile>
     <ClCompile Include="..\pspe4all\src\hle.kd.ThreadMan.ThreadContext.cpp">
       <Filter>Source Files\hle\hle.kd\hle.kd.ThreadMan</Filter>
     </ClCompile>
     <ClCompile Include="..\pspe4all\src\emu.Settings.cpp">
       <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.os.Module.cpp">
+      <Filter>Source Files\hal\hal.os</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -716,9 +716,6 @@
     <ClInclude Include="..\pspe4all\src\hal.video.h">
       <Filter>Source Files\hal</Filter>
     </ClInclude>
-    <ClInclude Include="..\psce4all\src\hal.os.Module.h">
-      <Filter>Source Files\hal</Filter>
-    </ClInclude>
     <ClInclude Include="..\pspe4all\src\pspe4all.pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -730,6 +727,9 @@
     </ClInclude>
     <ClInclude Include="..\pspe4all\src\emu.Settings.h">
       <Filter>Source Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.Module.h">
+      <Filter>Source Files\hal\hal.os</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

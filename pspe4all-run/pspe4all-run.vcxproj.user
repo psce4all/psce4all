@@ -7,12 +7,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release AVX|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>--use-interpreter=fast  ..\..\..\psp\demo\original\compilerperf_pspe4all.elf</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>--use-interpreter=fast --allegrex-icache=slow --jitasm-trace-cfg=no  ..\..\..\psp\demo\original\compilerperf_pspe4all.elf</LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release SSE|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>--use-interpreter=fast  ..\..\..\psp\demo\original\compilerperf_pspe4all.elf</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>--use-interpreter=fast --allegrex-icache=slow --jitasm-trace-cfg=no ..\..\..\psp\demo\original\compilerperf_pspe4all.elf</LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
