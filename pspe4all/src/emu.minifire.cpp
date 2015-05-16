@@ -30,7 +30,7 @@
 
 hle::kd::Module   * main_module = 0;
 hal::AsyncFile<>  * async_file  = 0;
-hal::AsyncFile<>  * asm_file;
+hal::AsyncFile<256, 20>  * asm_file;
 
 typedef struct PROCTHREADATTRIBUTE {
     DWORD_PTR Attribute;
@@ -139,7 +139,7 @@ void CCpu::Run()
     {
         if (!USE_REAL_INTERPRETER)
         {
-            if (_wcsicmp(Allegrex::use_debug_server.c_str(), L"none"))
+            if (Allegrex::use_debug_server)
             {
                 SECURITY_ATTRIBUTES sa;
 
@@ -164,7 +164,7 @@ void CCpu::Run()
                 ZeroMemory(&pi, sizeof(pi));
 
                 wchar_t szCommandLine[256];
-                _snwprintf_s(szCommandLine, 255, L"pspe4all-dbg.%s.exe %d", Allegrex::use_debug_server.c_str(), ::GetCurrentProcessId());
+                _snwprintf_s(szCommandLine, 255, L"pspe4all-dbg.%s.exe %d", Allegrex::use_debugger.c_str(), ::GetCurrentProcessId());
 
                 forcef(emu, L"Launching debugger '%s'...", szCommandLine);
 
@@ -253,7 +253,7 @@ void CCpu::StartThread()
 
     if (TRACE_ALLEGREX_INSTRUCTION)
     {
-        asm_file = new hal::AsyncFile < > ;
+        asm_file = new hal::AsyncFile < 256, 20 > ;
         if (INTERPRETER_LIKE)
         {
             asm_file->Open(L"allegrex_flow.fast.txt");
@@ -333,7 +333,7 @@ void lle::cpu::Context::Trace(Context * that, u32 address)
         last_opcode = 0;
     }
 
-    if (addresses.find(address) == addresses.end())
+    if (true/*addresses.find(address) == addresses.end()*/)
     {
         char line[1024];
         sprintf(line, "\r\n%08X - ", address);

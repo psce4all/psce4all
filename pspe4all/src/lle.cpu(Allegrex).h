@@ -11,7 +11,7 @@
 #define NO_REGISTER_ALLOCATION Allegrex::no_register_allocation
 #define TRACE_ALLEGREX_INSTRUCTION Allegrex::trace_instruction
 #define JITASM_TRACE_CFG Allegrex::jitasm_trace_cfg
-#define ICACHE_SLOW_MODE !Allegrex::icache_fast_mode
+#define ICACHE_SLOW_MODE (!Allegrex::icache_fast_mode)
 
 #include "emu.Log.h"
 
@@ -27,8 +27,9 @@ namespace Allegrex
     extern bool trace_instruction;
     extern bool jitasm_trace_cfg;
     extern bool icache_fast_mode;
+    extern bool use_debug_server;
 
-    extern std::wstring use_debug_server;
+    extern std::wstring use_debugger;
 
     extern Instruction * instruction_array[];
 

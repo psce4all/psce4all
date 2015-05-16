@@ -482,7 +482,8 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
                 }
                 break;
             case L'D':
-                Allegrex::use_debug_server = optarg;
+                Allegrex::use_debugger = optarg;
+                Allegrex::use_debug_server = !!wcsicmp(optarg, L"none");
                 break;
             case ':':
                 /* missing option argument */
