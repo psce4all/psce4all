@@ -539,8 +539,7 @@ namespace dbg
                             break;
 
                         case EXCEPTION_DEBUG_EVENT:
-                            OnExceptionEvent(DebugEvent.dwThreadId, DebugEvent.u.Exception);
-                            ContinueStatus = DBG_EXCEPTION_NOT_HANDLED;
+                            ContinueStatus = OnExceptionEvent(DebugEvent.dwThreadId, DebugEvent.u.Exception);
                             DWORD ExceptionCode = DebugEvent.u.Exception.ExceptionRecord.ExceptionCode;
                             if (!bSeenInitialBreakpoint && (ExceptionCode == EXCEPTION_BREAKPOINT))
                             {
@@ -651,7 +650,7 @@ namespace dbg
                 }
             }
 
-            virtual void OnExceptionEvent(DWORD ThreadId, EXCEPTION_DEBUG_INFO const & Info)
+            virtual DWORD OnExceptionEvent(DWORD ThreadId, EXCEPTION_DEBUG_INFO const & Info)
             {
                 TCHAR szMessage[4096];
 
@@ -677,7 +676,41 @@ namespace dbg
 
                 ::MessageBox(0, szMessage, _T("OnExceptionEvent"), MB_OK);
 
+                switch (Info.ExceptionRecord.ExceptionCode)
+                {
+                case EXCEPTION_ACCESS_VIOLATION:
+                    // First chance: Pass this on to the system. 
+                    // Last chance: Display an appropriate error. 
+                    break;
+
+                case EXCEPTION_BREAKPOINT:
+                    // First chance: Display the current 
+                    // instruction and register values. 
+                    break;
+
+                case EXCEPTION_DATATYPE_MISALIGNMENT:
+                    // First chance: Pass this on to the system. 
+                    // Last chance: Display an appropriate error. 
+                    break;
+
+                case EXCEPTION_SINGLE_STEP:
+                    // First chance: Update the display of the 
+                    // current instruction and register values. 
+                    break;
+
+                case DBG_CONTROL_C:
+                    // First chance: Pass this on to the system. 
+                    // Last chance: Display an appropriate error. 
+                    break;
+
+                default:
+                    // Handle other exceptions. 
+                    break;
+                }
+
                 //ShowCallStack(ThreadId);
+
+                return DBG_EXCEPTION_NOT_HANDLED;
             }
 
             virtual void OnDebugStringEvent(DWORD ThreadId, OUTPUT_DEBUG_STRING_INFO const & Info)

@@ -127,18 +127,18 @@ namespace Allegrex
                 so();
             }
 
+            u32   SetTargetLabel(u32 taken_address, u32 untaken_address = 0);
+            u32   SetSkipLabel(u32 address);
+
+            void  EmitCrossInterpret(u32 address, u32 opcode, bool delayslot);
+            void  EmitProlog(u32 address, u32 opcode, bool delayslot);
+            u32   EmitEpilog(u32 address, u32 opcode, bool delayslot);
+            void  EmitInterpreterBranch(u32 address, u32 opcode, bool delayslot);
+            void  EmitInterpreterBranch(u32 label, u32 address, u32 opcode, bool delayslot);
             u32   EmitInstruction(u32 address, u32 opcode, bool delayslot);
             void  RewriteInstructions(size_t beg, size_t end);
 
             virtual void InternalMain() override;
-
-#define __cross_interpret__ if (CROSS_INTERPRETER) { extern bool cross_interpreter_cmp; mov(dword_ptr[rsp], cross_interpreter_cmp ? address : (address + 1)); call(qword_ptr[rdi+s32(offsetof(SharedContext::Data, cross_interpret_address))], true); cross_interpreter_cmp = false; }
-#define __label__ if (!delayslot) { L(address); target_address_done.insert(address); source(address); __cross_interpret__ } else source(address); if (TRACE_ALLEGREX_INSTRUCTION) { mov(dword_ptr[rsp], address); call(qword_ptr[rdi + s32(offsetof(SharedContext::Data, trace_address))], true); }
-#define __target_label__(address1, address2) u32 target_address = address1; if ((address2)) target_address_next.insert((address2)); target_address_next.insert((address1))
-#define __skip_label__(address) u32 skip_address = address
-
-#define __interpreter_jmp__(address) if (INTERPRETER_LIKE) if (!delayslot) { mov(edx, u32((address)+ICACHE_MEMORY_ADDRESS)); mov(ebp, dword_ptr[rdx]); jmp(rbp); }
-#define __interpreter_jmp_with_label__(label, address) if (INTERPRETER_LIKE)  { L(label); mov(edx, u32((address)+ICACHE_MEMORY_ADDRESS)); mov(ebp, dword_ptr[rdx]); jmp(rbp); }
 
 #if !defined(__AVX__)
 #define __apply_aluss(alu1, alu2, reg, dst, src1, src2) do { \
@@ -175,8 +175,6 @@ namespace Allegrex
 
 #define lo_w dword_ptr[rsi+s32(0 + offsetof(lle::cpu::Context, hilo))]
 #define hi_w dword_ptr[rsi+s32(4 + offsetof(lle::cpu::Context, hilo))]
-
-#define syscall_q qword_ptr[rsi+s32(offsetof(lle::cpu::Context, doSyscall))]
 
 #include "lle.cpu(Allegrex).Emitter.h"
 

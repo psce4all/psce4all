@@ -374,12 +374,6 @@ __noinline void Allegrex::ICache::CodeBlock::InternalMain()
     size_t end = 0ULL;
     size_t beg = 0ULL;
 
-    enum
-    {
-        icache_hit = 1,
-        icache_miss,
-    };
-
     if (CROSS_INTERPRETER)
     {
         cross_interpreter_cmp = true;
@@ -387,33 +381,14 @@ __noinline void Allegrex::ICache::CodeBlock::InternalMain()
 
     while (pc)
     {
-        if ((pc - 0x08800000) > (0x0C000000 - 0x08800000))
-        {
-            pc = 0;
-            //__debugbreak();
-            break;
-        }
+        //if ((pc - 0x08800000) > (0x0C000000 - 0x08800000))
+        //{
+        //    pc = 0;
+        //    //__debugbreak();
+        //    break;
+        //}
+
         auto opcode = *((p32u32)pc);
-        if (INTERPRETER_LIKE)
-        {
-            if (pc & 0x40000000)
-            {
-                cmp(dword_ptr[rdx + DCACHE_MEMORY_ADDRESS - ICACHE_MEMORY_ADDRESS], opcode);
-                jnz(icache_miss);
-            }
-            else if (ICACHE_SLOW_MODE)
-            {
-                auto index = s32(pc & (4*16*128-1));
-                mov(rcx, qword_ptr[rdi + 2 * index + s32(offsetof(SharedContext::Data, icache_tag[0]))]);
-                cmp(ecx, edx);
-                jz(icache_hit);
-                rol(rcx, 32);
-                cmp(ecx, edx);
-                jnz(icache_miss);
-                mov(qword_ptr[rdi + 2 * index + s32(offsetof(SharedContext::Data, icache_tag[0]))], rcx);
-                L(icache_hit);
-            }
-        }
         pc = EmitInstruction(pc, opcode, false);
         if (INTERPRETER_LIKE)
         {
@@ -447,12 +422,135 @@ __noinline void Allegrex::ICache::CodeBlock::InternalMain()
         }
     }
     target_address_done.clear();
+}
 
+#define IDO(x) do { address = emit$##x(address, opcode, delayslot); goto epilog; } while (-1 == __LINE__)
+
+__noinline u32 Allegrex::ICache::CodeBlock::EmitInstruction(u32 address, u32 opcode, bool delayslot)
+{
+    EmitProlog(address, opcode, delayslot);
+#include "lle.cpu(Allegrex).Decoder.h"
+    address += 4;
+epilog:
+    return EmitEpilog(address, opcode, delayslot);
+}
+
+void Allegrex::ICache::CodeBlock::RewriteInstructions(size_t beg, size_t end)
+{
+    return;
+}
+
+u32 Allegrex::ICache::CodeBlock::SetTargetLabel(u32 taken_address, u32 untaken_address /*= 0*/)
+{
+    if (untaken_address)
+    {
+        target_address_next.insert(untaken_address);
+    }
+    target_address_next.insert(taken_address);
+    return taken_address;
+}
+
+u32 Allegrex::ICache::CodeBlock::SetSkipLabel(u32 address)
+{
+    return address;
+}
+
+void Allegrex::ICache::CodeBlock::EmitCrossInterpret(u32 address, u32 opcode, bool delayslot)
+{
+    extern bool cross_interpreter_cmp;
+    mov(dword_ptr[rsp], cross_interpreter_cmp ? address : (address + 1));
+    call(qword_ptr[rdi + s32(offsetof(SharedContext::Data, cross_interpret_address))], true);
+    cross_interpreter_cmp = false;
+}
+
+namespace Allegrex
+{
+    enum ICacheState
+    {
+        icache_hit = 1,
+        icache_miss,
+    };
+}
+
+void Allegrex::ICache::CodeBlock::EmitProlog(u32 address, u32 opcode, bool delayslot)
+{
+    if (!delayslot)
+    {
+        if (INTERPRETER_LIKE)
+        {
+            if (Allegrex::use_debug_server)
+            {
+                //mov(rcx, rsi);
+                //mov(r8d, 1);
+                //db(0xE9); // jump near
+                //dd(0);
+                dw(0x9066);
+            }
+            if (address & 0x40000000)
+            {
+                cmp(dword_ptr[rdx + DCACHE_MEMORY_ADDRESS - ICACHE_MEMORY_ADDRESS], opcode);
+                jnz(icache_miss);
+            }
+            else if (ICACHE_SLOW_MODE)
+            {
+                auto index = s32(address & (4 * 16 * 128 - 1));
+                mov(rcx, qword_ptr[rdi + 2 * index + s32(offsetof(SharedContext::Data, icache_tag[0]))]);
+                cmp(ecx, edx);
+                jz(icache_hit);
+                rol(rcx, 32);
+                cmp(ecx, edx);
+                jnz(icache_miss);
+                mov(qword_ptr[rdi + 2 * index + s32(offsetof(SharedContext::Data, icache_tag[0]))], rcx);
+                L(icache_hit);
+            }
+        }
+        L(address);
+        target_address_done.insert(address);
+        source(address);
+        if (CROSS_INTERPRETER)
+        {
+            EmitCrossInterpret(address, opcode, delayslot);
+        }
+    }
+    else
+    {
+        source(address);
+    }
+    if (TRACE_ALLEGREX_INSTRUCTION)
+    {
+        mov(dword_ptr[rsp], address);
+        call(qword_ptr[rdi + s32(offsetof(SharedContext::Data, trace_address))], true);
+    }
+}
+
+u32 Allegrex::ICache::CodeBlock::EmitEpilog(u32 address, u32 opcode, bool delayslot)
+{
     if (INTERPRETER_LIKE)
     {
-        if (pc)
+        if (!delayslot && address)
         {
-            mov(edx, u32((pc)+ICACHE_MEMORY_ADDRESS));
+            mov(edx, u32((address)+ICACHE_MEMORY_ADDRESS));
+            mov(ebp, dword_ptr[rdx]);
+            jmp(rbp);
+        }
+        if (ICACHE_SLOW_MODE)
+        {
+            L(icache_miss);
+            mov(ebp, u32(icache.shared_context.GetData()->recompile_address));
+            jmp(rbp);
+        }
+    }
+
+    return address;
+}
+
+void Allegrex::ICache::CodeBlock::EmitInterpreterBranch(u32 address, u32 opcode, bool delayslot)
+{
+    if (INTERPRETER_LIKE)
+    {
+        if (!delayslot)
+        {
+            mov(edx, u32((address)+ICACHE_MEMORY_ADDRESS));
             mov(ebp, dword_ptr[rdx]);
             jmp(rbp);
         }
@@ -465,17 +563,22 @@ __noinline void Allegrex::ICache::CodeBlock::InternalMain()
     }
 }
 
-#define IDO(x) do { return emit$##x(address, opcode, delayslot); } while (-1 == __LINE__)
 
-__noinline u32 Allegrex::ICache::CodeBlock::EmitInstruction(u32 address, u32 opcode, bool delayslot)
+void Allegrex::ICache::CodeBlock::EmitInterpreterBranch(u32 label, u32 address, u32 opcode, bool delayslot)
 {
-#include "lle.cpu(Allegrex).Decoder.h"
-    return address + 4;
-}
-
-void Allegrex::ICache::CodeBlock::RewriteInstructions(size_t beg, size_t end)
-{
-    return;
+    if (INTERPRETER_LIKE)
+    {
+        L(label);
+        mov(edx, u32((address)+ICACHE_MEMORY_ADDRESS));
+        mov(ebp, dword_ptr[rdx]);
+        jmp(rbp);
+        if (ICACHE_SLOW_MODE)
+        {
+            L(icache_miss);
+            mov(ebp, u32(icache.shared_context.GetData()->recompile_address));
+            jmp(rbp);
+        }
+    }
 }
 
 #undef IDO
