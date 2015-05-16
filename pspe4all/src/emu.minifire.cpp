@@ -32,6 +32,27 @@ hle::kd::Module   * main_module = 0;
 hal::AsyncFile<>  * async_file  = 0;
 hal::AsyncFile<>  * asm_file;
 
+typedef struct PROCTHREADATTRIBUTE {
+    DWORD_PTR Attribute;
+    PVOID lpValue;
+    SIZE_T cbSize;
+} PROCTHREADATTRIBUTE;
+
+BOOL CreateProcessWithAttributes(
+    __in_opt     LPCTSTR lpApplicationName,
+    __inout_opt  LPTSTR lpCommandLine,
+    __in_opt     LPSECURITY_ATTRIBUTES lpProcessAttributes,
+    __in_opt     LPSECURITY_ATTRIBUTES lpThreadAttributes,
+    __in         BOOL bInheritHandles,
+    __in         DWORD dwCreationFlags,
+    __in_opt     LPVOID lpEnvironment,
+    __in_opt     LPCTSTR lpCurrentDirectory,
+    __in         LPSTARTUPINFO lpStartupInfo,
+    __out        LPPROCESS_INFORMATION lpProcessInformation,
+    __in       DWORD cAttributes,
+    __in_ecount(cAttributes) const PROCTHREADATTRIBUTE rgAttributes[]);
+
+
 /*
 Below is test code to be checked and removed in near future (shadow)
 */
@@ -118,11 +139,80 @@ void CCpu::Run()
     {
         if (!USE_REAL_INTERPRETER)
         {
-            auto execute = reinterpret_cast< void (*)(Allegrex::Context *) >(Allegrex::icache.thread_code.GetCode());
+            if (_wcsicmp(Allegrex::use_debug_server.c_str(), L"none"))
+            {
+                SECURITY_ATTRIBUTES sa;
 
-            hal::npa::StartEvent(cpu_event1);
-            execute(this);
-            hal::npa::StopEvent(cpu_event1);
+                sa.nLength = sizeof(SECURITY_ATTRIBUTES);
+                sa.bInheritHandle = TRUE;
+                sa.lpSecurityDescriptor = NULL;
+
+                HANDLE handles[] = { ::GetStdHandle(STD_ERROR_HANDLE) };
+                const PROCTHREADATTRIBUTE attributes[] = {
+                    {
+                        PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
+                        handles,
+                        sizeof(handles),
+                    },
+                };
+
+                STARTUPINFO si;
+                ZeroMemory(&si, sizeof(si));
+                si.cb = sizeof(si);
+
+                PROCESS_INFORMATION pi;
+                ZeroMemory(&pi, sizeof(pi));
+
+                wchar_t szCommandLine[256];
+                _snwprintf_s(szCommandLine, 255, L"pspe4all-dbg.%s.exe %d", Allegrex::use_debug_server.c_str(), ::GetCurrentProcessId());
+
+                forcef(emu, L"Launching debugger '%s'...", szCommandLine);
+
+                BOOL ok = ::CreateProcessWithAttributes(
+                    nullptr,
+                    szCommandLine,
+                    nullptr,
+                    nullptr,
+                    TRUE,
+                    0,
+                    nullptr,
+                    nullptr,
+                    &si,
+                    &pi,
+                    ARRAYSIZE(attributes),
+                    attributes);
+                if (ok)
+                {
+                    forcef(emu, "Debugger successfully launched");
+
+                    //::OutputDebugStringA("Hello Shadow! as you can see, I can intercept your OutputDebugString :P");
+
+                    auto execute = reinterpret_cast<void(*)(Allegrex::Context *)>(Allegrex::icache.thread_code.GetCode());
+
+                    hal::npa::StartEvent(cpu_event1);
+                    execute(this);
+                    hal::npa::StopEvent(cpu_event1);
+
+                    // Wait until child process exits.
+                    ::WaitForSingleObject(pi.hProcess, INFINITE);
+
+                    // Close process and thread handles.
+                    ::CloseHandle(pi.hProcess);
+                    ::CloseHandle(pi.hThread);
+                }
+                else
+                {
+                    fatalf(emu, "Debugger not found");
+                }
+            }
+            else
+            {
+                auto execute = reinterpret_cast<void(*)(Allegrex::Context *)>(Allegrex::icache.thread_code.GetCode());
+
+                hal::npa::StartEvent(cpu_event1);
+                execute(this);
+                hal::npa::StopEvent(cpu_event1);
+            }
         }
         else
         {
@@ -790,4 +880,68 @@ __noinline void lle::cpu::Context::Syscall(Context * that, u32 code)
     {
         if (that->return_address) *that->return_address = u64(icache.shared_context.GetData()->exit_address);
     }
+}
+
+// see http://blogs.msdn.com/b/oldnewthing/archive/2013/04/26/10414234.aspx
+BOOL CreateProcessWithAttributes(
+    __in_opt     LPCTSTR lpApplicationName,
+    __inout_opt  LPTSTR lpCommandLine,
+    __in_opt     LPSECURITY_ATTRIBUTES lpProcessAttributes,
+    __in_opt     LPSECURITY_ATTRIBUTES lpThreadAttributes,
+    __in         BOOL bInheritHandles,
+    __in         DWORD dwCreationFlags,
+    __in_opt     LPVOID lpEnvironment,
+    __in_opt     LPCTSTR lpCurrentDirectory,
+    __in         LPSTARTUPINFO lpStartupInfo,
+    __out        LPPROCESS_INFORMATION lpProcessInformation,
+    __in       DWORD cAttributes,
+    __in_ecount(cAttributes) const PROCTHREADATTRIBUTE rgAttributes[])
+{
+    BOOL fSuccess;
+    BOOL fInitialized = FALSE;
+    SIZE_T size = 0;
+    LPPROC_THREAD_ATTRIBUTE_LIST lpAttributeList = NULL;
+
+    fSuccess = InitializeProcThreadAttributeList(NULL, cAttributes, 0, &size) ||
+        GetLastError() == ERROR_INSUFFICIENT_BUFFER;
+
+    if (fSuccess) {
+        lpAttributeList = reinterpret_cast<LPPROC_THREAD_ATTRIBUTE_LIST>
+            (HeapAlloc(GetProcessHeap(), 0, size));
+        fSuccess = lpAttributeList != NULL;
+    }
+    if (fSuccess) {
+        fSuccess = InitializeProcThreadAttributeList(lpAttributeList,
+                                                     cAttributes, 0, &size);
+    }
+    if (fSuccess) {
+        fInitialized = TRUE;
+        for (DWORD index = 0; index < cAttributes && fSuccess; index++) {
+            fSuccess = UpdateProcThreadAttribute(lpAttributeList,
+                                                 0, rgAttributes[index].Attribute,
+                                                 rgAttributes[index].lpValue,
+                                                 rgAttributes[index].cbSize, NULL, NULL);
+        }
+    }
+    if (fSuccess) {
+        STARTUPINFOEX info;
+        ZeroMemory(&info, sizeof(info));
+        info.StartupInfo = *lpStartupInfo;
+        info.StartupInfo.cb = sizeof(info);
+        info.lpAttributeList = lpAttributeList;
+        fSuccess = CreateProcess(lpApplicationName,
+                                 lpCommandLine,
+                                 lpProcessAttributes,
+                                 lpThreadAttributes,
+                                 bInheritHandles,
+                                 dwCreationFlags | EXTENDED_STARTUPINFO_PRESENT,
+                                 lpEnvironment,
+                                 lpCurrentDirectory,
+                                 &info.StartupInfo,
+                                 lpProcessInformation);
+    }
+
+    if (fInitialized) DeleteProcThreadAttributeList(lpAttributeList);
+    if (lpAttributeList) HeapFree(GetProcessHeap(), 0, lpAttributeList);
+    return fSuccess;
 }

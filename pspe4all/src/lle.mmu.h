@@ -40,6 +40,16 @@ template< typename T > using p32 = T __based(lle_mmu$dcache) * __ptr32 __uptr;
 template< typename T > using p32dcache = T __based(lle_mmu$dcache) * __ptr32 __uptr;
 template< typename T > using p32icache = T __based(lle_mmu$icache) * __ptr32 __uptr;
 
+#ifdef MINIMAL_LLE_MMU
+namespace lle
+{
+    namespace mmu
+    {
+        bool Attach(DWORD pid);
+        void Detach();
+    }
+}
+#else
 extern HANDLE lle_jitasm$heap;
 
 #include "emu.h"
@@ -61,4 +71,5 @@ namespace lle
 extern "C" __declspec(dllimport) lle::mmu::Interface * lle_mmu$GetInterface(long version);
 #else
 extern "C" __declspec(dllexport) lle::mmu::Interface * lle_mmu$GetInterface(long version);
+#endif
 #endif

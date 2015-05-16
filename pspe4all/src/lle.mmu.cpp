@@ -29,6 +29,7 @@
 #include "emu.log.h"
 #include "lle.mmu.h"
 
+#ifndef MINIMAL_LLE_MMU
 namespace emu
 {
     namespace log
@@ -36,6 +37,7 @@ namespace emu
         SubCategory mmu(lle, "mmu", "MMU - Memory Manager Unit");
     }
 }
+#endif
 
 namespace lle
 {
@@ -242,9 +244,13 @@ namespace lle
         static void * jitasm_base = 0;
         static HANDLE jitasm_filemapping = 0;
 
-        bool Reserve()
+        bool Reserve(DWORD pid)
         {
-            psp_memory_handle = ::CreateFileMappingA(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, PAGE64K_ALIGN(3*4*SRAM_SIZE + 1*VRAM_SIZE + 3*MRAM_SIZE + 1*GARB_SIZE - 1), 0);
+            char filemapping_name[256];
+
+            sprintf(filemapping_name, "PSPE4ALL-lle.mmu[dcache,icache]=%08X", pid);
+
+            psp_memory_handle = ::CreateFileMappingA(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, PAGE64K_ALIGN(3 * 4 * SRAM_SIZE + 1 * VRAM_SIZE + 3 * MRAM_SIZE + 1 * GARB_SIZE - 1), filemapping_name);
             if (!psp_memory_handle)
             {
                 return false;
@@ -262,7 +268,9 @@ namespace lle
 
             if (ok)
             {
-                ok = 0 != (jitasm_filemapping = ::CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, SEC_COMMIT|PAGE_EXECUTE_READWRITE, 0, JITASM_MEMORY_SIZE, NULL));
+                sprintf(filemapping_name, "PSPE4ALL-lle.mmu[jitasm]=%08X", pid);
+
+                ok = 0 != (jitasm_filemapping = ::CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, SEC_COMMIT | PAGE_EXECUTE_READWRITE, 0, JITASM_MEMORY_SIZE, NULL));
 
                 if (ok)
                 {
@@ -279,6 +287,7 @@ namespace lle
 
                     forcef(mmu, "jitasm heap size = %.0f Mbyte", size/1024./1024.);
 
+#ifndef MINIMAL_LLE_MMU
                     if (ok)
                     {
                         ok = 0 != (lle_jitasm$heap = ::RtlCreateHeap(HEAP_CREATE_ENABLE_EXECUTE|HEAP_CREATE_ALIGN_16|HEAP_GENERATE_EXCEPTIONS, jitasm_base, size, 0, NULL, NULL));
@@ -289,7 +298,7 @@ namespace lle
                             jitasm_base = 0;
                         }
                     }
-
+#endif
                     if (!ok)
                     {
                         ::CloseHandle(jitasm_filemapping);
@@ -311,18 +320,24 @@ namespace lle
             return ok;
         }
 
+        bool Reserve()
+        {
+            return Reserve(::GetCurrentProcessId());
+        }
+
         void Release()
         {
             if (psp_memory_pointer)
             {
                 if (jitasm_filemapping)
                 {
+#ifndef MINIMAL_LLE_MMU
                     if (lle_jitasm$heap)
                     {
                         ::RtlDestroyHeap(lle_jitasm$heap);
                         lle_jitasm$heap = 0;
                     }
-
+#endif
                     if (jitasm_base)
                     {
                         ::UnmapViewOfFile(jitasm_base);
@@ -346,6 +361,7 @@ namespace lle
             }
         }
 
+#ifndef MINIMAL_LLE_MMU
         struct Implementation : Interface
         {
             bool DllProcessAttach();
@@ -377,10 +393,34 @@ namespace lle
         }
 
         Implementation implementation;
+#else
+        bool Attach(DWORD pid)
+        {
+            infof(mmu, "Reserving a virtual memory to map PSP memory...");
+
+            if (!lle::mmu::Reserve(pid))
+            {
+                fatalf(mmu, "Mapping fails...");
+
+                return false;
+            }
+
+            return true;
+        }
+
+        void Detach()
+        {
+            infof(mmu, "Releasing the virtual memory mapping PSP memory...");
+
+            lle::mmu::Release();
+        }
+#endif
     }
 }
 
+#ifndef MINIMAL_LLE_MMU
 extern "C" __declspec(dllexport) lle::mmu::Interface * lle_mmu$GetInterface(long /*version*/)
 {
     return &lle::mmu::implementation;
 }
+#endif

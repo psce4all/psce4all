@@ -5,12 +5,18 @@
 
 //extern "C" { _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001; }
 
-#include "pspe4all-dbgsvr.h"
+#include "pspe4all-dbg.svr.h"
 
+#pragma comment(lib, "ntdll.lib")
+#pragma comment(lib, "psapi.lib")
+#pragma comment(lib, "dbghelp.lib")
 #pragma comment(linker, "/ENTRY:wmainCRTStartup")
+
+using DebugServer = dbg::svr::Debugger;
+
 int wmain(int argc, wchar_t * argv[])
 {
-    Debugger Debugger;
+    DebugServer Debugger;
 
     if (argc == 2)
     {
@@ -19,9 +25,13 @@ int wmain(int argc, wchar_t * argv[])
         {
             return 0;
         }
-    }
 
-    Debugger.DebugLoop();
+        if (lle::mmu::Attach(ProcessId))
+        {
+            Debugger.DebugLoop();
+            lle::mmu::Detach();
+        }
+    }
 
     return 0;
 }

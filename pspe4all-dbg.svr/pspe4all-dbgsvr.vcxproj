@@ -22,6 +22,7 @@
     <ProjectGuid>{3A81F450-B795-49B9-88C2-6258C33EE273}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>pspe4alldbgsvr</RootNamespace>
+    <ProjectName>pspe4all-dbg.svr</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,12 +72,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\pspe4all\lib\</OutDir>
+    <IntDir>..\pspe4all\tmp\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\pspe4all\lib\</OutDir>
+    <IntDir>..\pspe4all\tmp\$(Configuration)\$(TargetName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -98,9 +103,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;__pspe4all__;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\pspe4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeaderFile>pspe4all-dbgsvr.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>pspe4all-dbgsvr.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>.;..\pspe4all\src;..\psce4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pspe4all-dbg.svr.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pspe4all-dbg.svr.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -134,9 +139,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;__pspe4all__;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\pspe4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeaderFile>pspe4all-dbgsvr.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>pspe4all-dbgsvr.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>.;..\pspe4all\src;..\psce4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pspe4all-dbg.svr.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pspe4all-dbg.svr.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,12 +150,20 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>..\pspe4all\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>@robocopy ..\pspe4all\lib ..\pspe4all\bin $(TargetName).exe /NP
+@if %ERRORLEVEL% LSS 4 @cmd /c "exit /B 0"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="pspe4all-dbgsvr.cpp" />
+    <ClCompile Include="..\pspe4all\src\lle.mmu.cpp" />
+    <ClCompile Include="pspe4all-dbg.svr.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pspe4all-dbgsvr.h" />
+    <ClInclude Include="..\psce4all\src\dbg.svr.h" />
+    <ClInclude Include="..\psce4all\src\emu.log.h" />
+    <ClInclude Include="..\pspe4all\src\lle.mmu.h" />
+    <ClInclude Include="pspe4all-dbg.svr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

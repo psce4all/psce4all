@@ -5,6 +5,52 @@
 
 #pragma once
 
+#ifdef MINIMAL_EMU_LOG
+
+namespace emu
+{
+    namespace log
+    {
+        enum Level
+        {
+            E_OFF = 0,
+            E_FATAL = 1,
+            E_ERROR = 2,
+            E_WARN = 3,
+            E_INFO = 4,
+            E_DEBUG = 5,
+            E_TRACE = 6,
+            E_FORCE = 7,
+            E_DEFAULT = E_FORCE
+        };
+    }
+}
+
+void __forceinline fstderrf(wchar_t const fmt[], va_list args) { fputc('\n', stderr); vfwprintf(stderr, fmt, args); }
+void __forceinline fstderrf(char    const fmt[], va_list args) { fputc('\n', stderr); vfprintf(stderr, fmt, args); }
+void __forceinline fstderrf(wchar_t const fmt[], ...) { va_list args; va_start(args, fmt); fstderrf(fmt, args); va_end(args); }
+void __forceinline fstderrf(char    const fmt[], ...) { va_list args; va_start(args, fmt); fstderrf(fmt, args); va_end(args); }
+
+// __LINE__ == -1 instead of 0 because while(0) triggers a C4127: “Conditional expression is constant” when using /W4
+#define lprintf( name, level, fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
+#define fatalf(  name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
+#define errorf(  name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
+#define warnf(   name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
+#define infof(   name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
+#define debugf(  name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
+#define tracef(  name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
+#define forcef(  name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
+#define lprintfv(name, level, fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
+#define fatalfv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
+#define errorfv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
+#define warnfv(  name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
+#define infofv(  name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
+#define debugfv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
+#define tracefv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
+#define forcefv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
+
+#else
+
 #include <set>
 
 #include "emu.h"
@@ -202,3 +248,5 @@ __forceinline emu::log::Interface * emu::log::Category::GetInstance()
 {
     return emu_log$GetInterface(emu::log::Interface::version);
 }
+
+#endif

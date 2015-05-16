@@ -28,6 +28,8 @@ namespace Allegrex
     extern bool jitasm_trace_cfg;
     extern bool icache_fast_mode;
 
+    extern std::wstring use_debug_server;
+
     extern Instruction * instruction_array[];
 
     extern void FastInterpret(Allegrex::Context & processor, u32 opcode);

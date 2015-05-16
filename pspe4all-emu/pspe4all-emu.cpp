@@ -365,11 +365,12 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
         { L"trace-allegrex", optional_argument, 0, L'4' },
         { L"jitasm-trace-cfg", optional_argument, 0, L'5' },
         { L"allegrex-icache", optional_argument, 0, L'6' },
+        { L"use-debugger", required_argument, 0, L'D' },
         { L"help", no_argument, 0, L'h' },
         { 0, 0, 0, 0 }
     };
 
-    while (-1 != (c = getopt_long_only(argc, argv, L"1:234:5:6:h", long_options, &option_index)))
+    while (-1 != (c = getopt_long_only(argc, argv, L"1:234:5:6:D:h", long_options, &option_index)))
     {
         switch (c)
         {
@@ -383,6 +384,7 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
                        "\t--use-interpreter=fast\tuse interpreter-like dynarec\n"
                        "\t--use-interpreter=none\tuse full dynarec\n"
                        "\t--use-cross-interpreter\tuse cross interpreter\n"
+                       "\t--use-debugger=<name>\tuse a debug server\n"
                        "\t-help\t\tdisplay this help message\n"
                        );
                 return 1;
@@ -478,6 +480,9 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
                 {
                     Allegrex::icache_fast_mode = true;
                 }
+                break;
+            case L'D':
+                Allegrex::use_debug_server = optarg;
                 break;
             case ':':
                 /* missing option argument */

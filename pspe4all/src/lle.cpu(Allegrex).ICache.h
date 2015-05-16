@@ -140,7 +140,7 @@ namespace Allegrex
 #define __interpreter_jmp__(address) if (INTERPRETER_LIKE) if (!delayslot) { mov(edx, u32((address)+ICACHE_MEMORY_ADDRESS)); mov(ebp, dword_ptr[rdx]); jmp(rbp); }
 #define __interpreter_jmp_with_label__(label, address) if (INTERPRETER_LIKE)  { L(label); mov(edx, u32((address)+ICACHE_MEMORY_ADDRESS)); mov(ebp, dword_ptr[rdx]); jmp(rbp); }
 
-#if !defined(__AVX__) 
+#if !defined(__AVX__)
 #define __apply_aluss(alu1, alu2, reg, dst, src1, src2) do { \
     auto lduss = [&]() { movss(reg, src1); }; \
     auto aluss = [&]() { alu1(reg, src2); }; \
@@ -154,7 +154,7 @@ namespace Allegrex
     alu(lduss, aluss, stuss); } while(0)
 #endif
 
-#if !defined(__AVX__) 
+#if !defined(__AVX__)
 #define __apply_movss(reg, dst, src) do { \
     auto lduss = [&]() { movss(reg, src); }; \
     auto aluss = [&]() { }; \

@@ -14,6 +14,8 @@ bool Allegrex::trace_instruction = false;
 bool Allegrex::jitasm_trace_cfg = false;
 bool Allegrex::icache_fast_mode = true;
 
+std::wstring Allegrex::use_debug_server(L"none");
+
 namespace emu
 {
     namespace log
