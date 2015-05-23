@@ -30,7 +30,7 @@
 
 hle::kd::Module   * main_module = 0;
 hal::AsyncFile<>  * async_file  = 0;
-hal::AsyncFile<256, 20>  * asm_file;
+hal::AsyncFile<>  * asm_file;
 
 typedef struct PROCTHREADATTRIBUTE {
     DWORD_PTR Attribute;
@@ -253,7 +253,7 @@ void CCpu::StartThread()
 
     if (TRACE_ALLEGREX_INSTRUCTION)
     {
-        asm_file = new hal::AsyncFile < 256, 20 > ;
+        asm_file = new hal::AsyncFile <> ;
         if (INTERPRETER_LIKE)
         {
             asm_file->Open(L"allegrex_flow.fast.txt");

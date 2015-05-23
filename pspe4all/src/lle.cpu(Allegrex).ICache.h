@@ -14,22 +14,37 @@ namespace Allegrex
         void Start();
         void Stop();
 
-        struct UnwindInfoFrame0 : Allegrex::jitasm::Frontend
+        struct Fragment : Allegrex::jitasm::Frontend
+        {
+            void * GetFragment() { return GetCode(); }
+        };
+
+        struct DataFragment : Fragment
+        {
+            void * GetData() { return GetFragment(); }
+        };
+
+        struct CodeFragment : Fragment
+        {
+            void * GetCode() { return GetFragment(); }
+        };
+
+        struct UnwindInfoFrame0 :DataFragment
         {
             virtual void InternalMain() override;
         } unwind_info_frame0;
 
-        struct UnwindInfoFrame1 : Allegrex::jitasm::Frontend
+        struct UnwindInfoFrame1 : DataFragment
         {
             virtual void InternalMain() override;
         } unwind_info_frame1;
 
-        struct UnwindInfoFrame2 : Allegrex::jitasm::Frontend
+        struct UnwindInfoFrame2 : DataFragment
         {
             virtual void InternalMain() override;
         } unwind_info_frame2;
 
-        struct SharedContext : Allegrex::jitasm::Frontend
+        struct SharedContext : DataFragment
         {
             struct Data
             {
@@ -50,37 +65,37 @@ namespace Allegrex
             virtual void InternalMain() override;
         } shared_context;
 
-        struct ThreadCode : Allegrex::jitasm::Frontend
+        struct ThreadCode : CodeFragment
         {
             virtual void InternalMain() override;
         } thread_code;
 
-        struct RecompileCode : Allegrex::jitasm::Frontend
+        struct RecompileCode : CodeFragment
         {
             virtual void InternalMain() override;
         } recompile_code;
 
-        struct TrampolineCode : Allegrex::jitasm::Frontend
+        struct TrampolineCode : CodeFragment
         {
             virtual void InternalMain() override;
         } trampoline_code;
 
-        struct TraceCode : Allegrex::jitasm::Frontend
+        struct TraceCode : CodeFragment
         {
             virtual void InternalMain() override;
         } trace_code;
 
-        struct SyscallCode : Allegrex::jitasm::Frontend
+        struct SyscallCode : CodeFragment
         {
             virtual void InternalMain() override;
         } syscall_code;
 
-        struct CrossInterpretCode : Allegrex::jitasm::Frontend
+        struct CrossInterpretCode : CodeFragment
         {
             virtual void InternalMain() override;
         } crossinterpret_code;
 
-        struct CodeBlock : Allegrex::jitasm::Frontend
+        struct CodeBlock : CodeFragment
         {
             typedef Allegrex::jitasm::Gpr    Gpr;
             typedef Allegrex::jitasm::XmmReg Fpr;
