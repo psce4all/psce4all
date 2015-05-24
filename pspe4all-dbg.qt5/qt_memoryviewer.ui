@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>memoryform</class>
+ <widget class="QWidget" name="memoryform">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>463</width>
+    <height>371</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="maximumSize">
+        <size>
+         <width>40</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Address:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="qt_MemorySpinBox" name="memory_address_spin">
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::PlusMinus</enum>
+       </property>
+       <property name="accelerated">
+        <bool>true</bool>
+       </property>
+       <property name="minimum">
+        <number>-2147483647</number>
+       </property>
+       <property name="maximum">
+        <number>2147483647</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="memory_addressrange_combobox">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <item>
+        <property name="text">
+         <string>08800000-0BFFFFFF : user main memory</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>08000000-087FFFFF : kernel main ram</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>04000000-047FFFFF : video ram</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>00010000-00013FFF : scratch pad</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="qt_MemoryWidget" name="memory_widget" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>130</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="qt_MemoryScrollbar" name="memory_scrollbar">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>qt_MemoryWidget</class>
+   <extends>QWidget</extends>
+   <header>qt_memorywidget.h</header>
+   <container>1</container>
+   <slots>
+    <signal>addressChanged(int)</signal>
+    <signal>rangeChanged(int,int)</signal>
+    <slot>changeAddressRange(int)</slot>
+    <slot>changeAddress(int)</slot>
+    <slot>changeLine(int)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>qt_MemorySpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>qt_memoryspinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>qt_MemoryScrollbar</class>
+   <extends>QScrollBar</extends>
+   <header>qt_memoryscrollbar.h</header>
+   <slots>
+    <slot>changeRange(int,int)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>memory_addressrange_combobox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>memory_widget</receiver>
+   <slot>changeAddressRange(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>322</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>memory_address_spin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>memory_widget</receiver>
+   <slot>changeAddress(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>23</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>103</x>
+     <y>72</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>memory_widget</sender>
+   <signal>addressChanged(int)</signal>
+   <receiver>memory_address_spin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>151</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>146</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>memory_widget</sender>
+   <signal>rangeChanged(int,int)</signal>
+   <receiver>memory_scrollbar</receiver>
+   <slot>changeRange(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>198</x>
+     <y>238</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>memory_scrollbar</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>memory_widget</receiver>
+   <slot>changeLine(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>316</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>365</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>changeAddressRange(int)</slot>
+ </slots>
+</ui>

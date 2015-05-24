@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/pspe4alldbgqt5">
+        <file>res/PauseIcon.png</file>
+        <file>res/PlayIcon.png</file>
+        <file>res/StepIntoIcon.png</file>
+        <file>res/StepOutIcon.png</file>
+        <file>res/StepOverIcon.png</file>
+    </qresource>
+</RCC>
