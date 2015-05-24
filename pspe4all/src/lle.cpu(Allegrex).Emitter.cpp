@@ -1301,7 +1301,7 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$BEQ(u32 address, u32 opcode, bo
         jz(target_address);
 
         EmitInterpreterBranch(address + 8, opcode, delayslot);
-        
+
         EmitInterpreterBranch(target_address, DST, opcode, delayslot);
 
         return INTERPRETER_LIKE ? 0 : address + 8;

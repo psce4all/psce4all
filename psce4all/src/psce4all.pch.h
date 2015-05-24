@@ -114,8 +114,8 @@ typedef uint8_t   u8;
 typedef float     f32;
 typedef double    f64;
 
-typedef intptr_t  sint;
-typedef uintptr_t uint;
+//typedef intptr_t  sint;
+//typedef uintptr_t uint;
 
 struct u16le
 {

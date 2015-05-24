@@ -1,7 +1,9 @@
-#ifndef QT_MEMORYSPINBOX_H_
-#define QT_MEMORYSPINBOX_H_
+/**
+* (c) 2015 psce4all project. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
 
-#include <QSpinBox>
+#pragma once
 
 class qt_MemorySpinBox : public QSpinBox
 {
@@ -17,5 +19,3 @@ protected:
   QString textFromValue(int value) const;
   int valueFromText(const QString &text) const;
 };
-
-#endif /* Qt_MEMORYSPINBOX_H_ */

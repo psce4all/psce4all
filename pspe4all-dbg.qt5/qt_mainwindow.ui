@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>pspe4alldbgqt5Class</class>
- <widget class="QMainWindow" name="pspe4alldbgqt5Class">
+ <class>main_window</class>
+ <widget class="QMainWindow" name="main_window">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -19,7 +19,7 @@
      <rect>
       <x>20</x>
       <y>-5</y>
-      <width>450</width>
+      <width>481</width>
       <height>214</height>
      </rect>
     </property>
@@ -35,17 +35,14 @@
     <property name="windowTitle">
      <string>Disassembly</string>
     </property>
-    <widget class="QWidget" name="disassemblydockwidget">
-     <zorder>memory_dock</zorder>
-     <zorder>memory_dock</zorder>
-    </widget>
+    <widget class="QWidget" name="disassemblydockwidget"/>
    </widget>
    <widget class="QDockWidget" name="memory_dock">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>210</y>
-      <width>451</width>
+      <width>481</width>
       <height>271</height>
      </rect>
     </property>
@@ -88,7 +85,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionRun">
    <property name="icon">
-    <iconset resource="pspe4alldbgqt5.qrc">
+    <iconset resource="pspe4all-dbg.qt5.qrc">
      <normaloff>:/pspe4alldbgqt5/res/PlayIcon.png</normaloff>:/pspe4alldbgqt5/res/PlayIcon.png</iconset>
    </property>
    <property name="text">
@@ -100,7 +97,7 @@
   </action>
   <action name="actionActionPause">
    <property name="icon">
-    <iconset resource="pspe4alldbgqt5.qrc">
+    <iconset resource="pspe4all-dbg.qt5.qrc">
      <normaloff>:/pspe4alldbgqt5/res/PauseIcon.png</normaloff>:/pspe4alldbgqt5/res/PauseIcon.png</iconset>
    </property>
    <property name="text">
@@ -112,7 +109,7 @@
   </action>
   <action name="actionStepInto">
    <property name="icon">
-    <iconset resource="pspe4alldbgqt5.qrc">
+    <iconset resource="pspe4all-dbg.qt5.qrc">
      <normaloff>:/pspe4alldbgqt5/res/StepIntoIcon.png</normaloff>:/pspe4alldbgqt5/res/StepIntoIcon.png</iconset>
    </property>
    <property name="text">
@@ -124,7 +121,7 @@
   </action>
   <action name="actionStepOver">
    <property name="icon">
-    <iconset resource="pspe4alldbgqt5.qrc">
+    <iconset resource="pspe4all-dbg.qt5.qrc">
      <normaloff>:/pspe4alldbgqt5/res/StepOverIcon.png</normaloff>:/pspe4alldbgqt5/res/StepOverIcon.png</iconset>
    </property>
    <property name="text">
@@ -136,7 +133,7 @@
   </action>
   <action name="actionStepOut">
    <property name="icon">
-    <iconset resource="pspe4alldbgqt5.qrc">
+    <iconset resource="pspe4all-dbg.qt5.qrc">
      <normaloff>:/pspe4alldbgqt5/res/StepOutIcon.png</normaloff>:/pspe4alldbgqt5/res/StepOutIcon.png</iconset>
    </property>
    <property name="text">
@@ -157,7 +154,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="pspe4alldbgqt5.qrc"/>
+  <include location="pspe4all-dbg.qt5.qrc"/>
  </resources>
  <connections/>
 </ui>

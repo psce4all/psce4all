@@ -26,11 +26,6 @@ namespace emu
     }
 }
 
-void __forceinline fstderrf(wchar_t const fmt[], va_list args) { fputc('\n', stderr); vfwprintf(stderr, fmt, args); }
-void __forceinline fstderrf(char    const fmt[], va_list args) { fputc('\n', stderr); vfprintf(stderr, fmt, args); }
-void __forceinline fstderrf(wchar_t const fmt[], ...) { va_list args; va_start(args, fmt); fstderrf(fmt, args); va_end(args); }
-void __forceinline fstderrf(char    const fmt[], ...) { va_list args; va_start(args, fmt); fstderrf(fmt, args); va_end(args); }
-
 // __LINE__ == -1 instead of 0 because while(0) triggers a C4127: “Conditional expression is constant” when using /W4
 #define lprintf( name, level, fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
 #define fatalf(  name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)

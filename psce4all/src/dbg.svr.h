@@ -679,32 +679,32 @@ namespace dbg
                 switch (Info.ExceptionRecord.ExceptionCode)
                 {
                 case EXCEPTION_ACCESS_VIOLATION:
-                    // First chance: Pass this on to the system. 
-                    // Last chance: Display an appropriate error. 
+                    // First chance: Pass this on to the system.
+                    // Last chance: Display an appropriate error.
                     break;
 
                 case EXCEPTION_BREAKPOINT:
-                    // First chance: Display the current 
-                    // instruction and register values. 
+                    // First chance: Display the current
+                    // instruction and register values.
                     break;
 
                 case EXCEPTION_DATATYPE_MISALIGNMENT:
-                    // First chance: Pass this on to the system. 
-                    // Last chance: Display an appropriate error. 
+                    // First chance: Pass this on to the system.
+                    // Last chance: Display an appropriate error.
                     break;
 
                 case EXCEPTION_SINGLE_STEP:
-                    // First chance: Update the display of the 
-                    // current instruction and register values. 
+                    // First chance: Update the display of the
+                    // current instruction and register values.
                     break;
 
                 case DBG_CONTROL_C:
-                    // First chance: Pass this on to the system. 
-                    // Last chance: Display an appropriate error. 
+                    // First chance: Pass this on to the system.
+                    // Last chance: Display an appropriate error.
                     break;
 
                 default:
-                    // Handle other exceptions. 
+                    // Handle other exceptions.
                     break;
                 }
 

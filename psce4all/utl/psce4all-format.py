@@ -14,6 +14,10 @@ PS2E4ALL_SRC = os.path.join(PS2E4ALL_DIR, "src")
 PSPE4ALL_SRC = os.path.join(PSPE4ALL_DIR, "src")
 PSCE4ALL_SRC = os.path.join(PSCE4ALL_DIR, "src")
 
+PSPE4ALL_RUN = os.path.join(GIT_DIR, "pspe4all-run")
+PSPE4ALL_DBG_SVR = os.path.join(GIT_DIR, "pspe4all-dbg.svr")
+PSPE4ALL_DBG_QT5 = os.path.join(GIT_DIR, "pspe4all-dbg.qt5")
+
 # Formatting rules for *.c, *.cpp and *.h files
 def formatGeneric(codeInput):
 
@@ -30,7 +34,7 @@ def formatGeneric(codeInput):
 
 # Search and edit files of the PSCE4ALL project
 def main():
-    for path in [PSCE4ALL_SRC, PS1E4ALL_SRC, PS2E4ALL_SRC, PSPE4ALL_SRC]:
+    for path in [PSCE4ALL_SRC, PS1E4ALL_SRC, PS2E4ALL_SRC, PSPE4ALL_SRC, PSPE4ALL_RUN, PSPE4ALL_DBG_SVR, PSPE4ALL_DBG_QT5]:
         for root, dirs, files in os.walk(path):
             for filename in files:
                 if not filename.endswith((".c",".cc",".cpp",".h",".hpp")):

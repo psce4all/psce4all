@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>memoryform</class>
- <widget class="QWidget" name="memoryform">
+ <class>memory_viewer</class>
+ <widget class="QWidget" name="memory_viewer">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>463</width>
+    <width>515</width>
     <height>371</height>
    </rect>
   </property>
@@ -97,6 +97,18 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
       <widget class="qt_MemoryWidget" name="memory_widget" native="true">
        <property name="sizePolicy">
@@ -114,10 +126,37 @@
       </widget>
      </item>
      <item>
-      <widget class="qt_MemoryScrollbar" name="memory_scrollbar">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+      <widget class="QFrame" name="frame">
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
        </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="qt_MemoryScrollbar" name="memory_scrollbar">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
@@ -199,38 +238,6 @@
     <hint type="destinationlabel">
      <x>146</x>
      <y>18</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>memory_widget</sender>
-   <signal>rangeChanged(int,int)</signal>
-   <receiver>memory_scrollbar</receiver>
-   <slot>changeRange(int,int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>198</x>
-     <y>238</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>447</x>
-     <y>254</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>memory_scrollbar</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>memory_widget</receiver>
-   <slot>changeLine(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>440</x>
-     <y>316</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>365</x>
-     <y>311</y>
     </hint>
    </hints>
   </connection>

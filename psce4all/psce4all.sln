@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[pspe4all]", "[pspe4all]", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pspe4all-dbg.svr", "..\pspe4all-dbg.svr\pspe4all-dbgsvr.vcxproj", "{3A81F450-B795-49B9-88C2-6258C33EE273}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pspe4all-dbg.qt5", "..\pspe4all-dbg.qt5\pspe4all-dbg.qt5.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -102,6 +104,18 @@ Global
 		{3A81F450-B795-49B9-88C2-6258C33EE273}.Release|Win32.Build.0 = Release|Win32
 		{3A81F450-B795-49B9-88C2-6258C33EE273}.Release|x64.ActiveCfg = Release|x64
 		{3A81F450-B795-49B9-88C2-6258C33EE273}.Release|x64.Build.0 = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|Win32.ActiveCfg = Debug|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.ActiveCfg = Debug|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.Build.0 = Debug|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release AVX|Win32.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release AVX|x64.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release AVX|x64.Build.0 = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release SSE|Win32.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release SSE|x64.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release SSE|x64.Build.0 = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|Win32.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,5 +127,6 @@ Global
 		{154DE838-8EB3-46E6-8227-7657CADB8B41} = {C35B4479-D88A-4774-9698-BD0F5F9FC265}
 		{B4193BEB-27E9-4FA6-A612-2F21D102974E} = {55C7E9E0-A082-444F-8286-6D3A3830EF08}
 		{3A81F450-B795-49B9-88C2-6258C33EE273} = {C35B4479-D88A-4774-9698-BD0F5F9FC265}
+		{B12702AD-ABFB-343A-A199-8E24837244A3} = {C35B4479-D88A-4774-9698-BD0F5F9FC265}
 	EndGlobalSection
 EndGlobal

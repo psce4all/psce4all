@@ -35,24 +35,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pspe4alldbgqt5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_pspe4alldbgqt5.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_pspe4alldbgqt5.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_pspe4alldbgqt5.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="qt_memorycursor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -95,17 +77,26 @@
     <ClCompile Include="qt_translate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pspe4all-dbg.qt5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_pspe4all-dbg.qt5.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_mainwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_qt_mainwindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_qt_mainwindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pspe4all\src\lle.mmu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_pspe4alldbgqt5.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="types.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="qt_memorycursor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -115,17 +106,14 @@
     <ClInclude Include="qt_translate.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="pspe4all-dbg.qt5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_qt_mainwindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="pspe4alldbgqt5.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="pspe4alldbgqt5.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="pspe4alldbgqt5.qrc">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="qt_memoryscrollbar.h">
       <Filter>Source Files</Filter>
     </CustomBuild>
@@ -135,14 +123,40 @@
     <CustomBuild Include="qt_memoryviewer.h">
       <Filter>Source Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="qt_memoryviewer.ui">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="qt_memorywidget.h">
       <Filter>Source Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pspe4all-dbg.qt5.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_mainwindow.h">
+      <Filter>Source Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_memoryviewer.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_mainwindow.ui">
+      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pspe4all-dbg.qt5.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\PauseIcon.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\PlayIcon.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\StepIntoIcon.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\StepOutIcon.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\StepOverIcon.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

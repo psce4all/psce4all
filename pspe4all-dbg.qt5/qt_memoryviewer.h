@@ -1,21 +1,21 @@
-#ifndef QT_MEMORYVIEWER_H
-#define QT_MEMORYVIEWER_H
+/**
+* (c) 2015 psce4all project. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
 
-#include <QWidget>
+#pragma once
+
 #include "ui_qt_memoryviewer.h"
 
 class qt_MemoryViewer : public QWidget
 {
     Q_OBJECT
 
-  public:
+public:
     qt_MemoryViewer(QWidget *parent = 0);
     ~qt_MemoryViewer();
-	 void updateMemoryViewer();
-	
-  private:
-	  Ui::memoryform ui;
-	  
-};
+    void updateMemoryViewer();
 
-#endif // QT_MEMORYVIEWER_H
+private:
+    Ui::memory_viewer ui;
+};

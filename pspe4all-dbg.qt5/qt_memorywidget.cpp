@@ -1,38 +1,27 @@
-#include "stdafx.h"
-#include "types.h"
+/**
+* (c) 2015 psce4all project. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #include "qt_memorycursor.h"
 #include "qt_translate.h"
-#include "qt_memorywidget.h"  
-//#include "../memory.h"
-#include <QApplication>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QProgressDialog>
-#include <QPainter>
-#include <QPixmap>
-#include <QFocusEvent>
-#include <QPaintEvent>
-#include <QKeyEvent>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QAction>
-#include <QMenu>
-#include <QStyle>
-#include <QStyleOption>
+#include "qt_memorywidget.h"
+
 #include <cmath>
 
 qt_MemoryWidget::qt_MemoryWidget(QWidget *parent)
-: QWidget(parent)
-, m_columnSpacing(6)
-, m_bytesPerColumn(1)
-, m_charsPerByte(2)
-, m_topLeft(0)
-, m_base(16)
-, m_lastValidColumn(-1)
-, m_topMargin(6)
-, m_cols(16)
-, m_rows(32)
-, m_endianness(1)
+    : QWidget(parent)
+    , m_columnSpacing(6)
+    , m_bytesPerColumn(1)
+    , m_charsPerByte(2)
+    , m_topLeft(0)
+    , m_data(0)
+    , m_base(16)
+    , m_lastValidColumn(-1)
+    , m_topMargin(6)
+    , m_cols(16)
+    , m_rows(32)
+    , m_endianness(1)
 {
     m_selection[SelectionStart] = -1;
     m_selection[SelectionEnd] = -1;
@@ -42,6 +31,7 @@ qt_MemoryWidget::qt_MemoryWidget(QWidget *parent)
     font.setFixedPitch(1);
     setFont(font);
     changeAddressRange(0);
+    changeAddress(0x08800000);
 }
 
 qt_MemoryWidget::~qt_MemoryWidget()
@@ -86,7 +76,7 @@ void qt_MemoryWidget::calculateFontMetrics()
     resizeEvent(&re);
 }
 
-void qt_MemoryWidget::setFont(const QFont& font )
+void qt_MemoryWidget::setFont(const QFont& font)
 {
     QWidget::setFont(font);
     calculateFontMetrics();
@@ -144,11 +134,6 @@ void qt_MemoryWidget::changeAddress(int address)
 {
     setOffset(address - m_start);
     seeCursor();
-
-    /* if (moveTopLeft(address - m_start))
-    {
-    emit lineChanged(m_topLeft / bytesPerLine());
-    }*/
 }
 
 void qt_MemoryWidget::setTopLeft(int offset)
@@ -291,7 +276,7 @@ void qt_MemoryWidget::setCursorFromXY(int x, int y)
 {
     int oldColumnIndex = localColumnOffset();
 
-    m_cursor.setOffset(m_topLeft + localByteOffsetAtXY(x,y), 0);
+    m_cursor.setOffset(m_topLeft + localByteOffsetAtXY(x, y), 0);
 
     if (oldColumnIndex != localColumnOffset())
     {
@@ -359,7 +344,7 @@ void qt_MemoryWidget::contextMenuEvent(QContextMenuEvent *e)
     }
     viewMenu.addMenu(baseMenu);
 
-    QMenu *bpcMenu = new QMenu("&Bytes per column",this);
+    QMenu *bpcMenu = new QMenu("&Bytes per column", this);
     bpcMenu->addAction("&1", this, SLOT(set1BytePerColumn()));
     if (m_base != 8)
     {
@@ -369,7 +354,7 @@ void qt_MemoryWidget::contextMenuEvent(QContextMenuEvent *e)
     }
     viewMenu.addMenu(bpcMenu);
 
-    QMenu *endMenu = new QMenu("&Endianness",this);
+    QMenu *endMenu = new QMenu("&Endianness", this);
     if (m_base != 8)
     {
         if (m_endianness == 0)
@@ -390,20 +375,24 @@ void qt_MemoryWidget::contextMenuEvent(QContextMenuEvent *e)
 int qt_MemoryWidget::selectionStart() const
 {
     if (m_selection[SelectionStart] == -1 || m_selection[SelectionEnd] == -1)
+    {
         return -1;
+    }
     return qMin(m_selection[SelectionStart], m_selection[SelectionEnd]);
 }
 
 int qt_MemoryWidget::selectionEnd() const
 {
     if (m_selection[SelectionStart] == -1 || m_selection[SelectionEnd] == -1)
+    {
         return -1;
+    }
     return qMax(m_selection[SelectionStart], m_selection[SelectionEnd]);
 }
 
 void qt_MemoryWidget::setSelection(SelectionPos pos, int offset)
 {
-    if (m_end - m_start)
+    if (m_end == m_start)
     {
         return;
     }
@@ -426,7 +415,7 @@ void qt_MemoryWidget::setSelection(SelectionPos pos, int offset)
             QString data;
             for (int i = selectionStart(); i < selectionEnd(); ++i)
             {
-/*TODO*///                data += Qt4_Translate::ByteToHex(Memory::membu(m_start + i));
+                data += Qt_Translate::ByteToHex(*p32u8(m_start + i));
             }
             emit selectionChanged(data);
         }
@@ -459,7 +448,7 @@ void qt_MemoryWidget::keyPressEvent(QKeyEvent *e)
             Qt_Translate::ByteToChar(chars, oldData);
             chars[0] = key;
             Qt_Translate::CharToByte(newData, chars);
-            m_data[(m_cursor.byteOffset() - m_topLeft) ^ mask] = newData[0];
+            m_data[localByteOffset() ^ mask] = newData[0];
             cursorRight();
             setSelection(SelectionStart, -1);
             return;
@@ -481,8 +470,7 @@ void qt_MemoryWidget::keyPressEvent(QKeyEvent *e)
             Qt_Translate::ByteToHex(hex, oldData);
             hex[m_cursor.charOffset()] = key;
             Qt_Translate::HexToByte(newData, hex);
-
-            m_data[(m_cursor.byteOffset() - m_topLeft) ^ mask] = newData[0];
+            m_data[localByteOffset() ^ mask] = newData[0];
             cursorRight();
             setSelection(SelectionStart, -1);
             return;
@@ -500,9 +488,9 @@ void qt_MemoryWidget::keyPressEvent(QKeyEvent *e)
             Qt_Translate::ByteToOctal(octal, oldData);
             octal[m_cursor.charOffset()] = key;
             Qt_Translate::OctalToByte(newData, octal);
-            m_data[m_cursor.byteOffset( ) - m_topLeft] = newData[0];
+            m_data[localByteOffset()] = newData[0];
             cursorRight();
-            setSelection(SelectionStart, u32(-1));
+            setSelection(SelectionStart, -1);
             return;
         }
         break;
@@ -515,11 +503,10 @@ void qt_MemoryWidget::keyPressEvent(QKeyEvent *e)
             std::vector< u8 > binary;
 
             oldData.push_back(m_data[localByteOffset() ^ mask]);
-            Qt_Translate::ByteToBinary(binary,oldData);
+            Qt_Translate::ByteToBinary(binary, oldData);
             binary[m_cursor.charOffset()] = key;
-            Qt_Translate::BinaryToByte(newData,binary);
-
-            m_data[(m_cursor.byteOffset() - m_topLeft) ^ mask] = newData[0];
+            Qt_Translate::BinaryToByte(newData, binary);
+            m_data[localByteOffset() ^ mask] = newData[0];
             cursorRight();
             setSelection(SelectionStart, -1);
             return;
@@ -548,7 +535,7 @@ void qt_MemoryWidget::keyPressEvent(QKeyEvent *e)
         nextPage();
         break;
     case Qt::Key_End:
-        setTopLeft((m_end - m_start) - bytesPerPage()/2);
+        setTopLeft((m_end - m_start) - bytesPerPage() / 2);
         break;
     case Qt::Key_Home:
         setTopLeft(0);
@@ -578,8 +565,6 @@ void qt_MemoryWidget::resizeEvent(QResizeEvent *e)
     m_rows = qMax(1, (e->size().height() - m_topMargin) / height);
     m_cols = qMax(1, (e->size().width() - m_leftMargin) / totalColumnWidth);
 
-    //m_lineBBox.reserve(m_rows);
-    // m_columnBBox.reserve(m_rows * m_cols);//hmm vstudio doesn't like that?
     m_lineBBox.resize(m_rows);
     m_columnBBox.resize(m_rows * m_cols);
     int top, left;
@@ -589,7 +574,7 @@ void qt_MemoryWidget::resizeEvent(QResizeEvent *e)
         for (int c = 0; c < m_cols; c++)
         {
             left = totalColumnWidth * c + m_leftMargin;
-            int index = r* m_cols+c;
+            int index = r* m_cols + c;
             int size = m_columnBBox.size();
             m_columnBBox[r * m_cols + c] = QRect(left, top, totalColumnWidth, height);
         }
@@ -614,7 +599,9 @@ void qt_MemoryWidget::focusOutEvent(QFocusEvent *e)
 void qt_MemoryWidget::updateColumn(int columnIndex)
 {
     if (columnIndex > -1 && columnIndex < m_rows * m_cols)
+    {
         repaint(m_columnBBox[columnIndex]);
+    }
 }
 
 void qt_MemoryWidget::paintLabels(QPainter *p)
@@ -655,10 +642,10 @@ void qt_MemoryWidget::paintEvent(QPaintEvent *e)
     drawSelection(p);
 
     int totalColumnWidth = columnWidth() + columnSpacing();
-    int row_start = qMax(0, (e->rect().top() - topMargin()) / lineSpacing() );
+    int row_start = qMax(0, (e->rect().top() - topMargin()) / lineSpacing());
     int col_start = qMax(0, (e->rect().left() - leftMargin()) / totalColumnWidth);
-    int row_stop  = qMin(m_rows - 1, e->rect().bottom() / lineSpacing());
-    int col_stop  = qMin(m_cols - 1, e->rect().right() / totalColumnWidth);
+    int row_stop = qMin(m_rows - 1, e->rect().bottom() / lineSpacing());
+    int col_stop = qMin(m_cols - 1, e->rect().right() / totalColumnWidth);
 
     drawTextRegion(p, text, row_start, row_stop, col_start, col_stop);
 }
@@ -672,19 +659,18 @@ QString qt_MemoryWidget::getDisplayText()
 
     switch (m_base)
     {
-		//todo
-/*    case 16:
-        Qt4_Translate::ByteToHex(text, m_data + m_topLeft, size, mask);
+    case 16:
+        Qt_Translate::ByteToHex(text, m_data + m_topLeft, size, mask);
         break;
     case 8:
-        Qt4_Translate::ByteToOctal(text, m_data + m_topLeft, size, 0);
+        Qt_Translate::ByteToOctal(text, m_data + m_topLeft, size, 0);
         break;
     case 2:
-        Qt4_Translate::ByteToBinary(text, m_data + m_topLeft, size, mask);
+        Qt_Translate::ByteToBinary(text, m_data + m_topLeft, size, mask);
         break;
     case -1:
-        Qt4_Translate::ByteToChar(text, m_data + m_topLeft, size, mask);
-        break;*/
+        Qt_Translate::ByteToChar(text, m_data + m_topLeft, size, mask);
+        break;
     }
     return text;
 }
@@ -706,7 +692,7 @@ int qt_MemoryWidget::localCharOffset() const
 
 int qt_MemoryWidget::localLineOffset() const
 {
-    return localColumnOffset( ) / columnsPerLine();
+    return localColumnOffset() / columnsPerLine();
 }
 
 int qt_MemoryWidget::columnWidth() const
@@ -727,7 +713,7 @@ void qt_MemoryWidget::seeCursor()
     }
     else
     {
-        setTopLeft(qMax(m_cursor.byteOffset() - bytesPerPage() / 2, 0));
+        setTopLeft(qMax(m_cursor.byteOffset() /*- bytesPerPage() / 2*/, 0));
     }
 }
 
@@ -737,7 +723,9 @@ void qt_MemoryWidget::cursorLeft()
     m_cursor.decrByChar(1);
     seeCursor();
     if (localColumnOffset() != oldColumnIndex)
+    {
         updateColumn(oldColumnIndex);
+    }
     emit offsetChanged(m_cursor.byteOffset());
 }
 
@@ -747,7 +735,9 @@ void qt_MemoryWidget::cursorRight()
     m_cursor.incrByChar(1);
     seeCursor();
     if (localColumnOffset() != oldColumnIndex)
+    {
         updateColumn(oldColumnIndex);
+    }
     emit offsetChanged(m_cursor.byteOffset());
 }
 
@@ -757,7 +747,9 @@ void qt_MemoryWidget::cursorUp()
     m_cursor.decrByByte(bytesPerLine());
     seeCursor();
     if (localColumnOffset() != oldColumnIndex)
-        updateColumn(oldColumnIndex );
+    {
+        updateColumn(oldColumnIndex);
+    }
     emit offsetChanged(m_cursor.byteOffset());
 }
 
@@ -767,7 +759,9 @@ void qt_MemoryWidget::cursorDown()
     m_cursor.incrByByte(bytesPerLine());
     seeCursor();
     if (localColumnOffset() != oldColumnIndex)
+    {
         updateColumn(oldColumnIndex);
+    }
     emit offsetChanged(m_cursor.byteOffset());
 }
 
@@ -775,7 +769,7 @@ void qt_MemoryWidget::redo()
 {
     setTopLeft(m_topLeft);
     int start = selectionStart();
-    int end   = selectionEnd();
+    int end = selectionEnd();
     setSelection(SelectionStart, start);
     setSelection(SelectionEnd, end);
 }
@@ -784,7 +778,7 @@ void qt_MemoryWidget::undo()
 {
     setTopLeft(m_topLeft);
     int start = selectionStart();
-    int end   = selectionEnd();
+    int end = selectionEnd();
     setSelection(SelectionStart, start);
     setSelection(SelectionEnd, end);
 }
@@ -820,7 +814,7 @@ void qt_MemoryWidget::search(const QString &text, bool forwards)
     else
     {
         QMessageBox::information(this,PROGRAM_STRING,
-            "Could not find search data 0x" + hexText);
+                                 "Could not find search data 0x" + hexText);
     }
     QApplication::restoreOverrideCursor();
 #endif
@@ -828,7 +822,7 @@ void qt_MemoryWidget::search(const QString &text, bool forwards)
 
 void qt_MemoryWidget::setBase(int base)
 {
-    switch(base)
+    switch (base)
     {
     case -1:
         m_charsPerByte = 1;
@@ -884,11 +878,11 @@ void qt_MemoryWidget::showMatch(int pos, int len)
 }
 
 void qt_MemoryWidget::drawTextRegion(QPainter &paint,
-                                      const QString &text,
-                                      int row_start,
-                                      int row_stop,
-                                      int col_start,
-                                      int col_stop)
+                                     const QString &text,
+                                     int row_start,
+                                     int row_stop,
+                                     int col_start,
+                                     int col_stop)
 {
     paint.setPen(qApp->palette().windowText().color());
     for (int r = row_start; r <= row_stop; r++)
@@ -896,7 +890,7 @@ void qt_MemoryWidget::drawTextRegion(QPainter &paint,
         for (int c = col_start; c <= col_stop; c++)
         {
             int index = r * m_cols + c;
-            paint.drawText( m_columnBBox[index].left() + columnSpacing()/2, m_columnBBox[index].bottom(), text.mid(index * charsPerColumn(), charsPerColumn()));
+            paint.drawText(m_columnBBox[index].left() + columnSpacing() / 2, m_columnBBox[index].bottom(), text.mid(index * charsPerColumn(), charsPerColumn()));
         }
     }
 }
@@ -912,7 +906,7 @@ void qt_MemoryWidget::drawSelection(QPainter &paint)
         stop--;
         while (start <= stop)
         {
-            int linestop = qMin(stop, start + bytesPerLine() - 1 -(start % bytesPerLine()));
+            int linestop = qMin(stop, start + bytesPerLine() - 1 - (start % bytesPerLine()));
             QRect bbox = byteBBox(start);
             bbox.setRight(byteBBox(linestop).right());
             paint.drawRect(bbox);
@@ -943,9 +937,8 @@ void qt_MemoryWidget::drawCursor(QPainter &paint)
 void qt_MemoryWidget::changeAddressRange(int start, int end)
 {
     m_start = start;
-    m_end   = end;
-	m_data = 0; //temp
-//TODO    m_data = Memory::addrbu(m_start);
+    m_end = end;
+    m_data = p32u8(m_start);
     m_cursor.setRange(0, (m_end - m_start));
     m_cursor.setCharsPerByte(m_charsPerByte);
     setSelection(SelectionStart, -1);
@@ -962,19 +955,19 @@ void qt_MemoryWidget::changeAddressRange(int choice)
     {
     case 0:
         start = 0x08800000;
-        end   = 0x0C000000;
+        end = 0x0C000000;
         break;
     case 1:
         start = 0x08000000;
-        end   = 0x08800000;
+        end = 0x08800000;
         break;
     case 2:
         start = 0x04000000;
-        end   = 0x04400000;
+        end = 0x04400000;
         break;
     case 3:
         start = 0x00010000;
-        end   = 0x00014000;
+        end = 0x00014000;
         break;
     }
     changeAddressRange(start, end);

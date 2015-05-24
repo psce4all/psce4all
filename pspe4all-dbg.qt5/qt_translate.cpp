@@ -1,4 +1,8 @@
-#include "stdafx.h"
+/**
+* (c) 2015 psce4all project. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
 #include "qt_translate.h"
 
 namespace Qt_Translate
@@ -73,38 +77,38 @@ namespace Qt_Translate
 
     char byteToCharMap[256] =
     {
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        ' ','!','"','#','.','%','&','\'',
-        '(',')','*','+',',','-','.','/',
-        '0','1','2','3','4','5','6','7',
-        '8','9',':',';','<','=','>','?',
-        '@','A','B','C','D','E','F','G',
-        'H','I','J','K','L','M','N','O',
-        'P','Q','R','S','T','U','V','W',
-        'X','Y','Z','[','\\',']','^','_',
-        '`','a','b','c','d','e','f','g',
-        'h','i','j','k','l','m','n','o',
-        'p','q','r','s','t','u','v','w',
-        'x','y','z','{','|','}','~','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.',
-        '.','.','.','.','.','.','.','.'
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        ' ', '!', '"', '#', '.', '%', '&', '\'',
+        '(', ')', '*', '+', ',', '-', '.', '/',
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', ':', ';', '<', '=', '>', '?',
+        '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
+        'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+        'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+        'X', 'Y', 'Z', '[', '\\', ']', '^', '_',
+        '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+        'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+        'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
+        'x', 'y', 'z', '{', '|', '}', '~', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.',
+        '.', '.', '.', '.', '.', '.', '.', '.'
     };
 
     char *byteToHexMap[256] =
@@ -189,11 +193,11 @@ namespace Qt_Translate
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 1, 2, 3, 4, 5, 6, 7,
         8, 9, 0, 0, 0, 0, 0, 0,
-        0,10,11,12,13,14,15, 0,
+        0, 10, 11, 12, 13, 14, 15, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
-        0,10,11,12,13,14,15, 0,
+        0, 10, 11, 12, 13, 14, 15, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
@@ -231,8 +235,8 @@ void Qt_Translate::CharToByte(std::vector< u8 > &dst, const std::vector< u8 > &s
 void Qt_Translate::CharToByte(std::vector< u8 > &dst, const QString &src, int mask)
 {
     dst.resize(src.length());
-	for (int i = 0; i < src.length(); ++i)
-		dst[i] = src[i ^ mask].toLatin1();
+    for (int i = 0; i < src.length(); ++i)
+        dst[i] = src[i ^ mask].toLatin1();
 }
 
 
@@ -264,7 +268,7 @@ void Qt_Translate::HexToByte(std::vector< u8 > &dst, const std::vector< u8 > &sr
     }
     for (unsigned int i = start; i < src.size(); i += 2)
     {
-        dst.push_back(Qt_Translate::hexToByteMap[src[i ^ mask]] * 16 + Qt_Translate::hexToByteMap[src[(i ^ mask)+1]]);
+        dst.push_back(Qt_Translate::hexToByteMap[src[i ^ mask]] * 16 + Qt_Translate::hexToByteMap[src[(i ^ mask) + 1]]);
     }
 }
 
@@ -279,8 +283,8 @@ void Qt_Translate::HexToByte(std::vector< u8 > &dst, const QString &src, int mas
     }
     for (; i < src.length(); i += 2)
     {
-		u8 hi = src[i ^ mask].toLatin1();
-		u8 lo = src[(i ^ mask) + 1].toLatin1();
+        u8 hi = src[i ^ mask].toLatin1();
+        u8 lo = src[(i ^ mask) + 1].toLatin1();
         dst.push_back(Qt_Translate::hexToByteMap[hi] * 16 + Qt_Translate::hexToByteMap[lo]);
     }
 }
@@ -291,7 +295,7 @@ void Qt_Translate::OctalToByte(std::vector< u8 > &dst, const std::vector< u8 > &
     dst.reserve(src.size() / 3);
     for (unsigned int i = 0; i + 2 < src.size(); i += 3)
     {
-        dst.push_back(Qt_Translate::hexToByteMap[src[i]] * 64 + Qt_Translate::hexToByteMap[src[i+1]] * 8 + Qt_Translate::hexToByteMap[src[i+2]]);
+        dst.push_back(Qt_Translate::hexToByteMap[src[i]] * 64 + Qt_Translate::hexToByteMap[src[i + 1]] * 8 + Qt_Translate::hexToByteMap[src[i + 2]]);
     }
 }
 
@@ -301,14 +305,14 @@ void Qt_Translate::BinaryToByte(std::vector< u8 > &dst, const std::vector< u8 > 
     dst.reserve(src.size() / 8);
     for (unsigned int i = 0; i < src.size(); i += 8)
     {
-        dst.push_back(Qt_Translate::hexToByteMap[src[(i ^ mask)+0]] * 128 +
-            Qt_Translate::hexToByteMap[src[(i ^ mask)+1]] * 64 +
-            Qt_Translate::hexToByteMap[src[(i ^ mask)+2]] * 32 +
-            Qt_Translate::hexToByteMap[src[(i ^ mask)+3]] * 16 +
-            Qt_Translate::hexToByteMap[src[(i ^ mask)+4]] * 8 +
-            Qt_Translate::hexToByteMap[src[(i ^ mask)+5]] * 4 +
-            Qt_Translate::hexToByteMap[src[(i ^ mask)+6]] * 2 +
-            Qt_Translate::hexToByteMap[src[(i ^ mask)+7]] * 1);
+        dst.push_back(Qt_Translate::hexToByteMap[src[(i ^ mask) + 0]] * 128 +
+                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 1]] * 64 +
+                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 2]] * 32 +
+                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 3]] * 16 +
+                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 4]] * 8 +
+                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 5]] * 4 +
+                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 6]] * 2 +
+                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 7]] * 1);
     }
 }
 
@@ -325,8 +329,8 @@ void Qt_Translate::ByteToHex(std::vector< u8 > &dst, const std::vector< u8 > &sr
     for (unsigned int i = 0; i < src.size(); i++)
     {
         str = Qt_Translate::byteToHexMap[src[(i ^ mask)]];
-        dst.push_back(*(str+0));
-        dst.push_back(*(str+1));
+        dst.push_back(*(str + 0));
+        dst.push_back(*(str + 1));
     }
 }
 
@@ -361,7 +365,7 @@ void Qt_Translate::ByteToChar(QString &dst, const u8 *src, int len, int mask)
     dst = "";
     for (int i = 0; i < len; i++)
     {
-        dst += Qt_Translate::byteToCharMap[*((const u8 *)((int)src++ ^ mask))];
+        dst += Qt_Translate::byteToCharMap[*((const u8 *)((size_t)src++ ^ mask))];
     }
 }
 
@@ -370,7 +374,7 @@ void Qt_Translate::ByteToHex(QString &dst, const u8 *src, int len, int mask)
     dst = "";
     for (int i = 0; i < len; i++)
     {
-        dst += Qt_Translate::byteToHexMap[*((const u8 *)((int)src++ ^ mask))];
+        dst += Qt_Translate::byteToHexMap[*((const u8 *)((size_t)src++ ^ mask))];
     }
 }
 
@@ -379,7 +383,7 @@ void Qt_Translate::ByteToOctal(QString &dst, const u8 *src, int len, int mask)
     dst = "";
     for (int i = 0; i < len; ++i)
     {
-        dst += Qt_Translate::byteToOctalMap[*((const u8 *)((int)src++ ^ mask))];
+        dst += Qt_Translate::byteToOctalMap[*((const u8 *)((size_t)src++ ^ mask))];
     }
 }
 
@@ -388,7 +392,6 @@ void Qt_Translate::ByteToBinary(QString &dst, const u8 *src, int len, int mask)
     dst = "";
     for (int i = 0; i < len; ++i)
     {
-        dst += Qt_Translate::byteToBinaryMap[*((const u8 *)((int)src++ ^ mask))];
+        dst += Qt_Translate::byteToBinaryMap[*((const u8 *)((size_t)src++ ^ mask))];
     }
 }
-

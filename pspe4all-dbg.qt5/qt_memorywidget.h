@@ -1,15 +1,17 @@
-#ifndef QT_MEMORYWIDGET_H
-#define QT_MEMORYWIDGET_H
-#include "types.h"
-#include "qt_memorycursor.h"
-#include <QWidget>
+/**
+* (c) 2015 psce4all project. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
 
+#pragma once
+
+#include "qt_memorycursor.h"
 
 class qt_MemoryWidget : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     qt_MemoryWidget(QWidget *parent = 0);
     ~qt_MemoryWidget();
     u32 offset() const;
@@ -22,11 +24,11 @@ class qt_MemoryWidget : public QWidget
     int  wordWidth() const;
     int  wordSpacing() const;
     void setCursorFromXY(int x, int y);
-  public:
+public:
     enum SelectionPos
     {
-      SelectionStart,
-      SelectionEnd,
+        SelectionStart,
+        SelectionEnd,
     };
 
     void setSelection(SelectionPos pos, int offset);
@@ -41,14 +43,14 @@ protected:
     int localCharOffset() const;
     int localLineOffset() const;
 
-  signals:
+signals:
     void rangeChanged(int low, int high);
     void addressChanged(int address);
     void lineChanged(int line);
     void offsetChanged(int offset);
     void selectionChanged(const QString &selection);
 
-  public slots:
+public slots:
     void changeAddressRange(int choice);
     void changeAddressRange(int start, int end);
     void changeAddress(int address);
@@ -75,11 +77,11 @@ protected:
     void setBaseBinary();
     void setBaseASCII();
 
-  protected:
+protected:
     void setTopLeft(int offset);
     bool moveTopLeft(int offset);
 
-  protected:
+protected:
     bool columnModified(int index) const;
     template< class T >
     void setColumn(int index, const T &str);
@@ -89,7 +91,7 @@ protected:
     int pointToColumn(const QPoint &point);
     QChar &pointToChar(const QPoint &point);
 
-  protected:
+protected:
     void calculateFontMetrics();
     int charsPerByte() const;
     int charsPerColumn() const;
@@ -111,16 +113,16 @@ protected:
     int globalOffset(int local) const;
     int localOffset(int global) const;
 
-  protected:
+protected:
     void showMatch(int pos, int len);
 
-  protected:
+protected:
     QString getDisplayText();
     void drawCursor(QPainter &p);
     void drawSelection(QPainter &p);
     void drawTextRegion(QPainter &p, const QString &text, int row_start, int row_end, int col_start, int col_end);
 
-  protected:
+protected:
     void resizeEvent(QResizeEvent *e);
     void updateColumn(int index);
     void paintEvent(QPaintEvent *e);
@@ -134,7 +136,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e);
     void contextMenuEvent(QContextMenuEvent *e);
 
-  protected:
+protected:
     u32 m_start;
     u32 m_end;
 
@@ -149,7 +151,7 @@ protected:
     u8 *m_data;
     int m_base;
     int m_lastValidColumn;
-    
+
     int m_endianness;
 
     QVector< QRect > m_lineBBox;
@@ -168,5 +170,3 @@ protected:
     Qt_MemoryCursor m_cursor;
     int m_selection[2];
 };
-
-#endif

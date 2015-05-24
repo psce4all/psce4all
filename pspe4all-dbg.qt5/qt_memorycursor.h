@@ -1,5 +1,9 @@
-#ifndef QT_MEMORYCURSOR_H
-#define QT_MEMORYCURSOR_H
+/**
+* (c) 2015 psce4all project. All rights reserved.
+* Released under GPL v2 license. Read LICENSE for more details.
+*/
+
+#pragma once
 
 class Qt_MemoryCursor
 {
@@ -40,5 +44,3 @@ class Qt_MemoryCursor
     int m_high;
     int m_charsPerByte;
 };
-
-#endif // QMEMORYCURSOR_H
