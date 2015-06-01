@@ -144,18 +144,18 @@ namespace dbg
             String          m_FullName;
         };
 
-        struct CSymbolInfoPackage : public SYMBOL_INFO_PACKAGE
+        struct SymbolInfoPackage : public SYMBOL_INFO_PACKAGE
         {
-            CSymbolInfoPackage()
+            SymbolInfoPackage()
             {
                 si.SizeOfStruct = sizeof(SYMBOL_INFO);
                 si.MaxNameLen = sizeof(name) / sizeof(TCHAR);
             }
         };
 
-        struct CImageHlpLine64 : public IMAGEHLP_LINE64
+        struct ImageHlpLine64 : public IMAGEHLP_LINE64
         {
-            CImageHlpLine64()
+            ImageHlpLine64()
             {
                 SizeOfStruct = sizeof(IMAGEHLP_LINE64);
             }
@@ -198,16 +198,16 @@ namespace dbg
                         return true;
                     }
                 }
-                if (!SymInitialize(hProcess, SearchPath, Invade ? TRUE : FALSE))
+                if (!::SymInitialize(hProcess, SearchPath, Invade ? TRUE : FALSE))
                 {
-                    m_LastError = GetLastError();
+                    m_LastError = ::GetLastError();
                     return false;
                 }
                 if (Notify)
                 {
-                    if (!SymRegisterCallback64(hProcess, DebugInfoCallback, (ULONG64)this))
+                    if (!::SymRegisterCallback64(hProcess, DebugInfoCallback, (ULONG64)this))
                     {
-                        m_LastError = GetLastError();
+                        m_LastError = ::GetLastError();
                         return false;
                     }
                 }
@@ -219,7 +219,7 @@ namespace dbg
             {
                 if (m_hProcess != nullptr)
                 {
-                    SymCleanup(m_hProcess);
+                    ::SymCleanup(m_hProcess);
 
                     m_hProcess = nullptr;
                 }
@@ -269,7 +269,7 @@ namespace dbg
 #else
                 const char * pImageName = ImageName.empty() ? 0 : ImageName.c_str();
 #endif //_UNICODE
-                DWORD64 rv = SymLoadModule64(m_hProcess, hFile, pImageName, NULL, ModBase, ModSize);
+                DWORD64 rv = ::SymLoadModule64(m_hProcess, hFile, pImageName, NULL, ModBase, ModSize);
                 if (rv == 0)
                 {
                     m_LastError = GetLastError();
@@ -290,9 +290,9 @@ namespace dbg
                     m_LastError = ERROR_INVALID_PARAMETER;
                     return false;
                 }
-                if (!SymUnloadModule64(m_hProcess, ModBase))
+                if (!::SymUnloadModule64(m_hProcess, ModBase))
                 {
-                    m_LastError = GetLastError();
+                    m_LastError = ::GetLastError();
                     return false;
                 }
                 return true;
@@ -307,9 +307,9 @@ namespace dbg
                 }
                 memset(&Info, 0, sizeof(Info));
                 Info.SizeOfStruct = sizeof(Info);
-                if (!SymGetModuleInfo64(m_hProcess, Addr, &Info))
+                if (!::SymGetModuleInfo64(m_hProcess, Addr, &Info))
                 {
-                    m_LastError = GetLastError();
+                    m_LastError = ::GetLastError();
                     return false;
                 }
                 return true;
@@ -322,11 +322,11 @@ namespace dbg
                     m_LastError = ERROR_INVALID_FUNCTION;
                     return false;
                 }
-                CSymbolInfoPackage sip;
+                SymbolInfoPackage sip;
                 DWORD64 Disp = 0;
-                if (!SymFromAddr(m_hProcess, Address, &Disp, &sip.si))
+                if (!::SymFromAddr(m_hProcess, Address, &Disp, &sip.si))
                 {
-                    m_LastError = GetLastError();
+                    m_LastError = ::GetLastError();
                     return false;
                 }
                 Name = sip.si.Name;
@@ -341,11 +341,11 @@ namespace dbg
                     m_LastError = ERROR_INVALID_FUNCTION;
                     return false;
                 }
-                CImageHlpLine64 LineInfo;
+                ImageHlpLine64 LineInfo;
                 DWORD Disp = 0;
                 if (!SymGetLineFromAddr64(m_hProcess, Address, &Disp, &LineInfo))
                 {
-                    m_LastError = GetLastError();
+                    m_LastError = ::GetLastError();
                     return false;
                 }
                 File = LineInfo.FileName;
@@ -369,7 +369,7 @@ namespace dbg
                 if (pContext == nullptr)
                 {
                     pContext = &Context;
-                    RtlCaptureContext(pContext);
+                    ::RtlCaptureContext(pContext);
                 }
                 StackFrame.AddrPC.Offset = pContext->Rip;
                 StackFrame.AddrPC.Mode = AddrModeFlat;
@@ -379,7 +379,7 @@ namespace dbg
                 StackFrame.AddrFrame.Mode = AddrModeFlat;
                 while (1)
                 {
-                    if (!StackWalk64(MachineType, m_hProcess, hThread, &StackFrame, pContext, 0, SymFunctionTableAccess64, SymGetModuleBase64, 0))
+                    if (!::StackWalk64(MachineType, m_hProcess, hThread, &StackFrame, pContext, 0, SymFunctionTableAccess64, SymGetModuleBase64, 0))
                     {
                         m_LastError = GetLastError();
                         break;
@@ -409,12 +409,12 @@ namespace dbg
 
             DWORD GetOptions() const
             {
-                return SymGetOptions();
+                return ::SymGetOptions();
             }
 
             void SetOptions(DWORD Options)
             {
-                SymSetOptions(Options);
+                ::SymSetOptions(Options);
             }
 
             void AddOptions(DWORD Options)
@@ -468,6 +468,9 @@ namespace dbg
         {
             Debugger() : m_hProcess(nullptr)
             {
+                bContinue = true;
+                bSeenInitialBreakpoint = false;
+
                 EnableDebugPrivilege_(true);
             }
 
@@ -477,94 +480,108 @@ namespace dbg
 
             bool AttachToProcess(DWORD ProcessId)
             {
-                if (!DebugActiveProcess(ProcessId))
+                if (!::DebugActiveProcess(ProcessId))
                 {
                     return false;
                 }
-
                 return true;
             }
 
-            bool DebugLoop()
+            bool WaitForDebugEvent(DEBUG_EVENT & DebugEvent, DWORD Timeout, DWORD & ContinueStatus)
+            {
+                if (::WaitForDebugEvent(&DebugEvent, Timeout))
+                {
+                    switch (DebugEvent.dwDebugEventCode)
+                    {
+                    case CREATE_PROCESS_DEBUG_EVENT:
+                        m_hProcess = DebugEvent.u.CreateProcessInfo.hProcess;
+                        OnCreateProcessEvent(DebugEvent.dwProcessId);
+                        OnCreateThreadEvent(DebugEvent.dwThreadId, DebugEvent.u.CreateProcessInfo.hThread);
+                        OnLoadModuleEvent(DebugEvent.u.CreateProcessInfo.lpBaseOfImage, DebugEvent.u.CreateProcessInfo.hFile);
+                        ::CloseHandle(DebugEvent.u.CreateProcessInfo.hFile);
+                        break;
+
+                    case EXIT_PROCESS_DEBUG_EVENT:
+                        OnExitProcessEvent(DebugEvent.dwProcessId);
+                        m_hProcess = NULL;
+                        bContinue = false;
+                        break;
+
+                    case CREATE_THREAD_DEBUG_EVENT:
+                        OnCreateThreadEvent(DebugEvent.dwThreadId, DebugEvent.u.CreateThread.hThread);
+                        break;
+
+                    case EXIT_THREAD_DEBUG_EVENT:
+                        OnExitThreadEvent(DebugEvent.dwThreadId);
+                        break;
+
+                    case LOAD_DLL_DEBUG_EVENT:
+                        OnLoadModuleEvent(DebugEvent.u.LoadDll.lpBaseOfDll, DebugEvent.u.LoadDll.hFile);
+                        ::CloseHandle(DebugEvent.u.LoadDll.hFile);
+                        break;
+
+                    case UNLOAD_DLL_DEBUG_EVENT:
+                        OnUnloadModuleEvent(DebugEvent.u.UnloadDll.lpBaseOfDll);
+                        break;
+
+                    case OUTPUT_DEBUG_STRING_EVENT:
+                        OnDebugStringEvent(DebugEvent.dwThreadId, DebugEvent.u.DebugString);
+                        break;
+
+                    case RIP_EVENT:
+                        break;
+
+                    case EXCEPTION_DEBUG_EVENT:
+                        ContinueStatus = OnExceptionEvent(DebugEvent.dwThreadId, DebugEvent.u.Exception);
+                        DWORD ExceptionCode = DebugEvent.u.Exception.ExceptionRecord.ExceptionCode;
+                        if (!bSeenInitialBreakpoint && (ExceptionCode == EXCEPTION_BREAKPOINT))
+                        {
+                            ContinueStatus = DBG_CONTINUE;
+                            bSeenInitialBreakpoint = true;
+                        }
+                        break;
+                    }
+                }
+                else
+                {
+                    DWORD ErrCode = ::GetLastError();
+                    if (ErrCode == ERROR_SEM_TIMEOUT)
+                    {
+                        OnTimeout();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            bool ContinueDebugEvent(DEBUG_EVENT & DebugEvent, DWORD ContinueStatus)
+            {
+                return FALSE != ::ContinueDebugEvent(DebugEvent.dwProcessId, DebugEvent.dwThreadId, ContinueStatus);
+            }
+
+            bool DebugLoop(DWORD Timeout)
             {
                 DEBUG_EVENT DebugEvent;
 
-                bool bContinue = true;
-                bool bSeenInitialBreakpoint = false;
+                bContinue = true;
+                bSeenInitialBreakpoint = false;
 
                 while (bContinue)
                 {
-                    if (WaitForDebugEvent(&DebugEvent, INFINITE))
+                    DWORD ContinueStatus = DBG_CONTINUE;
+                    if (WaitForDebugEvent(DebugEvent, Timeout, ContinueStatus))
                     {
-                        DWORD ContinueStatus = DBG_CONTINUE;
-
-                        switch (DebugEvent.dwDebugEventCode)
-                        {
-                        case CREATE_PROCESS_DEBUG_EVENT:
-                            m_hProcess = DebugEvent.u.CreateProcessInfo.hProcess;
-                            OnCreateProcessEvent(DebugEvent.dwProcessId);
-                            OnCreateThreadEvent(DebugEvent.dwThreadId, DebugEvent.u.CreateProcessInfo.hThread);
-                            OnLoadModuleEvent(DebugEvent.u.CreateProcessInfo.lpBaseOfImage, DebugEvent.u.CreateProcessInfo.hFile);
-                            CloseHandle(DebugEvent.u.CreateProcessInfo.hFile);
-                            break;
-
-                        case EXIT_PROCESS_DEBUG_EVENT:
-                            OnExitProcessEvent(DebugEvent.dwProcessId);
-                            m_hProcess = NULL;
-                            bContinue = false;
-                            break;
-
-                        case CREATE_THREAD_DEBUG_EVENT:
-                            OnCreateThreadEvent(DebugEvent.dwThreadId, DebugEvent.u.CreateThread.hThread);
-                            break;
-
-                        case EXIT_THREAD_DEBUG_EVENT:
-                            OnExitThreadEvent(DebugEvent.dwThreadId);
-                            break;
-
-                        case LOAD_DLL_DEBUG_EVENT:
-                            OnLoadModuleEvent(DebugEvent.u.LoadDll.lpBaseOfDll, DebugEvent.u.LoadDll.hFile);
-                            CloseHandle(DebugEvent.u.LoadDll.hFile);
-                            break;
-
-                        case UNLOAD_DLL_DEBUG_EVENT:
-                            OnUnloadModuleEvent(DebugEvent.u.UnloadDll.lpBaseOfDll);
-                            break;
-
-                        case OUTPUT_DEBUG_STRING_EVENT:
-                            OnDebugStringEvent(DebugEvent.dwThreadId, DebugEvent.u.DebugString);
-                            break;
-
-                        case RIP_EVENT:
-                            break;
-
-                        case EXCEPTION_DEBUG_EVENT:
-                            ContinueStatus = OnExceptionEvent(DebugEvent.dwThreadId, DebugEvent.u.Exception);
-                            DWORD ExceptionCode = DebugEvent.u.Exception.ExceptionRecord.ExceptionCode;
-                            if (!bSeenInitialBreakpoint && (ExceptionCode == EXCEPTION_BREAKPOINT))
-                            {
-                                ContinueStatus = DBG_CONTINUE;
-                                bSeenInitialBreakpoint = true;
-                            }
-                            break;
-                        }
-
-                        if (!ContinueDebugEvent(DebugEvent.dwProcessId, DebugEvent.dwThreadId, ContinueStatus))
+                        if (!ContinueDebugEvent(DebugEvent, ContinueStatus))
                         {
                             return false;
                         }
                     }
                     else
                     {
-                        DWORD ErrCode = GetLastError();
-                        if (ErrCode == ERROR_SEM_TIMEOUT)
-                        {
-                            OnTimeout();
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
 
@@ -572,39 +589,64 @@ namespace dbg
             }
 
         protected:
+            bool bContinue;
+            bool bSeenInitialBreakpoint;
+
             virtual void OnCreateProcessEvent(DWORD ProcessId)
             {
+                ::OutputDebugStringA("BOF[OnCreateProcessEvent]");
+
                 if (m_hProcess == NULL)
                 {
+                    ::OutputDebugStringA("BOF[OnCreateProcessEvent] *FAILURE*");
+
                     return;
                 }
 
                 m_SymbolEngine.AddOptions(SYMOPT_DEBUG | SYMOPT_LOAD_LINES);
                 m_SymbolEngine.Init(m_hProcess, 0, false, false);
+
+                ::OutputDebugStringA("BOF[OnCreateProcessEvent]");
             }
 
             virtual void OnExitProcessEvent(DWORD ProcessId)
             {
+                ::OutputDebugStringA("BOF[OnExitProcessEvent]");
+
                 m_SymbolEngine.Close();
+
+                ::OutputDebugStringA("EOF[OnExitProcessEvent]");
             }
 
             virtual void OnCreateThreadEvent(DWORD ThreadId, HANDLE hThread)
             {
+                ::OutputDebugStringA("BOF[OnCreateThreadEvent]");
+
                 if (hThread)
                 {
                     m_ThreadHandles[ThreadId] = hThread;
                 }
+
+                ::OutputDebugStringA("EOF[OnCreateThreadEvent]");
             }
 
             virtual void OnExitThreadEvent(DWORD ThreadId)
             {
+                ::OutputDebugStringA("BOF[OnExitThreadEvent]");
+
                 m_ThreadHandles.erase(ThreadId);
+
+                ::OutputDebugStringA("EOF[OnExitThreadEvent]");
             }
 
             virtual void OnLoadModuleEvent(LPVOID ImageBase, HANDLE hFile)
             {
+                ::OutputDebugStringA("BOF[OnLoadModuleEvent]");
+
                 if (m_hProcess == NULL)
                 {
+                    ::OutputDebugStringA("EOF[OnLoadModuleEvent] *FAILURE*");
+
                     return;
                 }
 
@@ -630,10 +672,14 @@ namespace dbg
                         //ShowSymbolInfo(ImageBase);
                     }
                 }
+
+                ::OutputDebugStringA("EOF[OnLoadModuleEvent]");
             }
 
             virtual void OnUnloadModuleEvent(LPVOID ImageBase)
             {
+                ::OutputDebugStringA("BOF[OnUnloadModuleEvent]");
+
                 String ImageName(_T("<unknown>"));
 
                 ModuleList::iterator pm = m_Modules.find(ImageBase);
@@ -648,10 +694,14 @@ namespace dbg
                 {
                     m_Modules.erase(pm);
                 }
+
+                ::OutputDebugStringA("EOF[OnUnloadModuleEvent]");
             }
 
             virtual DWORD OnExceptionEvent(DWORD ThreadId, EXCEPTION_DEBUG_INFO const & Info)
             {
+                ::OutputDebugStringA("BOF[OnExceptionEvent]");
+
                 TCHAR szMessage[4096];
 
                 size_t len = 0;
@@ -710,18 +760,26 @@ namespace dbg
 
                 //ShowCallStack(ThreadId);
 
+                ::OutputDebugStringA("EOF[OnExceptionEvent]");
+
                 return DBG_EXCEPTION_NOT_HANDLED;
             }
 
             virtual void OnDebugStringEvent(DWORD ThreadId, OUTPUT_DEBUG_STRING_INFO const & Info)
             {
+                ::OutputDebugStringA("BOF[OnDebugStringEvent]");
+
                 if (m_hProcess == NULL)
                 {
+                    ::OutputDebugStringA("EOF[OnDebugStringEvent]");
+
                     return;
                 }
 
                 if ((Info.lpDebugStringData == 0) || (Info.nDebugStringLength == 0))
                 {
+                    ::OutputDebugStringA("EOF[OnDebugStringEvent]");
+
                     return;
                 }
 
@@ -740,8 +798,10 @@ namespace dbg
                     }
 
                     SIZE_T BytesRead = 0;
-                    if (!ReadProcessMemory(m_hProcess, Info.lpDebugStringData, Buffer + len, CharsToRead * sizeof(WCHAR), &BytesRead) || (BytesRead == 0))
+                    if (!::ReadProcessMemory(m_hProcess, Info.lpDebugStringData, Buffer + len, CharsToRead * sizeof(WCHAR), &BytesRead) || (BytesRead == 0))
                     {
+                        ::OutputDebugStringA("EOF[OnDebugStringEvent] *FAILURE*");
+
                         return;
                     }
 
@@ -763,18 +823,25 @@ namespace dbg
                     }
 
                     SIZE_T BytesRead = 0;
-                    if (!ReadProcessMemory(m_hProcess, Info.lpDebugStringData, Buffer + len, CharsToRead * sizeof(CHAR), &BytesRead) || (BytesRead == 0))
+                    if (!::ReadProcessMemory(m_hProcess, Info.lpDebugStringData, Buffer + len, CharsToRead * sizeof(CHAR), &BytesRead) || (BytesRead == 0))
                     {
+                        ::OutputDebugStringA("EOF[OnDebugStringEvent] *FAILURE*");
+
                         return;
                     }
 
                     ::MessageBoxA(0, Buffer, "OnDebugStringEvent", MB_OK);
                     //printf("ODS(%u): %s\n", ThreadId, Buffer);
                 }
+
+                ::OutputDebugStringA("EOF[OnDebugStringEvent]");
             }
 
             virtual void OnTimeout()
             {
+                ::OutputDebugStringA("BOF[OnTimeout]");
+
+                ::OutputDebugStringA("EOF[OnTimeout]");
             }
 
             typedef std::map< LPVOID, ModuleInfo > ModuleList;
@@ -794,7 +861,7 @@ namespace dbg
                 }
                 DWORD const cBufSize = 512;
                 TCHAR szDrives[cBufSize + 1] = { 0 };
-                DWORD rv = GetLogicalDriveStrings(cBufSize, szDrives);
+                DWORD rv = ::GetLogicalDriveStrings(cBufSize, szDrives);
                 if ((rv == 0) || (rv > cBufSize))
                 {
                     return;
@@ -805,7 +872,7 @@ namespace dbg
                     TCHAR szDrive[3] = _T(" :");
                     _tcsncpy(szDrive, p, 2);
                     TCHAR szDevice[cBufSize + 1] = { 0 };
-                    rv = QueryDosDevice(szDrive, szDevice, cBufSize);
+                    rv = ::QueryDosDevice(szDrive, szDevice, cBufSize);
                     if ((rv != 0) && (rv >= cBufSize))
                     {
                         size_t DevNameLen = _tcslen(szDevice);
@@ -818,7 +885,8 @@ namespace dbg
                         }
                     }
                     while (*p++);
-                } while (*p);
+                }
+                while (*p);
             }
 
             bool GetFileNameFromHandle_(HANDLE hFile, String & FileName)
@@ -831,7 +899,7 @@ namespace dbg
                 }
                 DWORD FileSizeHi = 0;
                 DWORD FileSizeLo = 0;
-                FileSizeLo = GetFileSize(hFile, &FileSizeHi);
+                FileSizeLo = ::GetFileSize(hFile, &FileSizeHi);
                 if ((FileSizeLo == INVALID_FILE_SIZE) && (GetLastError() != NO_ERROR))
                 {
                     return false;
@@ -843,35 +911,36 @@ namespace dbg
                 bool bSuccess = false;
                 HANDLE hMapFile = NULL;
                 PVOID pViewOfFile = NULL;
-                do
+                for (;;)
                 {
-                    hMapFile = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 1, NULL);
+                    hMapFile = ::CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 1, NULL);
                     if (hMapFile == NULL)
                     {
                         break;
                     }
-                    pViewOfFile = MapViewOfFile(hMapFile, FILE_MAP_READ, 0, 0, 1);
+                    pViewOfFile = ::MapViewOfFile(hMapFile, FILE_MAP_READ, 0, 0, 1);
                     if (pViewOfFile == NULL)
                     {
                         break;
                     }
                     const DWORD cBufSize = MAX_PATH;
                     TCHAR szFileName[cBufSize + 1] = { 0 };
-                    if (!GetMappedFileName(GetCurrentProcess(), pViewOfFile, szFileName, cBufSize))
+                    if (!GetMappedFileName(::GetCurrentProcess(), pViewOfFile, szFileName, cBufSize))
                     {
                         break;
                     }
                     FileName = szFileName;
                     GetFileNameFromHandleHelper_(FileName);
                     bSuccess = true;
-                } while (0);
+                    break;
+                }
                 if (pViewOfFile != NULL)
                 {
-                    UnmapViewOfFile(pViewOfFile);
+                    ::UnmapViewOfFile(pViewOfFile);
                 }
                 if (hMapFile != NULL)
                 {
-                    CloseHandle(hMapFile);
+                    ::CloseHandle(hMapFile);
                 }
                 return bSuccess;
             }
@@ -891,7 +960,7 @@ namespace dbg
                 BYTE * QueryAddress = (BYTE *)ImageBase;
                 while (!bFound)
                 {
-                    if (VirtualQueryEx(hProcess, QueryAddress, &mbi, sizeof(mbi)) != sizeof(mbi))
+                    if (::VirtualQueryEx(hProcess, QueryAddress, &mbi, sizeof(mbi)) != sizeof(mbi))
                     {
                         break;
                     }
@@ -911,29 +980,30 @@ namespace dbg
                 bool Success = false;
                 HANDLE hToken = NULL;
                 DWORD ec = 0;
-                do
+                for (;;)
                 {
-                    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hToken))
+                    if (!::OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hToken))
                     {
                         break;
                     }
                     TOKEN_PRIVILEGES tp;
                     tp.PrivilegeCount = 1;
-                    if (!LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &tp.Privileges[0].Luid))
+                    if (!::LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &tp.Privileges[0].Luid))
                     {
                         break;
                     }
                     tp.Privileges[0].Attributes = Enable ? SE_PRIVILEGE_ENABLED : 0;
-                    if (!AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(tp), NULL, NULL))
+                    if (!::AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(tp), NULL, NULL))
                     {
                         break;
                     }
                     Success = true;
-                } while (0);
+                    break;
+                }
 
                 if (hToken != NULL)
                 {
-                    CloseHandle(hToken);
+                    ::CloseHandle(hToken);
                 }
                 return Success;
             }

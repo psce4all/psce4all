@@ -21,14 +21,14 @@ int wmain(int argc, wchar_t * argv[])
     if (argc == 2)
     {
         DWORD ProcessId = _wtol(argv[1]);
-        if (!Debugger.AttachToProcess(ProcessId))
-        {
-            return 0;
-        }
 
         if (lle::mmu::Attach(ProcessId))
         {
-            Debugger.DebugLoop();
+            if (Debugger.AttachToProcess(ProcessId))
+            {
+                Debugger.DebugLoop(INFINITE);
+            }
+
             lle::mmu::Detach();
         }
     }
