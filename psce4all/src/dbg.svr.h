@@ -489,70 +489,74 @@ namespace dbg
 
             bool WaitForDebugEvent(DEBUG_EVENT & DebugEvent, DWORD Timeout, DWORD & ContinueStatus)
             {
-                if (::WaitForDebugEvent(&DebugEvent, Timeout))
+                return FALSE != ::WaitForDebugEvent(&DebugEvent, Timeout);
+            }
+
+            bool HandleDebugEvent(DEBUG_EVENT & DebugEvent, DWORD & ContinueStatus)
+            {
+                switch (DebugEvent.dwDebugEventCode)
                 {
-                    switch (DebugEvent.dwDebugEventCode)
+                case CREATE_PROCESS_DEBUG_EVENT:
+                    m_hProcess = DebugEvent.u.CreateProcessInfo.hProcess;
+                    OnCreateProcessEvent(DebugEvent.dwProcessId);
+                    OnCreateThreadEvent(DebugEvent.dwThreadId, DebugEvent.u.CreateProcessInfo.hThread);
+                    OnLoadModuleEvent(DebugEvent.u.CreateProcessInfo.lpBaseOfImage, DebugEvent.u.CreateProcessInfo.hFile);
+                    ::CloseHandle(DebugEvent.u.CreateProcessInfo.hFile);
+                    break;
+
+                case EXIT_PROCESS_DEBUG_EVENT:
+                    OnExitProcessEvent(DebugEvent.dwProcessId);
+                    m_hProcess = NULL;
+                    bContinue = false;
+                    break;
+
+                case CREATE_THREAD_DEBUG_EVENT:
+                    OnCreateThreadEvent(DebugEvent.dwThreadId, DebugEvent.u.CreateThread.hThread);
+                    break;
+
+                case EXIT_THREAD_DEBUG_EVENT:
+                    OnExitThreadEvent(DebugEvent.dwThreadId);
+                    break;
+
+                case LOAD_DLL_DEBUG_EVENT:
+                    OnLoadModuleEvent(DebugEvent.u.LoadDll.lpBaseOfDll, DebugEvent.u.LoadDll.hFile);
+                    ::CloseHandle(DebugEvent.u.LoadDll.hFile);
+                    break;
+
+                case UNLOAD_DLL_DEBUG_EVENT:
+                    OnUnloadModuleEvent(DebugEvent.u.UnloadDll.lpBaseOfDll);
+                    break;
+
+                case OUTPUT_DEBUG_STRING_EVENT:
+                    OnDebugStringEvent(DebugEvent.dwThreadId, DebugEvent.u.DebugString);
+                    break;
+
+                case RIP_EVENT:
+                    break;
+
+                case EXCEPTION_DEBUG_EVENT:
+                    ContinueStatus = OnExceptionEvent(DebugEvent.dwThreadId, DebugEvent.u.Exception);
+                    DWORD ExceptionCode = DebugEvent.u.Exception.ExceptionRecord.ExceptionCode;
+                    if (!bSeenInitialBreakpoint && (ExceptionCode == EXCEPTION_BREAKPOINT))
                     {
-                    case CREATE_PROCESS_DEBUG_EVENT:
-                        m_hProcess = DebugEvent.u.CreateProcessInfo.hProcess;
-                        OnCreateProcessEvent(DebugEvent.dwProcessId);
-                        OnCreateThreadEvent(DebugEvent.dwThreadId, DebugEvent.u.CreateProcessInfo.hThread);
-                        OnLoadModuleEvent(DebugEvent.u.CreateProcessInfo.lpBaseOfImage, DebugEvent.u.CreateProcessInfo.hFile);
-                        ::CloseHandle(DebugEvent.u.CreateProcessInfo.hFile);
-                        break;
-
-                    case EXIT_PROCESS_DEBUG_EVENT:
-                        OnExitProcessEvent(DebugEvent.dwProcessId);
-                        m_hProcess = NULL;
-                        bContinue = false;
-                        break;
-
-                    case CREATE_THREAD_DEBUG_EVENT:
-                        OnCreateThreadEvent(DebugEvent.dwThreadId, DebugEvent.u.CreateThread.hThread);
-                        break;
-
-                    case EXIT_THREAD_DEBUG_EVENT:
-                        OnExitThreadEvent(DebugEvent.dwThreadId);
-                        break;
-
-                    case LOAD_DLL_DEBUG_EVENT:
-                        OnLoadModuleEvent(DebugEvent.u.LoadDll.lpBaseOfDll, DebugEvent.u.LoadDll.hFile);
-                        ::CloseHandle(DebugEvent.u.LoadDll.hFile);
-                        break;
-
-                    case UNLOAD_DLL_DEBUG_EVENT:
-                        OnUnloadModuleEvent(DebugEvent.u.UnloadDll.lpBaseOfDll);
-                        break;
-
-                    case OUTPUT_DEBUG_STRING_EVENT:
-                        OnDebugStringEvent(DebugEvent.dwThreadId, DebugEvent.u.DebugString);
-                        break;
-
-                    case RIP_EVENT:
-                        break;
-
-                    case EXCEPTION_DEBUG_EVENT:
-                        ContinueStatus = OnExceptionEvent(DebugEvent.dwThreadId, DebugEvent.u.Exception);
-                        DWORD ExceptionCode = DebugEvent.u.Exception.ExceptionRecord.ExceptionCode;
-                        if (!bSeenInitialBreakpoint && (ExceptionCode == EXCEPTION_BREAKPOINT))
-                        {
-                            ContinueStatus = DBG_CONTINUE;
-                            bSeenInitialBreakpoint = true;
-                        }
-                        break;
+                        ContinueStatus = DBG_CONTINUE;
+                        bSeenInitialBreakpoint = true;
                     }
+                    break;
+                }
+                return true;
+            }
+
+            bool HandleTimeout()
+            {
+                DWORD ErrCode = ::GetLastError();
+                if (ErrCode == ERROR_SEM_TIMEOUT)
+                {
+                    OnTimeout();
                 }
                 else
                 {
-                    DWORD ErrCode = ::GetLastError();
-                    if (ErrCode == ERROR_SEM_TIMEOUT)
-                    {
-                        OnTimeout();
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
                 return true;
             }
@@ -574,12 +578,20 @@ namespace dbg
                     DWORD ContinueStatus = DBG_CONTINUE;
                     if (WaitForDebugEvent(DebugEvent, Timeout, ContinueStatus))
                     {
-                        if (!ContinueDebugEvent(DebugEvent, ContinueStatus))
+                        if (!HandleDebugEvent(DebugEvent, ContinueStatus))
                         {
                             return false;
                         }
                     }
                     else
+                    {
+                        if (!HandleTimeout())
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (!ContinueDebugEvent(DebugEvent, ContinueStatus))
                     {
                         return false;
                     }
@@ -589,13 +601,11 @@ namespace dbg
             }
 
         protected:
-            bool bContinue;
+            volatile bool bContinue;
             bool bSeenInitialBreakpoint;
 
             virtual void OnCreateProcessEvent(DWORD ProcessId)
             {
-                ::OutputDebugStringA("BOF[OnCreateProcessEvent]");
-
                 if (m_hProcess == NULL)
                 {
                     ::OutputDebugStringA("BOF[OnCreateProcessEvent] *FAILURE*");
@@ -605,44 +615,28 @@ namespace dbg
 
                 m_SymbolEngine.AddOptions(SYMOPT_DEBUG | SYMOPT_LOAD_LINES);
                 m_SymbolEngine.Init(m_hProcess, 0, false, false);
-
-                ::OutputDebugStringA("BOF[OnCreateProcessEvent]");
             }
 
             virtual void OnExitProcessEvent(DWORD ProcessId)
             {
-                ::OutputDebugStringA("BOF[OnExitProcessEvent]");
-
                 m_SymbolEngine.Close();
-
-                ::OutputDebugStringA("EOF[OnExitProcessEvent]");
             }
 
             virtual void OnCreateThreadEvent(DWORD ThreadId, HANDLE hThread)
             {
-                ::OutputDebugStringA("BOF[OnCreateThreadEvent]");
-
                 if (hThread)
                 {
                     m_ThreadHandles[ThreadId] = hThread;
                 }
-
-                ::OutputDebugStringA("EOF[OnCreateThreadEvent]");
             }
 
             virtual void OnExitThreadEvent(DWORD ThreadId)
             {
-                ::OutputDebugStringA("BOF[OnExitThreadEvent]");
-
                 m_ThreadHandles.erase(ThreadId);
-
-                ::OutputDebugStringA("EOF[OnExitThreadEvent]");
             }
 
             virtual void OnLoadModuleEvent(LPVOID ImageBase, HANDLE hFile)
             {
-                ::OutputDebugStringA("BOF[OnLoadModuleEvent]");
-
                 if (m_hProcess == NULL)
                 {
                     ::OutputDebugStringA("EOF[OnLoadModuleEvent] *FAILURE*");
@@ -672,14 +666,10 @@ namespace dbg
                         //ShowSymbolInfo(ImageBase);
                     }
                 }
-
-                ::OutputDebugStringA("EOF[OnLoadModuleEvent]");
             }
 
             virtual void OnUnloadModuleEvent(LPVOID ImageBase)
             {
-                ::OutputDebugStringA("BOF[OnUnloadModuleEvent]");
-
                 String ImageName(_T("<unknown>"));
 
                 ModuleList::iterator pm = m_Modules.find(ImageBase);
@@ -694,14 +684,10 @@ namespace dbg
                 {
                     m_Modules.erase(pm);
                 }
-
-                ::OutputDebugStringA("EOF[OnUnloadModuleEvent]");
             }
 
             virtual DWORD OnExceptionEvent(DWORD ThreadId, EXCEPTION_DEBUG_INFO const & Info)
             {
-                ::OutputDebugStringA("BOF[OnExceptionEvent]");
-
                 TCHAR szMessage[4096];
 
                 size_t len = 0;
@@ -767,19 +753,13 @@ namespace dbg
 
             virtual void OnDebugStringEvent(DWORD ThreadId, OUTPUT_DEBUG_STRING_INFO const & Info)
             {
-                ::OutputDebugStringA("BOF[OnDebugStringEvent]");
-
                 if (m_hProcess == NULL)
                 {
-                    ::OutputDebugStringA("EOF[OnDebugStringEvent]");
-
                     return;
                 }
 
                 if ((Info.lpDebugStringData == 0) || (Info.nDebugStringLength == 0))
                 {
-                    ::OutputDebugStringA("EOF[OnDebugStringEvent]");
-
                     return;
                 }
 
@@ -833,15 +813,10 @@ namespace dbg
                     ::MessageBoxA(0, Buffer, "OnDebugStringEvent", MB_OK);
                     //printf("ODS(%u): %s\n", ThreadId, Buffer);
                 }
-
-                ::OutputDebugStringA("EOF[OnDebugStringEvent]");
             }
 
             virtual void OnTimeout()
             {
-                ::OutputDebugStringA("BOF[OnTimeout]");
-
-                ::OutputDebugStringA("EOF[OnTimeout]");
             }
 
             typedef std::map< LPVOID, ModuleInfo > ModuleList;

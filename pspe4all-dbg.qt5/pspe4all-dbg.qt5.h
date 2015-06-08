@@ -16,7 +16,7 @@
 
 #include <QtWidgets>
 
-void __forceinline fstderrf(wchar_t const fmt[], va_list args) { wchar_t tmp[4096]; vswprintf(tmp, fmt, args); qDebug() << tmp; }
-void __forceinline fstderrf(char    const fmt[], va_list args) { char tmp[4096]; vsprintf(tmp, fmt, args); qDebug() << tmp; }
+void __forceinline fstderrf(wchar_t const fmt[], va_list args) { wchar_t tmp[4096]; int len = swprintf(tmp, L"[TID:%04X]", ::GetCurrentThreadId()); vswprintf(tmp + len, fmt, args); qDebug() << tmp; }
+void __forceinline fstderrf(char    const fmt[], va_list args) { char tmp[4096]; int len = sprintf(tmp, "[TID:%04X]", ::GetCurrentThreadId()); vsprintf(tmp + len, fmt, args); qDebug() << tmp; }
 void __forceinline fstderrf(wchar_t const fmt[], ...) { va_list args; va_start(args, fmt); fstderrf(fmt, args); va_end(args); }
 void __forceinline fstderrf(char    const fmt[], ...) { va_list args; va_start(args, fmt); fstderrf(fmt, args); va_end(args); }

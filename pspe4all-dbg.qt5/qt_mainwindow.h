@@ -15,6 +15,10 @@ public:
     qt_MainWindow(QWidget *parent = 0);
     ~qt_MainWindow();
 
+    QAction * actionStepIn()   { return this->ui.actionStepInto; }
+    QAction * actionStepOver() { return this->ui.actionStepOver; }
+    QAction * actionStepOut()  { return this->ui.actionStepOut; }
+
 private:
     Ui::main_window ui;
 };

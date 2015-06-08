@@ -62,3 +62,4 @@ x64/Release/
 GeneratedFiles/
 *.aps
 pspe4all-dbg.qt5/ipch/*
+tmp/
