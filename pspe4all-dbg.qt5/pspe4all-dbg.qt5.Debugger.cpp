@@ -15,7 +15,10 @@ namespace dbg
     {
         Debugger::Debugger(int &argc, char **argv, int flags) : QApplication(argc, argv, flags)
         {
+            stepping = nullptr;
+
             state = NoEvent_State;
+            stepMode = None_StepMode;
 
             QRunnable::setAutoDelete(false);
 
@@ -70,24 +73,51 @@ namespace dbg
             WakeForState(NoEvent_State);
         }
 
-        void Debugger::onStepIn()
+        void Debugger::onContinue()
         {
-            if (!continueDebugEvent())
-            {
-                errorf(dbg, "Debugger::onStepIn() failure");
-            }
-        }
+            stepMode = Continue_StepMode;
 
-        void Debugger::onStepOver()
-        {
             if (!continueDebugEvent())
             {
                 errorf(dbg, "Debugger::onStepOver() failure");
             }
         }
 
+        void Debugger::onStop()
+        {
+            stepMode = Stop_StepMode;
+
+            if (!continueDebugEvent())
+            {
+                errorf(dbg, "Debugger::onStepOver() failure");
+            }
+        }
+
+
+        void Debugger::onStepOver()
+        {
+            stepMode = StepOver_StepMode;
+
+            if (!continueDebugEvent())
+            {
+                errorf(dbg, "Debugger::onStepOver() failure");
+            }
+        }
+
+        void Debugger::onStepIn()
+        {
+            stepMode = StepIn_StepMode;
+
+            if (!continueDebugEvent())
+            {
+                errorf(dbg, "Debugger::onStepIn() failure");
+            }
+        }
+
         void Debugger::onStepOut()
         {
+            stepMode = StepOut_StepMode;
+
             if (!continueDebugEvent())
             {
                 errorf(dbg, "Debugger::onStepOut() failure");
@@ -145,18 +175,19 @@ namespace dbg
                             !bSeenInitialBreakpoint;
                         if (dbg::svr::Debugger::HandleDebugEvent(debugEvent, continueStatus))
                         {
-                            if (callContinueDebugEvent)
+                            if (!callContinueDebugEvent)
                             {
-                                debugf(dbg, "Debugger::ContinueDebugEvent(Code = %u, Process = %04X, Thread = %04X):", debugEvent.dwDebugEventCode, debugEvent.dwProcessId, debugEvent.dwThreadId);
-                                result = dbg::svr::Debugger::ContinueDebugEvent(debugEvent, continueStatus);
-                                debugf(dbg, "Result = %d", int(result));
-                                if (!result)
-                                {
-                                    errorf(dbg, "Debugger::ContinueDebugEvent() failure");
-                                    return;
-                                }
-                                break;
+                                Sleep(1000);
                             }
+                            debugf(dbg, "Debugger::ContinueDebugEvent(Code = %u, Process = %04X, Thread = %04X):", debugEvent.dwDebugEventCode, debugEvent.dwProcessId, debugEvent.dwThreadId);
+                            result = dbg::svr::Debugger::ContinueDebugEvent(debugEvent, continueStatus);
+                            debugf(dbg, "Result = %d", int(result));
+                            if (!result)
+                            {
+                                errorf(dbg, "Debugger::ContinueDebugEvent() failure");
+                                return;
+                            }
+                            break;
                             QTimer::singleShot(0, Qt::PreciseTimer, this, SLOT(enableStepping()));
                             WakeForState(ContinueDebugEventResult_State);
                         }
@@ -250,6 +281,76 @@ namespace dbg
             return result;
         }
 
+        typedef struct tagTHREADNAME_INFO
+        {
+            DWORD dwType; // must be 0x1000
+            LPCSTR szName; // pointer to name (in user addr space)
+            DWORD dwThreadID; // thread ID (-1=caller thread)
+            DWORD dwFlags; // reserved for future use, must be zero
+        } THREADNAME_INFO;
+
+        DWORD Debugger::OnExceptionEvent(DWORD ThreadId, EXCEPTION_DEBUG_INFO const & Info)
+        {
+            debugf(dbg, "Debugger::OnExceptionEvent(ExceptionCode = 0x%08X):", Info.ExceptionRecord.ExceptionCode);
+            switch (Info.ExceptionRecord.ExceptionCode)
+            {
+            case EXCEPTION_BREAKPOINT:
+                if (bSeenInitialBreakpoint)
+                {
+                    CONTEXT Context;
+                    Context.ContextFlags = CONTEXT_ALL;
+
+                    auto hThread = m_ThreadHandles[ThreadId];
+
+                    ::GetThreadContext(hThread, &Context);
+
+                    auto Rip = Context.Rip;
+
+                    if (size_t(Rip) - JITASM_MEMORY_ADDRESS < size_t(JITASM_MEMORY_SIZE))
+                    {
+                        auto icache_pc = (u32 *)Context.Rdx;
+                        auto jitasm_ip = (u32 *)Context.Rbp;
+                        
+                        if (!stepping)
+                        {
+                            stepping = (u8 *)Context.Rdi;
+                        }
+
+                        if (*((u8 *)Rip) == 0xCC)
+                        {
+                            switch (*((u16 *)(Rip - 2)))
+                            {
+                            case 0x0075: // user breakpoint on call instruction
+                            case 0x0175: // single-step call instruction
+                                Context.Rip++;
+                                ::SetThreadContext(hThread, &Context);
+                                debugf(dbg, "<<<<<<<<<<<<<< stepping at 0x%08X... >>>>>>>>>>>>>>>", (size_t(icache_pc) - ICACHE_MEMORY_ADDRESS));
+                                return DBG_CONTINUE;
+                            }
+                        }
+                    }
+
+                    return DBG_EXCEPTION_NOT_HANDLED;
+                }
+                return DBG_CONTINUE;
+
+            case 0x406D1388: /* SET_THREAD_NAME */
+                if (Info.ExceptionRecord.ExceptionInformation[0] == 0x1000)
+                {
+                    auto thread_name = (char const *)Info.ExceptionRecord.ExceptionInformation[1];
+                    auto thread_id = Info.ExceptionRecord.ExceptionInformation[2];
+
+                    return DBG_CONTINUE;
+                }
+                break;
+
+            case EXCEPTION_SINGLE_STEP:
+            default:
+                return dbg::svr::Debugger::OnExceptionEvent(ThreadId, Info);
+            }
+
+            return DBG_EXCEPTION_NOT_HANDLED;
+        }
+
     }
 }
-

@@ -145,6 +145,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\psce4all\src\hal.Observable.h" />
     <ClInclude Include="tmp\ui_qt_mainwindow.h" />
     <ClInclude Include="tmp\ui_qt_memoryviewer.h" />
     <CustomBuild Include="pspe4all-dbg.qt5.Debugger.h">

@@ -348,9 +348,6 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
     LPTOP_LEVEL_EXCEPTION_FILTER old_filter = nullptr;
 	//emu::settings = __new emu::Settings;
 
-    // warning: Windows 7 or later just ignore FatalFilter when running in a debugger
-    old_filter = hal::dbg::EnforceFilter(true, FatalFilter);
-
     int verbose_flag = 0;
     int c;
     int option_index = 0;
@@ -500,6 +497,9 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
     {
         return -1;
     }
+
+    // warning: Windows 7 or later just ignore FatalFilter when running in a debugger
+    old_filter = hal::dbg::EnforceFilter(true, FatalFilter);
 
     MSG	 msg;
 

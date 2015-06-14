@@ -186,7 +186,7 @@ void Allegrex::ICache::UnwindInfoFrame2::InternalMain() // for syscall_code
 
 void Allegrex::ICache::SharedContext::InternalMain()
 {
-
+    dq(0); // debug_flags
     dq(0); // exit_address
     dq(0); // syscall_address;
     dq(0); // recompile_address;
@@ -218,6 +218,8 @@ void Allegrex::ICache::ThreadCode::InternalMain()
     push(r14);
     push(r15);
     sub(rsp, 0x28); // 4 registers w/ 16-byte alignment (http://blogs.msdn.com/b/oldnewthing/archive/2004/01/14/58579.aspx)
+    
+    db(0x65); mov(qword_ptr[0x00000028], rcx); // mov gs:[0x28], rcx
 
     mov(rsi, rcx);
     mov(rdi, uint32_t(Allegrex::icache.shared_context.GetData()));
@@ -472,6 +474,8 @@ namespace Allegrex
     };
 }
 
+static auto const Prolog_MainOpcode = 0x0000000000000200LL;
+
 void Allegrex::ICache::CodeBlock::EmitProlog(u32 address, u32 opcode, bool delayslot)
 {
     if (!delayslot)
@@ -480,11 +484,60 @@ void Allegrex::ICache::CodeBlock::EmitProlog(u32 address, u32 opcode, bool delay
         {
             if (Allegrex::use_debug_server)
             {
-                //mov(rcx, rsi);
-                //mov(r8d, 1);
-                //db(0xE9); // jump near
-                //dd(0);
-                dw(0x9066);
+                switch (u64(opcode >> 26))
+                {
+                case 0x00:
+                    if (opcode == 03e00008 /* JR $RA */)
+                    {
+                        goto return_instruction;
+                    }
+                    else if ((opcode & 0x0000003F) == 0x09) /* JALR */
+                    {
+                        goto call_instruction;
+                    }
+                    else
+                    {
+                        goto default_instruction;
+                    }
+                    break;
+                case 0x01:
+                    switch (opcode & 0x001F000000)
+                    {
+                    case 0x00100000: /* BLTZAL */
+                    case 0x00110000: /* BGEZAL */
+                    case 0x00120000: /* BLTZALL */
+                    case 0x00130000: /* BGEZALL */
+                        goto call_instruction;
+                    default:
+                        goto default_instruction;
+                    }
+                    break;
+                return_instruction:
+                    mov(eax, dword_ptr[rdi]);
+                    test(eax, eax);
+                    dw(0x0175); // jnz($+1)
+                    int3();
+                    movsx(eax, byte_ptr[rdi + 6]);
+                    sub(dword_ptr[rdi], eax);
+                    dw(0x0475); // jnz($+4)
+                    mov(byte_ptr[rdi + 5], 0);
+                    break;
+                call_instruction:
+                case 0x03: /* JAL */
+                    movsx(eax, byte_ptr[rdi + 5]);
+                    add(dword_ptr[rdi], eax);
+                    dw(0x0175); // jnz($+1)
+                    int3();
+                    mov(byte_ptr[rdi + 6], 1);
+                    break;
+                default_instruction:
+                default:
+                    movsx(eax, byte_ptr[rdi + 4]);
+                    sub(dword_ptr[rdi], eax);
+                    dw(0x0175); // jnz($+1)
+                    int3();
+                    break;
+                }
             }
             if (address & 0x40000000)
             {

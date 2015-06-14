@@ -183,6 +183,8 @@ void CCpu::Run()
                     attributes);
                 if (ok)
                 {
+                    ::Sleep(500);
+
                     forcef(emu, "Debugger successfully launched");
 
                     //::OutputDebugStringA("Hello Shadow! as you can see, I can intercept your OutputDebugString :P");

@@ -121,6 +121,9 @@
     <ClInclude Include="tmp\ui_qt_memoryviewer.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.Observable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qt_memoryscrollbar.h">

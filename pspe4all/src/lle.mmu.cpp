@@ -270,7 +270,7 @@ namespace lle
             {
                 sprintf(filemapping_name, "PSPE4ALL-lle.mmu[jitasm]=%08X", pid);
 
-                ok = 0 != (jitasm_filemapping = ::CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, SEC_COMMIT | PAGE_EXECUTE_READWRITE, 0, JITASM_MEMORY_SIZE, NULL));
+                ok = 0 != (jitasm_filemapping = ::CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, SEC_COMMIT | PAGE_EXECUTE_READWRITE, 0, JITASM_MEMORY_SIZE, filemapping_name));
 
                 if (ok)
                 {

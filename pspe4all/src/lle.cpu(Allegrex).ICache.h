@@ -48,6 +48,7 @@ namespace Allegrex
         {
             struct Data
             {
+                u64 debug_flags;
                 u64 exit_address;
                 u64 syscall_address;
                 u64 recompile_address;
@@ -188,8 +189,9 @@ namespace Allegrex
 #define gpr_b(r) (byte_ptr[rsi+s32(offsetof(lle::cpu::Context, gpr[r]))])
 #define fpr_w(r) (dword_ptr[rsi+s32(offsetof(lle::cpu::Context, fpr[r]))])
 
-#define lo_w dword_ptr[rsi+s32(0 + offsetof(lle::cpu::Context, hilo))]
-#define hi_w dword_ptr[rsi+s32(4 + offsetof(lle::cpu::Context, hilo))]
+#define lo_w (dword_ptr[rsi+s32(0 + offsetof(lle::cpu::Context, hilo))])
+#define hi_w (dword_ptr[rsi+s32(4 + offsetof(lle::cpu::Context, hilo))])
+
 
 #include "lle.cpu(Allegrex).Emitter.h"
 

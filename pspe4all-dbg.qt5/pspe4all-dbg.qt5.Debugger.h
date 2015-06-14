@@ -27,15 +27,20 @@ namespace dbg
 
             int exec(DWORD pid);
 
-            virtual void run() override;
-
         public slots:
             void onAboutToQuit();
-            void onStepIn();
+            void onContinue();
+            void onStop();
             void onStepOver();
+            void onStepIn();
             void onStepOut();
             void enableStepping();
             void disableStepping();
+
+        protected:
+            virtual void run() override;
+
+            virtual DWORD OnExceptionEvent(DWORD ThreadId, EXCEPTION_DEBUG_INFO const & Info) override;
 
         private:
             enum State
@@ -49,11 +54,30 @@ namespace dbg
                 ContinueDebugEventResult_State
             };
 
+            enum StepMode
+            {
+                None_StepMode,
+                Continue_StepMode,  // F5
+                Stop_StepMode,      // Shift+F5
+                StepOver_StepMode,  // F10
+                StepIn_StepMode,    // F11
+                StepOut_StepMode    // Shift+F11
+            };
+
+            enum StepAction
+            {
+                None_StepAction,
+
+            };
+
             qt_MainWindow         * mainWindow;
             DEBUG_EVENT             debugEvent;
             DWORD                   continueStatus;
             State                   state;
+            u8                    * stepping;
+            StepMode                stepMode;
             QThreadPool             threadpool;
+            QMap< u32, u32 * >      breakpoints;
             bool                    result;
 
             bool PeekForState(State resultType, State waitingType);
