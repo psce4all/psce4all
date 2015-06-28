@@ -156,6 +156,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\psce4all\src\dbg.svr.cpp" />
     <ClCompile Include="..\pspe4all\src\lle.mmu.cpp" />
     <ClCompile Include="pspe4all-dbg.svr.cpp" />
   </ItemGroup>

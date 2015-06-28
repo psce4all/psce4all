@@ -33,33 +33,21 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Source Files\hal">
+      <UniqueIdentifier>{7b0a2020-5a0b-4e70-87de-d98471bf3076}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dbg">
+      <UniqueIdentifier>{a56841de-231a-4806-be69-8cbc8f4245cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lle">
+      <UniqueIdentifier>{188cfb99-b296-4fcc-b454-091304b9bc2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\qt5">
+      <UniqueIdentifier>{c50b5283-79b4-415f-91e8-1142d950c4a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="qt_memorycursor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="qt_memoryscrollbar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="qt_memoryspinbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="qt_memoryviewer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="qt_memorywidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="qt_translate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pspe4all-dbg.qt5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="qt_mainwindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pspe4all\src\lle.mmu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pspe4all-dbg.qt5.Debugger.cpp">
@@ -104,14 +92,35 @@
     <ClCompile Include="tmp\qrc_pspe4all-dbg.qt5.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\pspe4all\src\lle.mmu.cpp">
+      <Filter>Source Files\lle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\dbg.svr.cpp">
+      <Filter>Source Files\dbg</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_mainwindow.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_memorycursor.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_memoryscrollbar.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_memoryspinbox.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_memoryviewer.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_memorywidget.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_translate.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="qt_memorycursor.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="qt_translate.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="pspe4all-dbg.qt5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -122,27 +131,21 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="..\psce4all\src\hal.Observable.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\dbg.svr.h">
+      <Filter>Source Files\dbg</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_memorycursor.h">
+      <Filter>Source Files\qt5</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_translate.h">
+      <Filter>Source Files\qt5</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="qt_memoryscrollbar.h">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="qt_memoryspinbox.h">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="qt_memoryviewer.h">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="qt_memorywidget.h">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="pspe4all-dbg.qt5.qrc">
       <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="qt_mainwindow.h">
-      <Filter>Source Files</Filter>
     </CustomBuild>
     <CustomBuild Include="qt_memoryviewer.ui">
       <Filter>Form Files</Filter>
@@ -152,6 +155,21 @@
     </CustomBuild>
     <CustomBuild Include="pspe4all-dbg.qt5.Debugger.h">
       <Filter>Source Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_mainwindow.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_memoryscrollbar.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_memoryspinbox.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_memoryviewer.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_memorywidget.h">
+      <Filter>Source Files\qt5</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

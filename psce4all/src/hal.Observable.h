@@ -18,8 +18,8 @@ namespace hal
     public:
         struct Index
         {
-            Event m_event;
-            unsigned int m_index;
+            Event  m_event;
+            size_t m_index;
         };
 
         Observable() = default;
@@ -28,19 +28,19 @@ namespace hal
         template < typename Observer >
         Index const Register(Event const &event, Observer &&observer)
         {
-            auto observers = m_observers[event];
+            auto &observers = m_observers[event];
             observers.push_back(std::forward< Observer >(observer));
 
-            return Index(){ event, observers.size() - 1 };
+            return Index{ event, observers.size() - 1 };
         }
 
         template < typename Observer >
         Index const Register(Event const &&event, Observer &&observer)
         {
-            auto observers = m_observers[std::move(event)];
+            auto &observers = m_observers[std::move(event)];
             observers.push_back(std::forward< Observer >(observer));
 
-            return Index(){ event, observers.size() - 1 };
+            return Index{ event, observers.size() - 1 };
         }
 
         template < typename... Parameters >
@@ -51,7 +51,7 @@ namespace hal
                 auto iterator = m_observers.find(event);
                 if (iterator != m_observers.end())
                 {
-                    auto &observers = *iterator;
+                    auto &observers = iterator->second;
                     for (auto const &observer : observers)
                     {
                         observer(Params...);

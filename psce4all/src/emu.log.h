@@ -35,14 +35,14 @@ namespace emu
 #define debugf(  name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
 #define tracef(  name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
 #define forcef(  name,        fmt, ... ) do { fstderrf(fmt, ## __VA_ARGS__); } while (__LINE__ == -1)
-#define lprintfv(name, level, fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
-#define fatalfv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
-#define errorfv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
-#define warnfv(  name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
-#define infofv(  name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
-#define debugfv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
-#define tracefv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
-#define forcefv( name,        fmt, args) do { fstderrf(fmt, args); } while (__LINE__ == -1)
+#define lprintfv(name, level, fmt, args) do { vfstderrf(fmt, args); } while (__LINE__ == -1)
+#define fatalfv( name,        fmt, args) do { vfstderrf(fmt, args); } while (__LINE__ == -1)
+#define errorfv( name,        fmt, args) do { vfstderrf(fmt, args); } while (__LINE__ == -1)
+#define warnfv(  name,        fmt, args) do { vfstderrf(fmt, args); } while (__LINE__ == -1)
+#define infofv(  name,        fmt, args) do { vfstderrf(fmt, args); } while (__LINE__ == -1)
+#define debugfv( name,        fmt, args) do { vfstderrf(fmt, args); } while (__LINE__ == -1)
+#define tracefv( name,        fmt, args) do { vfstderrf(fmt, args); } while (__LINE__ == -1)
+#define forcefv( name,        fmt, args) do { vfstderrf(fmt, args); } while (__LINE__ == -1)
 
 #else
 

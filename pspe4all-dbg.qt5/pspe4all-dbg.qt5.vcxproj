@@ -91,6 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\psce4all\src\dbg.svr.cpp" />
     <ClCompile Include="..\pspe4all\src\lle.mmu.cpp" />
     <ClCompile Include="pspe4all-dbg.qt5.cpp" />
     <ClCompile Include="pspe4all-dbg.qt5.Debugger.cpp" />
@@ -145,6 +146,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\psce4all\src\dbg.svr.h" />
     <ClInclude Include="..\psce4all\src\hal.Observable.h" />
     <ClInclude Include="tmp\ui_qt_mainwindow.h" />
     <ClInclude Include="tmp\ui_qt_memoryviewer.h" />

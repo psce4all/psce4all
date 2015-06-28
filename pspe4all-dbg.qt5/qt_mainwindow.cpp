@@ -10,7 +10,9 @@ qt_MainWindow::qt_MainWindow(QWidget *parent)
 {
     ui.setupUi(this);
 
-    connect(actionStepIn(), SIGNAL(triggered()), qApp, SLOT(onStepIn()));
+    connect(actionContinue(), SIGNAL(triggered()), qApp, SLOT(onContinue()));
+    connect(actionStop(), SIGNAL(triggered()), qApp, SLOT(onStop()));
+    connect(actionStepInto(), SIGNAL(triggered()), qApp, SLOT(onStepInto()));
     connect(actionStepOver(), SIGNAL(triggered()), qApp, SLOT(onStepOver()));
     connect(actionStepOut(), SIGNAL(triggered()), qApp, SLOT(onStepOut()));
 }

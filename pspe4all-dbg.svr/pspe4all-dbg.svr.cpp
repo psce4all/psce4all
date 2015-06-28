@@ -24,10 +24,7 @@ int wmain(int argc, wchar_t * argv[])
 
         if (lle::mmu::Attach(ProcessId))
         {
-            if (Debugger.AttachToProcess(ProcessId))
-            {
-                Debugger.DebugLoop(INFINITE);
-            }
+            Debugger.AttachToProcess(ProcessId);
 
             lle::mmu::Detach();
         }

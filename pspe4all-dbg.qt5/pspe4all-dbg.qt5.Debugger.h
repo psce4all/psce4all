@@ -13,76 +13,42 @@ namespace dbg
 {
     namespace qt5
     {
-        struct Debugger : QApplication, dbg::svr::Debugger, QRunnable
+        struct Debugger final : QApplication, dbg::svr::Debugger
         {
             Q_OBJECT
+
         public:
-
+            Debugger() = delete;
             Debugger(int &argc, char **argv, int flags = ApplicationFlags);
+            Debugger(const Debugger &copy) = delete;
+            Debugger &operator=(const Debugger &copy) = delete;
 
-            ~Debugger();
-
-            bool attachToProcess(DWORD pid);
-            bool continueDebugEvent();
+            ~Debugger() = default;
 
             int exec(DWORD pid);
+
+            bool const attachToProcess(DWORD pid);
 
         public slots:
             void onAboutToQuit();
             void onContinue();
             void onStop();
             void onStepOver();
-            void onStepIn();
+            void onStepInto();
             void onStepOut();
-            void enableStepping();
-            void disableStepping();
+            void onEnableStepping();
+            void onDisableStepping();
 
         protected:
-            virtual void run() override;
+            static DWORD WINAPI run(LPVOID lpParameters);
 
-            virtual DWORD OnExceptionEvent(DWORD ThreadId, EXCEPTION_DEBUG_INFO const & Info) override;
+            virtual bool const DebuggerLoop() override;
+            virtual bool const Continue(const bool bIsStepping) override;
+            virtual bool const WaitForContinue() const override;
 
         private:
-            enum State
-            {
-                NoEvent_State,
-                AttachToProcessNeeded_State,
-                AttachToProcessResult_State,
-                WaitForDebugEventNeeded_State,
-                WaitForDebugEventResult_State,
-                ContinueDebugEventNeeded_State,
-                ContinueDebugEventResult_State
-            };
-
-            enum StepMode
-            {
-                None_StepMode,
-                Continue_StepMode,  // F5
-                Stop_StepMode,      // Shift+F5
-                StepOver_StepMode,  // F10
-                StepIn_StepMode,    // F11
-                StepOut_StepMode    // Shift+F11
-            };
-
-            enum StepAction
-            {
-                None_StepAction,
-
-            };
-
-            qt_MainWindow         * mainWindow;
-            DEBUG_EVENT             debugEvent;
-            DWORD                   continueStatus;
-            State                   state;
-            u8                    * stepping;
-            StepMode                stepMode;
-            QThreadPool             threadpool;
-            QMap< u32, u32 * >      breakpoints;
-            bool                    result;
-
-            bool PeekForState(State resultType, State waitingType);
-            bool WaitForState(State resultType);
-            void WakeForState(State neededType);
+            qt_MainWindow * m_qMainWindow;
+            //HANDLE          m_hDebugThread;
         };
     }
 }
