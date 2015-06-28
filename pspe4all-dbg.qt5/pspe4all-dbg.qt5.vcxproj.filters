@@ -119,6 +119,24 @@
     <ClCompile Include="qt_translate.cpp">
       <Filter>Source Files\qt5</Filter>
     </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_textview.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_textview.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_textview.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_logview.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_logview.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_logview.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pspe4all-dbg.qt5.h">
@@ -169,6 +187,12 @@
       <Filter>Source Files\qt5</Filter>
     </CustomBuild>
     <CustomBuild Include="qt_memorywidget.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_textview.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_logview.h">
       <Filter>Source Files\qt5</Filter>
     </CustomBuild>
   </ItemGroup>

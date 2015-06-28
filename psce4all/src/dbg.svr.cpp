@@ -137,11 +137,11 @@ void dbg::svr::DebugEventHandler::Initialize()
         {
             if (info.fUnicode)
             {
-                debugf(L"DebugEvents::DebugString:  %s", (wchar_t *)pBuffer.get());
+                m_pDebugger->OutputDebugStringW((wchar_t *)pBuffer.get());
             }
             else
             {
-                debugf("DebugEvents::DebugString:  %s", pBuffer.get());
+                m_pDebugger->OutputDebugStringA(pBuffer.get());
             }
         }
         else
@@ -436,7 +436,7 @@ static bool EnableDebugPrivilege(bool Enable)
 dbg::svr::Debugger::Debugger()
     : m_bIsActive{ false }
     , m_dwProcessId{ 0 }
-    , m_bKillOnExit{ false }
+    , m_bKillOnExit{ true }
     , m_hProcess{ INVALID_HANDLE_VALUE }
     , m_pLastBreakpoint{ nullptr }
     , m_dwExecutingThreadId{ 0 }
@@ -616,7 +616,7 @@ bool const dbg::svr::Debugger::Stop()
 bool const dbg::svr::Debugger::Continue(const bool bIsStepping)
 {
     m_bIsStepping = bIsStepping;
-    
+
     return BOOLIFY(::SetEvent(m_hContinueEvent()));
 }
 
@@ -659,7 +659,7 @@ dbg::svr::SafeHandle dbg::svr::Debugger::OpenCurrentThread()
     return handle;
 }
 
-bool const dbg::svr::Debugger::WaitForContinue() const
+bool const dbg::svr::Debugger::WaitForContinue()
 {
     return (::WaitForSingleObject(m_hContinueEvent(), INFINITE) == WAIT_OBJECT_0);
 }
@@ -691,5 +691,15 @@ bool const dbg::svr::Debugger::DebuggerLoop()
     }
 
     return true;
+}
+
+void dbg::svr::Debugger::OutputDebugStringA(char const message[])
+{
+    debugf("DebugEvents::DebugString:  %s", message);
+}
+
+void dbg::svr::Debugger::OutputDebugStringW(wchar_t const message[])
+{
+    debugf(L"DebugEvents::DebugString:  %s", message);
 }
 

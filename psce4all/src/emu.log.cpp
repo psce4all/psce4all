@@ -254,6 +254,11 @@ namespace emu
 
                 // starts a new asynchronous I/O
                 ::WriteFile(log_file, overlapped.Buffer, length, &dummy, &overlapped);
+
+                if (::IsDebuggerPresent())
+                {
+                    ::OutputDebugStringA(overlapped.Buffer);
+                }
             }
         }
 

@@ -29,6 +29,11 @@ namespace dbg
 
             bool const attachToProcess(DWORD pid);
 
+        signals:
+            void enableStepping();
+            void disableStepping();
+            void log(const QString&);
+
         public slots:
             void onAboutToQuit();
             void onContinue();
@@ -38,13 +43,16 @@ namespace dbg
             void onStepOut();
             void onEnableStepping();
             void onDisableStepping();
+            void onLog(const QString &);
 
         protected:
             static DWORD WINAPI run(LPVOID lpParameters);
 
             virtual bool const DebuggerLoop() override;
             virtual bool const Continue(const bool bIsStepping) override;
-            virtual bool const WaitForContinue() const override;
+            virtual bool const WaitForContinue() override;
+            virtual void       OutputDebugStringA(char const message[]) override;
+            virtual void       OutputDebugStringW(wchar_t const message[]) override;
 
         private:
             qt_MainWindow * m_qMainWindow;

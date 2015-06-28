@@ -369,7 +369,9 @@ namespace dbg
 
             virtual bool const DebuggerLoop();
             virtual bool const Continue(const bool bIsStepping);
-            virtual bool const WaitForContinue() const;
+            virtual bool const WaitForContinue();
+            virtual void       OutputDebugStringA(char const message[]);
+            virtual void       OutputDebugStringW(wchar_t const message[]);
 
             SafeHandle         OpenCurrentThread();
 

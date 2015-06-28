@@ -16,10 +16,16 @@ namespace dbg
         Debugger::Debugger(int &argc, char **argv, int flags) : QApplication(argc, argv, flags)
         {
             connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(onAboutToQuit()));
+
+            connect(this, SIGNAL(log(QString)), this, SLOT(onLog(QString)), Qt::BlockingQueuedConnection);
+            connect(this, SIGNAL(enableStepping()), this, SLOT(onEnableStepping()), Qt::BlockingQueuedConnection);
+            connect(this, SIGNAL(disableStepping()), this, SLOT(onDisableStepping()), Qt::BlockingQueuedConnection);
         }
 
         void Debugger::onAboutToQuit()
         {
+            dbg::svr::Debugger::Continue();
+            QThread::msleep(100);
         }
 
         void Debugger::onContinue()
@@ -102,21 +108,22 @@ namespace dbg
             return dbg::svr::Debugger::Continue(bIsStepping);
         }
 
-        bool const Debugger::WaitForContinue() const
+        bool const Debugger::WaitForContinue()
         {
-            debugf(dbg, "Press F5 to continue, F10 to step over, F11 to step into, Shift+F11 to step out.");
-
-            QTimer::singleShot(0, Qt::PreciseTimer, this, SLOT(onEnableStepping()));
+            //QTimer::singleShot(0, Qt::PreciseTimer, this, SLOT(onEnableStepping()));
+            emit enableStepping();
 
             auto result = dbg::svr::Debugger::WaitForContinue();
 
-            QTimer::singleShot(0, Qt::PreciseTimer, this, SLOT(onDisableStepping()));
+            //QTimer::singleShot(0, Qt::PreciseTimer, this, SLOT(onDisableStepping()));
+            emit disableStepping();
 
             return result;
         }
 
         void Debugger::onEnableStepping()
         {
+            m_qMainWindow->setStatusText("Press F5 to continue, F10 to step over, F11 to step into, Shift+F11 to step out.");
             m_qMainWindow->actionContinue()->setEnabled(true);
             m_qMainWindow->actionStop()->setEnabled(false);
             m_qMainWindow->actionStepInto()->setEnabled(true);
@@ -126,11 +133,27 @@ namespace dbg
 
         void Debugger::onDisableStepping()
         {
+            m_qMainWindow->setStatusText("Press Shift+F5 to stop.");
             m_qMainWindow->actionContinue()->setEnabled(false);
             m_qMainWindow->actionStop()->setEnabled(true);
             m_qMainWindow->actionStepInto()->setEnabled(false);
             m_qMainWindow->actionStepOver()->setEnabled(false);
             m_qMainWindow->actionStepOut()->setEnabled(false);
+        }
+
+        void Debugger::onLog(const QString &text)
+        {
+            m_qMainWindow->logView()->log(text);
+        }
+
+        void Debugger::OutputDebugStringA(char const message[])
+        {
+            emit log(QString(message));
+        }
+
+        void Debugger::OutputDebugStringW(wchar_t const message[])
+        {
+            emit log(QString::fromWCharArray(message));
         }
     }
 }

@@ -218,7 +218,7 @@ void Allegrex::ICache::ThreadCode::InternalMain()
     push(r14);
     push(r15);
     sub(rsp, 0x28); // 4 registers w/ 16-byte alignment (http://blogs.msdn.com/b/oldnewthing/archive/2004/01/14/58579.aspx)
-    
+
     db(0x65); mov(qword_ptr[0x00000028], rcx); // mov gs:[0x28], rcx
 
     mov(rsi, rcx);
