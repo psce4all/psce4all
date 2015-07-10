@@ -1,6 +1,9 @@
 # psce4all
 PlayStation Console Emulators For All
 
+## Status
+[![Build status](https://ci.appveyor.com/api/projects/status/a3yycqilpsqfhpsq?svg=true)](https://ci.appveyor.com/project/hlide/psce4all)
+
 ## Disclaimer
 The goal of this project is to experiment, research, and educate on the topic of emulation of modern devices and operating systems.
 
