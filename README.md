@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/psce4all/psce4all.png?label=ready&title=Ready)](https://waffle.io/psce4all/psce4all)
 # psce4all
 PlayStation Console Emulators For All
 
