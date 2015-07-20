@@ -56,7 +56,7 @@ namespace dbg
 
         private:
             qt_MainWindow * m_qMainWindow;
-            //HANDLE          m_hDebugThread;
+            HANDLE          m_hProcSyncEvent;
         };
     }
 }

@@ -10,20 +10,25 @@
 
 #include "pspe4all-dbg.qt5.Debugger.h"
 
-//int wmain(int argc, wchar_t * argv[])
 int main(int argc, char *argv[])
 {
-    dbg::qt5::Debugger Debugger(argc, argv);
+    dbg::qt5::Debugger debugger(argc, argv);
 
     int result = -1;
 
     if (argc == 2)
     {
+        QFile stylesheet("assets/stylesheet.qss");
+        if (stylesheet.open(QFile::ReadOnly))
+        {
+            debugger.setStyleSheet(QLatin1String(stylesheet.readAll()));
+        }
+
         DWORD pid = atol(argv[1]);
 
         if (lle::mmu::Attach(pid))
         {
-            result = Debugger.exec(pid);
+            result = debugger.exec(pid);
 
             lle::mmu::Detach();
         }

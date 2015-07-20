@@ -64,17 +64,26 @@ namespace dbg
         {
             int result = -1;
 
-            qt_MainWindow MainWindow;
+            char procsync_name[256];
+            snprintf(procsync_name, 255, "pspe4all-dbg-%u", pid);
 
-            m_qMainWindow = &MainWindow;
-
-            if (attachToProcess(pid))
+            m_hProcSyncEvent = ::OpenEventA(EVENT_MODIFY_STATE, FALSE, procsync_name);
+            if (m_hProcSyncEvent)
             {
-                onEnableStepping();
+                qt_MainWindow MainWindow;
 
-                MainWindow.show();
+                m_qMainWindow = &MainWindow;
 
-                result = QApplication::exec();
+                if (attachToProcess(pid))
+                {
+                    onEnableStepping();
+
+                    MainWindow.show();
+
+                    result = QApplication::exec();
+                }
+
+                ::CloseHandle(m_hProcSyncEvent);
             }
 
             return result;
@@ -100,6 +109,8 @@ namespace dbg
 
         bool const Debugger::DebuggerLoop()
         {
+            ::SetEvent(m_hProcSyncEvent);
+
             return dbg::svr::Debugger::DebuggerLoop();
         }
 
@@ -110,12 +121,10 @@ namespace dbg
 
         bool const Debugger::WaitForContinue()
         {
-            //QTimer::singleShot(0, Qt::PreciseTimer, this, SLOT(onEnableStepping()));
             emit enableStepping();
 
             auto result = dbg::svr::Debugger::WaitForContinue();
 
-            //QTimer::singleShot(0, Qt::PreciseTimer, this, SLOT(onDisableStepping()));
             emit disableStepping();
 
             return result;

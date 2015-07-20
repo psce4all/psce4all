@@ -147,14 +147,10 @@ void CCpu::Run()
                 sa.bInheritHandle = TRUE;
                 sa.lpSecurityDescriptor = NULL;
 
-                HANDLE handles[] = { ::GetStdHandle(STD_ERROR_HANDLE) };
-                const PROCTHREADATTRIBUTE attributes[] = {
-                    {
-                        PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
-                        handles,
-                        sizeof(handles),
-                    },
-                };
+                char szProcsyncName[256];
+                snprintf(szProcsyncName, 255, "pspe4all-dbg-%u", ::GetCurrentProcessId());
+
+                HANDLE procsync = ::CreateEventA(nullptr, TRUE, FALSE, szProcsyncName);
 
                 STARTUPINFO si;
                 ZeroMemory(&si, sizeof(si));
@@ -164,11 +160,11 @@ void CCpu::Run()
                 ZeroMemory(&pi, sizeof(pi));
 
                 wchar_t szCommandLine[256];
-                _snwprintf_s(szCommandLine, 255, L"pspe4all-dbg.%s.exe %d", Allegrex::use_debugger.c_str(), ::GetCurrentProcessId());
+                _snwprintf_s(szCommandLine, 255, L"pspe4all-dbg.%s.exe %u", Allegrex::use_debugger.c_str(), ::GetCurrentProcessId());
 
                 forcef(emu, L"Launching debugger '%s'...", szCommandLine);
 
-                BOOL ok = ::CreateProcessWithAttributes(
+                BOOL ok = ::CreateProcess(
                     nullptr,
                     szCommandLine,
                     nullptr,
@@ -178,14 +174,17 @@ void CCpu::Run()
                     nullptr,
                     nullptr,
                     &si,
-                    &pi,
-                    ARRAYSIZE(attributes),
-                    attributes);
-                if (ok)
+                    &pi);
+                if (ok && WAIT_OBJECT_0 == ::WaitForSingleObject(procsync, INFINITE))
                 {
-                    ::Sleep(500);
-
                     forcef(emu, "Debugger successfully launched");
+                    fatalf(emu, "test fatalf log");
+                    errorf(emu, "test errorf log");
+                    warnf(emu, "test warnf log");
+                    infof(emu, "test infof log");
+                    debugf(emu, "test debugf log");
+                    tracef(emu, "test tracef log");
+                    forcef(emu, "test forcef log");
 
                     //::OutputDebugStringA("Hello Shadow! as you can see, I can intercept your OutputDebugString :P");
 
@@ -204,8 +203,9 @@ void CCpu::Run()
                 }
                 else
                 {
-                    fatalf(emu, "Debugger not found");
+                    fatalf(emu, "Debugger not found or unresponsive");
                 }
+                ::CloseHandle(procsync);
             }
             else
             {
