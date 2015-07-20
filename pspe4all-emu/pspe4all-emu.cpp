@@ -348,156 +348,6 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
     LPTOP_LEVEL_EXCEPTION_FILTER old_filter = nullptr;
 	//emu::settings = __new emu::Settings;
 
-    int verbose_flag = 0;
-    int c;
-    int option_index = 0;
-
-    static struct option long_options[] =
-    {
-        { L"verbose", no_argument, &verbose_flag, 1 },
-        { L"brief", no_argument, &verbose_flag, 0 },
-        { L"use-interpreter", required_argument, 0, L'1' },
-        { L"use-cross-interpreter", no_argument, 0, L'2' },
-        { L"no-register-allocation", no_argument, 0, L'3' },
-        { L"trace-allegrex", optional_argument, 0, L'4' },
-        { L"jitasm-trace-cfg", optional_argument, 0, L'5' },
-        { L"allegrex-icache", optional_argument, 0, L'6' },
-        { L"use-debugger", required_argument, 0, L'D' },
-        { L"help", no_argument, 0, L'h' },
-        { 0, 0, 0, 0 }
-    };
-
-    while (-1 != (c = getopt_long_only(argc, argv, L"1:234:5:6:D:h", long_options, &option_index)))
-    {
-        switch (c)
-        {
-            case 0:
-                break;
-            case L'h':
-                printf("HELP:\n"
-                       "\t--verbose\tset verbose ON\n"
-                       "\t--brief\t\tset verbose OFF\n"
-                       "\t--use-interpreter=slow\tuse real interpreter\n"
-                       "\t--use-interpreter=fast\tuse interpreter-like dynarec\n"
-                       "\t--use-interpreter=none\tuse full dynarec\n"
-                       "\t--use-cross-interpreter\tuse cross interpreter\n"
-                       "\t--use-debugger=<name>\tuse a debug server\n"
-                       "\t-help\t\tdisplay this help message\n"
-                       );
-                return 1;
-            case L'1':
-                if (!wcsicmp(optarg, L"slow"))
-                {
-                    Allegrex::use_real_interpreter  = true;
-                    Allegrex::use_cross_interpreter = false;
-                    Allegrex::interpreter_like_mode = false;
-                }
-                else if (!wcsicmp(optarg, L"fast"))
-                {
-                    Allegrex::use_real_interpreter = false;
-                    Allegrex::interpreter_like_mode = true;
-                }
-                else if (!wcsicmp(optarg, L"none"))
-                {
-                    Allegrex::use_real_interpreter = false;
-                    Allegrex::interpreter_like_mode = false;
-                    Allegrex::icache_fast_mode = true;
-                }
-                else
-                {
-                    fprintf(stderr, "option --use-interpreter with unknown value `%ls'\n", optarg);
-                }
-                break;
-            case L'2':
-                Allegrex::use_real_interpreter = false;
-                Allegrex::use_cross_interpreter = true;
-                break;
-            case L'3':
-                Allegrex::no_register_allocation = true;
-                break;
-            case L'4':
-                if (optarg)
-                {
-                    if (!wcsicmp(optarg, L"yes"))
-                    {
-                        Allegrex::trace_instruction = true;
-                    }
-                    else if (!wcsicmp(optarg, L"no"))
-                    {
-                        Allegrex::trace_instruction = false;
-                    }
-                    else
-                    {
-                        fprintf(stderr, "option --trace-allegrex with unknown value `%ls'\n", optarg);
-                    }
-                }
-                else
-                {
-                    Allegrex::trace_instruction = true;
-                }
-                break;
-            case L'5':
-                if (optarg)
-                {
-                    if (!wcsicmp(optarg, L"yes"))
-                    {
-                        Allegrex::jitasm_trace_cfg = true;
-                    }
-                    else if (!wcsicmp(optarg, L"no"))
-                    {
-                        Allegrex::jitasm_trace_cfg = false;
-                    }
-                    else
-                    {
-                        fprintf(stderr, "option --jitasm-trace-cfg with unknown value `%ls'\n", optarg);
-                    }
-                }
-                else
-                {
-                    Allegrex::jitasm_trace_cfg = true;
-                }
-                break;
-            case L'6':
-                if (optarg)
-                {
-                    if (!wcsicmp(optarg, L"fast"))
-                    {
-                        Allegrex::icache_fast_mode = true;
-                    }
-                    else if (!wcsicmp(optarg, L"slow") && Allegrex::interpreter_like_mode)
-                    {
-                        Allegrex::icache_fast_mode = false;
-                    }
-                    else
-                    {
-                        fprintf(stderr, "option --allegrex-icache with unknown value `%ls'\n", optarg);
-                    }
-                }
-                else
-                {
-                    Allegrex::icache_fast_mode = true;
-                }
-                break;
-            case L'D':
-                Allegrex::use_debugger = optarg;
-                Allegrex::use_debug_server = !!wcsicmp(optarg, L"none");
-                break;
-            case ':':
-                /* missing option argument */
-                fprintf(stderr, "option --%s requires an argument\n", argv[0], long_options[option_index].name);
-                break;
-            case '?':
-                break;
-            default:
-                return -1;
-        }
-    }
-
-    if (argc <= optind)
-    {
-        return -1;
-    }
-
     // warning: Windows 7 or later just ignore FatalFilter when running in a debugger
     old_filter = hal::dbg::EnforceFilter(true, FatalFilter);
 
@@ -640,6 +490,189 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE /*hinstDLL*/, DWORD fdwReason, LPVOID /
             long version = emu::Interface::version;
 
             emulator = emu$GetInterface(version);
+
+            int argc = 0;
+
+            wchar_t **argv = ::CommandLineToArgvW(::GetCommandLine(), &argc);
+
+            int verbose_flag = 0;
+            int c;
+            int option_index = 0;
+
+            static struct option long_options[] =
+            {
+                { L"verbose", no_argument, &verbose_flag, 1 },
+                { L"brief", no_argument, &verbose_flag, 0 },
+                { L"use-interpreter", required_argument, 0, L'1' },
+                { L"use-cross-interpreter", no_argument, 0, L'2' },
+                { L"no-register-allocation", no_argument, 0, L'3' },
+                { L"trace-allegrex", optional_argument, 0, L'4' },
+                { L"jitasm-trace-cfg", optional_argument, 0, L'5' },
+                { L"allegrex-icache", optional_argument, 0, L'6' },
+                { L"use-debugger", required_argument, 0, L'D' },
+                { L"help", no_argument, 0, L'h' },
+                { 0, 0, 0, 0 }
+            };
+
+            while (-1 != (c = getopt_long_only(argc, argv, L"1:234:5:6:D:h", long_options, &option_index)))
+            {
+                switch (c)
+                {
+                case 0:
+                    break;
+                case L'h':
+                    printf("HELP:\n"
+                           "\t--verbose\tset verbose ON\n"
+                           "\t--brief\t\tset verbose OFF\n"
+                           "\t--use-interpreter=slow\tuse real interpreter\n"
+                           "\t--use-interpreter=fast\tuse interpreter-like dynarec\n"
+                           "\t--use-interpreter=none\tuse full dynarec\n"
+                           "\t--use-cross-interpreter\tuse cross interpreter\n"
+                           "\t--use-debugger=<name>\tuse a debug server\n"
+                           "\t-help\t\tdisplay this help message\n"
+                           );
+                    return 1;
+                case L'1':
+                    if (!wcsicmp(optarg, L"slow"))
+                    {
+                        Allegrex::use_real_interpreter = true;
+                        Allegrex::use_cross_interpreter = false;
+                        Allegrex::interpreter_like_mode = false;
+                    }
+                    else if (!wcsicmp(optarg, L"fast"))
+                    {
+                        Allegrex::use_real_interpreter = false;
+                        Allegrex::interpreter_like_mode = true;
+                    }
+                    else if (!wcsicmp(optarg, L"none"))
+                    {
+                        Allegrex::use_real_interpreter = false;
+                        Allegrex::interpreter_like_mode = false;
+                        Allegrex::icache_fast_mode = true;
+                    }
+                    else
+                    {
+                        fprintf(stderr, "option --use-interpreter with unknown value `%ls'\n", optarg);
+                    }
+                    break;
+                case L'2':
+                    Allegrex::use_real_interpreter = false;
+                    Allegrex::use_cross_interpreter = true;
+                    break;
+                case L'3':
+                    Allegrex::no_register_allocation = true;
+                    break;
+                case L'4':
+                    if (optarg)
+                    {
+                        if (!wcsicmp(optarg, L"yes"))
+                        {
+                            Allegrex::trace_instruction = true;
+                        }
+                        else if (!wcsicmp(optarg, L"no"))
+                        {
+                            Allegrex::trace_instruction = false;
+                        }
+                        else
+                        {
+                            fprintf(stderr, "option --trace-allegrex with unknown value `%ls'\n", optarg);
+                        }
+                    }
+                    else
+                    {
+                        Allegrex::trace_instruction = true;
+                    }
+                    break;
+                case L'5':
+                    if (optarg)
+                    {
+                        if (!wcsicmp(optarg, L"yes"))
+                        {
+                            Allegrex::jitasm_trace_cfg = true;
+                        }
+                        else if (!wcsicmp(optarg, L"no"))
+                        {
+                            Allegrex::jitasm_trace_cfg = false;
+                        }
+                        else
+                        {
+                            fprintf(stderr, "option --jitasm-trace-cfg with unknown value `%ls'\n", optarg);
+                        }
+                    }
+                    else
+                    {
+                        Allegrex::jitasm_trace_cfg = true;
+                    }
+                    break;
+                case L'6':
+                    if (optarg)
+                    {
+                        if (!wcsicmp(optarg, L"fast"))
+                        {
+                            Allegrex::icache_fast_mode = true;
+                        }
+                        else if (!wcsicmp(optarg, L"slow") && Allegrex::interpreter_like_mode)
+                        {
+                            Allegrex::icache_fast_mode = false;
+                        }
+                        else
+                        {
+                            fprintf(stderr, "option --allegrex-icache with unknown value `%ls'\n", optarg);
+                        }
+                    }
+                    else
+                    {
+                        Allegrex::icache_fast_mode = true;
+                    }
+                    break;
+                case L'D':
+                    Allegrex::use_debugger = optarg;
+                    Allegrex::use_debug_server = !!wcsicmp(optarg, L"none");
+                    break;
+                case ':':
+                    /* missing option argument */
+                    fprintf(stderr, "option --%s requires an argument\n", argv[0], long_options[option_index].name);
+                    break;
+                case '?':
+                    break;
+                default:
+                    return -1;
+                }
+            }
+
+            if (argc <= optind)
+            {
+                return -1;
+            }
+
+            if (Allegrex::use_debug_server)
+            {
+                char szProcsyncName[256];
+                snprintf(szProcsyncName, 255, "pspe4all-dbg-%u", ::GetCurrentProcessId());
+
+                HANDLE procsync = ::CreateEventA(nullptr, TRUE, FALSE, szProcsyncName);
+
+                STARTUPINFO si = { 0 };
+                si.cb = sizeof(si);
+                PROCESS_INFORMATION pi = { 0 };
+
+                wchar_t szCommandLine[256];
+                _snwprintf_s(szCommandLine, 255, L"pspe4all-dbg.%s.exe %u", Allegrex::use_debugger.c_str(), ::GetCurrentProcessId());
+
+                BOOL ok = ::CreateProcess(nullptr, szCommandLine, nullptr, nullptr, TRUE, 0, nullptr, nullptr, &si, &pi);
+                if (ok)
+                {
+                    if (WAIT_OBJECT_0 == ::WaitForSingleObject(procsync, INFINITE))
+                    {
+                        CloseHandle(pi.hProcess);
+                        CloseHandle(pi.hThread);
+                    }
+                    else
+                    {
+                        return FALSE;
+                    }
+                }
+            }
 
             if (!emulator->DllProcessAttach())
             {

@@ -139,82 +139,11 @@ void CCpu::Run()
     {
         if (!USE_REAL_INTERPRETER)
         {
-            if (Allegrex::use_debug_server)
-            {
-                SECURITY_ATTRIBUTES sa;
+            auto execute = reinterpret_cast<void(*)(Allegrex::Context *)>(Allegrex::icache.thread_code.GetCode());
 
-                sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-                sa.bInheritHandle = TRUE;
-                sa.lpSecurityDescriptor = NULL;
-
-                char szProcsyncName[256];
-                snprintf(szProcsyncName, 255, "pspe4all-dbg-%u", ::GetCurrentProcessId());
-
-                HANDLE procsync = ::CreateEventA(nullptr, TRUE, FALSE, szProcsyncName);
-
-                STARTUPINFO si;
-                ZeroMemory(&si, sizeof(si));
-                si.cb = sizeof(si);
-
-                PROCESS_INFORMATION pi;
-                ZeroMemory(&pi, sizeof(pi));
-
-                wchar_t szCommandLine[256];
-                _snwprintf_s(szCommandLine, 255, L"pspe4all-dbg.%s.exe %u", Allegrex::use_debugger.c_str(), ::GetCurrentProcessId());
-
-                forcef(emu, L"Launching debugger '%s'...", szCommandLine);
-
-                BOOL ok = ::CreateProcess(
-                    nullptr,
-                    szCommandLine,
-                    nullptr,
-                    nullptr,
-                    TRUE,
-                    0,
-                    nullptr,
-                    nullptr,
-                    &si,
-                    &pi);
-                if (ok && WAIT_OBJECT_0 == ::WaitForSingleObject(procsync, INFINITE))
-                {
-                    forcef(emu, "Debugger successfully launched");
-                    fatalf(emu, "test fatalf log");
-                    errorf(emu, "test errorf log");
-                    warnf(emu, "test warnf log");
-                    infof(emu, "test infof log");
-                    debugf(emu, "test debugf log");
-                    tracef(emu, "test tracef log");
-                    forcef(emu, "test forcef log");
-
-                    //::OutputDebugStringA("Hello Shadow! as you can see, I can intercept your OutputDebugString :P");
-
-                    auto execute = reinterpret_cast<void(*)(Allegrex::Context *)>(Allegrex::icache.thread_code.GetCode());
-
-                    hal::npa::StartEvent(cpu_event1);
-                    execute(this);
-                    hal::npa::StopEvent(cpu_event1);
-
-                    // Wait until child process exits.
-                    ::WaitForSingleObject(pi.hProcess, INFINITE);
-
-                    // Close process and thread handles.
-                    ::CloseHandle(pi.hProcess);
-                    ::CloseHandle(pi.hThread);
-                }
-                else
-                {
-                    fatalf(emu, "Debugger not found or unresponsive");
-                }
-                ::CloseHandle(procsync);
-            }
-            else
-            {
-                auto execute = reinterpret_cast<void(*)(Allegrex::Context *)>(Allegrex::icache.thread_code.GetCode());
-
-                hal::npa::StartEvent(cpu_event1);
-                execute(this);
-                hal::npa::StopEvent(cpu_event1);
-            }
+            hal::npa::StartEvent(cpu_event1);
+            execute(this);
+            hal::npa::StopEvent(cpu_event1);
         }
         else
         {
