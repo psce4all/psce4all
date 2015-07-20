@@ -236,7 +236,7 @@ namespace emu
 
             if (use_stderr)
             {
-                fprintf(stderr, "%-95s|%-7s|%08X|%04d-%02d-%02d %02d:%02d:%02d.%03d| %s\r\n", that->GetName().c_str(), level_name[level], thuid, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds, src);
+                fprintf(stderr, "%-7s|%-95s|%08X|%04d-%02d-%02d %02d:%02d:%02d.%03d| %s\r\n", level_name[level], that->GetName().c_str(), thuid, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds, src);
             }
             else
             {
@@ -249,7 +249,7 @@ namespace emu
                 ::GetOverlappedResult(log_file, &overlapped, &dummy, TRUE);
                 //::ResetEvent(overlapped.hEvent);
 
-                long length = ::snprintf(overlapped.Buffer, maxlength, "%-95s|%-7s|%08X|%04d-%02d-%02d %02d:%02d:%02d.%03d| %s\r\n", that->GetName().c_str(), level_name[level], thuid, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds, src);
+                long length = ::snprintf(overlapped.Buffer, maxlength, "%-7s|%-95s|%08X|%04d-%02d-%02d %02d:%02d:%02d.%03d| %s\r\n", level_name[level], that->GetName().c_str(), thuid, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds, src);
                 overlapped.Offset = (DWORD)_InterlockedExchangeAdd(&log_offset, length);
 
                 // starts a new asynchronous I/O

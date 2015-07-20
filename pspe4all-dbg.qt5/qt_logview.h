@@ -16,4 +16,7 @@ public:
 
 public slots:
     void log(const QString &text);
+
+private:
+    class qt_LogViewHighlighter * highlighter_;
 };
