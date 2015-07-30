@@ -1,9 +1,9 @@
-[![Stories in Ready](https://badge.waffle.io/psce4all/psce4all.png?label=ready&title=Ready)](https://waffle.io/psce4all/psce4all)
+
 # psce4all
 PlayStation Console Emulators For All
 
 ## Status
-[![Build status](https://ci.appveyor.com/api/projects/status/a3yycqilpsqfhpsq?svg=true)](https://ci.appveyor.com/project/hlide/psce4all)
+[![Stories in Ready](https://badge.waffle.io/psce4all/psce4all.png?label=ready&title=Ready)](https://waffle.io/psce4all/psce4all) [![Build status](https://ci.appveyor.com/api/projects/status/a3yycqilpsqfhpsq?svg=true)](https://ci.appveyor.com/project/hlide/psce4all) [![Project Stats](https://www.openhub.net/p/psce4all/widgets/project_thin_badge.gif)](https://www.openhub.net/p/psce4all)
 
 ## Disclaimer
 The goal of this project is to experiment, research, and educate on the topic of emulation of modern devices and operating systems.
