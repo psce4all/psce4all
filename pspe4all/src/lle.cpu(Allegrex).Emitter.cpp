@@ -266,7 +266,7 @@ __noinline u32 Allegrex::ICache::CodeBlock::emit$SYSCALL(u32 address, u32 opcode
     mov(edx, IMM);
     call(qword_ptr[rdi + s32(offsetof(SharedContext::Data, syscall_address))]);
 
-    target_address_next.insert(address + 4);
+    //target_address_next.insert(address + 4);
 
     return address + 4;
 }

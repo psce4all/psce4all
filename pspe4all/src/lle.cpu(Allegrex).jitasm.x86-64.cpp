@@ -1203,6 +1203,78 @@ namespace Allegrex
             CfgDumper & operator=(CfgDumper const &);
         };
 
+        struct DebugAllegrexInstruction
+        {
+            DebugAllegrexInstruction(Frontend & frontend) : frontend(frontend)
+            {
+            }
+
+            ~DebugAllegrexInstruction()
+            {
+            }
+
+            static void SetDebugAllegrexInstruction(DWORD dwAddr, BOOL bDelaySlot, UINT_PTR qwAddr, UINT_PTR qwSize)
+            {
+                ULONG_PTR info[4] = { dwAddr, bDelaySlot, qwAddr, qwSize };
+
+                __try
+                {
+                    RaiseException(0x414CA449, 0, 4, (ULONG_PTR*)&info);
+                }
+                __except (EXCEPTION_EXECUTE_HANDLER)
+                {
+                }
+            }
+
+            void Set(u32 code, u32 size, Backend & backend, u32 & previous_base)
+            {
+                if (size)
+                {
+                    auto offset = size_t((u8 const *)code - backend.pbuff_);
+                    auto length = size_t(size);
+                    auto base = u32(0);
+                    auto lower = size_t(-1);
+                    auto upper = size_t(+0);
+                    for (auto source : backend.GetSourcesInRange(offset, length))
+                    {
+                        for (auto address : source.second.second)
+                        {
+                            base = address;
+                            if (lower > source.first)
+                            {
+                                lower = source.first;
+                            }
+                            if (upper < source.first + source.second.first)
+                            {
+                                upper = source.first + source.second.first;
+                            }
+                            if (base)
+                            {
+                                SetDebugAllegrexInstruction(base, false, lower, upper - lower);
+                            }
+                        }
+                    }
+                    if (!base)
+                    {
+                        base = previous_base;
+                    }
+                    else
+                    {
+                        previous_base = base;
+                    }
+                    if (base)
+                    {
+                        SetDebugAllegrexInstruction(base, false, lower, upper - lower);
+                    }
+                }
+            }
+
+            Frontend & frontend;
+
+        private:
+            DebugAllegrexInstruction & operator=(DebugAllegrexInstruction const &);
+        };
+
         void Frontend::Assemble()
         {
             detail::ScopedLock<detail::SpinLock> lock(codelock_);
@@ -1264,12 +1336,17 @@ namespace Allegrex
             }
             else
             {
+                auto base = u32();
+
                 for (size_t i = 0; i < instrs_.size(); ++i)
                 {
+                    DebugAllegrexInstruction dbginsn(*this);
+
                     backend.Assemble(instrs_[i]);
 
                     if (indices_.end() != indices_.find(i))
                     {
+                        auto code = buffer_code;
                         auto size = backend.GetSize() - buffer_size;
 
                         for (auto pc : backend.GetSources(buffer_size))
@@ -1279,9 +1356,14 @@ namespace Allegrex
 
                         buffer_code += size;
                         buffer_size = backend.GetSize();
+
+                        if (Allegrex::use_debug_server)
+                        {
+                            dbginsn.Set(u32(code), u32(size), backend, base);
+                        }
+                    }
                 }
             }
-        }
 
 #if 0
             char tmp[1024];

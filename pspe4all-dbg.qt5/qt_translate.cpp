@@ -5,7 +5,7 @@
 
 #include "qt_translate.h"
 
-namespace Qt_Translate
+namespace qt_translate
 {
     char *byteToBinaryMap[256] =
     {
@@ -220,7 +220,7 @@ namespace Qt_Translate
     };
 }
 
-void Qt_Translate::CharToByte(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
+void qt_translate::CharToByte(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
 {
     if (mask)
     {
@@ -232,7 +232,7 @@ void Qt_Translate::CharToByte(std::vector< u8 > &dst, const std::vector< u8 > &s
         dst = std::vector< u8 >(src.begin(), src.end());
     }
 }
-void Qt_Translate::CharToByte(std::vector< u8 > &dst, const QString &src, int mask)
+void qt_translate::CharToByte(std::vector< u8 > &dst, const QString &src, int mask)
 {
     dst.resize(src.length());
     for (int i = 0; i < src.length(); ++i)
@@ -240,17 +240,17 @@ void Qt_Translate::CharToByte(std::vector< u8 > &dst, const QString &src, int ma
 }
 
 
-void Qt_Translate::ByteToChar(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
+void qt_translate::ByteToChar(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
 {
     dst.erase(dst.begin(), dst.end());
     dst.reserve(src.size());
     for (unsigned int i = 0; i < src.size(); i++)
     {
-        dst.push_back(Qt_Translate::byteToCharMap[src[i ^ mask]]);
+        dst.push_back(qt_translate::byteToCharMap[src[i ^ mask]]);
     }
 }
 
-void Qt_Translate::HexToByte(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
+void qt_translate::HexToByte(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
 {
     dst.erase(dst.begin(), dst.end());
     int start;
@@ -258,7 +258,7 @@ void Qt_Translate::HexToByte(std::vector< u8 > &dst, const std::vector< u8 > &sr
     if (src.size() % 2)
     {
         dst.reserve(src.size() / 2 + 1);
-        dst.push_back(Qt_Translate::hexToByteMap[src[0 ^ mask]]);
+        dst.push_back(qt_translate::hexToByteMap[src[0 ^ mask]]);
         start = 1;
     }
     else
@@ -268,11 +268,11 @@ void Qt_Translate::HexToByte(std::vector< u8 > &dst, const std::vector< u8 > &sr
     }
     for (unsigned int i = start; i < src.size(); i += 2)
     {
-        dst.push_back(Qt_Translate::hexToByteMap[src[i ^ mask]] * 16 + Qt_Translate::hexToByteMap[src[(i ^ mask) + 1]]);
+        dst.push_back(qt_translate::hexToByteMap[src[i ^ mask]] * 16 + qt_translate::hexToByteMap[src[(i ^ mask) + 1]]);
     }
 }
 
-void Qt_Translate::HexToByte(std::vector< u8 > &dst, const QString &src, int mask)
+void qt_translate::HexToByte(std::vector< u8 > &dst, const QString &src, int mask)
 {
     dst.erase(dst.begin(), dst.end());
     dst.reserve(src.length() / 2);
@@ -285,56 +285,56 @@ void Qt_Translate::HexToByte(std::vector< u8 > &dst, const QString &src, int mas
     {
         u8 hi = src[i ^ mask].toLatin1();
         u8 lo = src[(i ^ mask) + 1].toLatin1();
-        dst.push_back(Qt_Translate::hexToByteMap[hi] * 16 + Qt_Translate::hexToByteMap[lo]);
+        dst.push_back(qt_translate::hexToByteMap[hi] * 16 + qt_translate::hexToByteMap[lo]);
     }
 }
 
-void Qt_Translate::OctalToByte(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
+void qt_translate::OctalToByte(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
 {
     dst.erase(dst.begin(), dst.end());
     dst.reserve(src.size() / 3);
     for (unsigned int i = 0; i + 2 < src.size(); i += 3)
     {
-        dst.push_back(Qt_Translate::hexToByteMap[src[i]] * 64 + Qt_Translate::hexToByteMap[src[i + 1]] * 8 + Qt_Translate::hexToByteMap[src[i + 2]]);
+        dst.push_back(qt_translate::hexToByteMap[src[i]] * 64 + qt_translate::hexToByteMap[src[i + 1]] * 8 + qt_translate::hexToByteMap[src[i + 2]]);
     }
 }
 
-void Qt_Translate::BinaryToByte(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
+void qt_translate::BinaryToByte(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
 {
     dst.erase(dst.begin(), dst.end());
     dst.reserve(src.size() / 8);
     for (unsigned int i = 0; i < src.size(); i += 8)
     {
-        dst.push_back(Qt_Translate::hexToByteMap[src[(i ^ mask) + 0]] * 128 +
-                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 1]] * 64 +
-                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 2]] * 32 +
-                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 3]] * 16 +
-                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 4]] * 8 +
-                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 5]] * 4 +
-                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 6]] * 2 +
-                      Qt_Translate::hexToByteMap[src[(i ^ mask) + 7]] * 1);
+        dst.push_back(qt_translate::hexToByteMap[src[(i ^ mask) + 0]] * 128 +
+                      qt_translate::hexToByteMap[src[(i ^ mask) + 1]] * 64 +
+                      qt_translate::hexToByteMap[src[(i ^ mask) + 2]] * 32 +
+                      qt_translate::hexToByteMap[src[(i ^ mask) + 3]] * 16 +
+                      qt_translate::hexToByteMap[src[(i ^ mask) + 4]] * 8 +
+                      qt_translate::hexToByteMap[src[(i ^ mask) + 5]] * 4 +
+                      qt_translate::hexToByteMap[src[(i ^ mask) + 6]] * 2 +
+                      qt_translate::hexToByteMap[src[(i ^ mask) + 7]] * 1);
     }
 }
 
-const char *Qt_Translate::ByteToHex(u8 b)
+const char *qt_translate::ByteToHex(u8 b)
 {
-    return Qt_Translate::byteToHexMap[b];
+    return qt_translate::byteToHexMap[b];
 }
 
-void Qt_Translate::ByteToHex(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
+void qt_translate::ByteToHex(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
 {
     const char *str;
     dst.erase(dst.begin(), dst.end());
     dst.reserve(src.size() * 2);
     for (unsigned int i = 0; i < src.size(); i++)
     {
-        str = Qt_Translate::byteToHexMap[src[(i ^ mask)]];
+        str = qt_translate::byteToHexMap[src[(i ^ mask)]];
         dst.push_back(*(str + 0));
         dst.push_back(*(str + 1));
     }
 }
 
-void Qt_Translate::ByteToOctal(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
+void qt_translate::ByteToOctal(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
 {
     dst.erase(dst.begin(), dst.end());
     dst.reserve(src.size() * 3);
@@ -342,12 +342,12 @@ void Qt_Translate::ByteToOctal(std::vector< u8 > &dst, const std::vector< u8 > &
     const char *str;
     for (int i = 0; i != src.size(); ++i)
     {
-        str = Qt_Translate::byteToOctalMap[src[(i ^ mask)]];
+        str = qt_translate::byteToOctalMap[src[(i ^ mask)]];
         dst.insert(dst.end(), str, str + 3);
     }
 }
 
-void Qt_Translate::ByteToBinary(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
+void qt_translate::ByteToBinary(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask)
 {
     dst.erase(dst.begin(), dst.end());
     dst.reserve(src.size() * 8);
@@ -355,43 +355,43 @@ void Qt_Translate::ByteToBinary(std::vector< u8 > &dst, const std::vector< u8 > 
     const char *str;
     for (int i = 0; i != src.size(); ++i)
     {
-        str = Qt_Translate::byteToBinaryMap[src[(i ^ mask)]];
+        str = qt_translate::byteToBinaryMap[src[(i ^ mask)]];
         dst.insert(dst.end(), str, str + 8);
     }
 }
 
-void Qt_Translate::ByteToChar(QString &dst, const u8 *src, int len, int mask)
+void qt_translate::ByteToChar(QString &dst, const u8 *src, int len, int mask)
 {
     dst = "";
     for (int i = 0; i < len; i++)
     {
-        dst += Qt_Translate::byteToCharMap[*((const u8 *)((size_t)src++ ^ mask))];
+        dst += qt_translate::byteToCharMap[*((const u8 *)((size_t)src++ ^ mask))];
     }
 }
 
-void Qt_Translate::ByteToHex(QString &dst, const u8 *src, int len, int mask)
+void qt_translate::ByteToHex(QString &dst, const u8 *src, int len, int mask)
 {
     dst = "";
     for (int i = 0; i < len; i++)
     {
-        dst += Qt_Translate::byteToHexMap[*((const u8 *)((size_t)src++ ^ mask))];
+        dst += qt_translate::byteToHexMap[*((const u8 *)((size_t)src++ ^ mask))];
     }
 }
 
-void Qt_Translate::ByteToOctal(QString &dst, const u8 *src, int len, int mask)
+void qt_translate::ByteToOctal(QString &dst, const u8 *src, int len, int mask)
 {
     dst = "";
     for (int i = 0; i < len; ++i)
     {
-        dst += Qt_Translate::byteToOctalMap[*((const u8 *)((size_t)src++ ^ mask))];
+        dst += qt_translate::byteToOctalMap[*((const u8 *)((size_t)src++ ^ mask))];
     }
 }
 
-void Qt_Translate::ByteToBinary(QString &dst, const u8 *src, int len, int mask)
+void qt_translate::ByteToBinary(QString &dst, const u8 *src, int len, int mask)
 {
     dst = "";
     for (int i = 0; i < len; ++i)
     {
-        dst += Qt_Translate::byteToBinaryMap[*((const u8 *)((size_t)src++ ^ mask))];
+        dst += qt_translate::byteToBinaryMap[*((const u8 *)((size_t)src++ ^ mask))];
     }
 }

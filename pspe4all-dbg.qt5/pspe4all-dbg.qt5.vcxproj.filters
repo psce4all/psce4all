@@ -45,6 +45,12 @@
     <Filter Include="Source Files\qt5">
       <UniqueIdentifier>{c50b5283-79b4-415f-91e8-1142d950c4a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ext">
+      <UniqueIdentifier>{9a883b54-e07c-46d5-b687-4833328f239a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ext\markdown">
+      <UniqueIdentifier>{52b103b2-0e67-4b98-8856-bc014dcd407f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pspe4all-dbg.qt5.cpp">
@@ -57,12 +63,6 @@
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="tmp\Release\moc_qt_memorywidget.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="tmp\Debug\moc_qt_memoryviewer.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="tmp\Release\moc_qt_memoryviewer.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="tmp\Debug\moc_qt_memoryspinbox.cpp">
@@ -110,9 +110,6 @@
     <ClCompile Include="qt_memoryspinbox.cpp">
       <Filter>Source Files\qt5</Filter>
     </ClCompile>
-    <ClCompile Include="qt_memoryviewer.cpp">
-      <Filter>Source Files\qt5</Filter>
-    </ClCompile>
     <ClCompile Include="qt_memorywidget.cpp">
       <Filter>Source Files\qt5</Filter>
     </ClCompile>
@@ -137,13 +134,169 @@
     <ClCompile Include="tmp\Release\moc_qt_logview.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_memoryview.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_memoryview.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_memoryview.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_instructionreferenceview.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_instructionreferenceview.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_instructionreferenceview.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_webview.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_webview.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_webview.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\ext\markdown\docheader.c">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\ext\markdown\dumptree.c">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\ext\markdown\generate.c">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\ext\markdown\markdown.c">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\ext\markdown\markdowncxx.cpp">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\ext\markdown\mkdio.c">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\ext\markdown\resource.c">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\ext\markdown\version.c">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_hexwidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_hexwidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_hexwidget.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_hexchunks.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_hexcommands.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_hexcommands.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_hexcommands.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_hexedit.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_hexedit.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_hexedit.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="allegrex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_searchwidget.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_searchwidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_searchwidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_texteditsearcher.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_texteditsearcher.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_texteditsearcher.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_gotolinewidget.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_gotolinewidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_gotolinewidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_treeview.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_treeview.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_treeview.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_treeviewsearcher.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_treeviewsearcher.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_treeviewsearcher.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_instructionsview.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_instructionsview.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_instructionsview.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_instructionsmodel.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_instructionsmodel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_instructionsmodel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_jumpdisplaydelegate.cpp">
+      <Filter>Source Files\qt5</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Debug\moc_qt_jumpdisplaydelegate.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\Release\moc_qt_jumpdisplaydelegate.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\psce4all\src\hal.os.Module.cpp">
+      <Filter>Source Files\hal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pspe4all-dbg.qt5.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tmp\ui_qt_mainwindow.h">
-      <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="tmp\ui_qt_memoryviewer.h">
       <Filter>Generated Files</Filter>
@@ -160,15 +313,42 @@
     <ClInclude Include="qt_translate.h">
       <Filter>Source Files\qt5</Filter>
     </ClInclude>
+    <ClInclude Include="..\psce4all\ext\markdown\amalloc.h">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\ext\markdown\config.h">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\ext\markdown\cstring.h">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\ext\markdown\markdown.h">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\ext\markdown\markdowncxx.h">
+      <Filter>Source Files\ext\markdown</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_hexchunks.h">
+      <Filter>Source Files\qt5</Filter>
+    </ClInclude>
+    <ClInclude Include="allegrex.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_searcher.h">
+      <Filter>Source Files\qt5</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_Instruction.h">
+      <Filter>Source Files\qt5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\psce4all\src\hal.os.Module.h">
+      <Filter>Source Files\hal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="pspe4all-dbg.qt5.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="qt_memoryviewer.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="qt_mainwindow.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="pspe4all-dbg.qt5.Debugger.h">
@@ -183,9 +363,6 @@
     <CustomBuild Include="qt_memoryspinbox.h">
       <Filter>Source Files\qt5</Filter>
     </CustomBuild>
-    <CustomBuild Include="qt_memoryviewer.h">
-      <Filter>Source Files\qt5</Filter>
-    </CustomBuild>
     <CustomBuild Include="qt_memorywidget.h">
       <Filter>Source Files\qt5</Filter>
     </CustomBuild>
@@ -193,6 +370,51 @@
       <Filter>Source Files\qt5</Filter>
     </CustomBuild>
     <CustomBuild Include="qt_logview.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_logviewhighlighter.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_memoryview.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_instructionreferenceview.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_webview.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_hexwidget.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_hexcommands.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_hexedit.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_searchwidget.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_texteditsearcher.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_gotolinewidget.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_treeview.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_treeviewsearcher.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_instructionsview.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_instructionsmodel.h">
+      <Filter>Source Files\qt5</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qt_jumpdisplaydelegate.h">
       <Filter>Source Files\qt5</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -213,6 +435,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\StepOverIcon.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="x86-64.sql">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="mips32.sql">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

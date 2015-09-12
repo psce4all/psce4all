@@ -13,7 +13,9 @@ namespace dbg
 {
     namespace qt5
     {
-        Debugger::Debugger(int &argc, char **argv, int flags) : QApplication(argc, argv, flags)
+        Debugger::Debugger(int &argc, char **argv, int flags)
+            : QApplication(argc, argv, flags)
+            , instructions_(new qt_Instructions)
         {
             connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(onAboutToQuit()));
 
@@ -67,12 +69,12 @@ namespace dbg
             char procsync_name[256];
             snprintf(procsync_name, 255, "pspe4all-dbg-%u", pid);
 
-            m_hProcSyncEvent = ::OpenEventA(EVENT_MODIFY_STATE, FALSE, procsync_name);
-            if (m_hProcSyncEvent)
+            hProcSyncEvent_ = ::OpenEventA(EVENT_MODIFY_STATE, FALSE, procsync_name);
+            if (hProcSyncEvent_)
             {
-                qt_MainWindow MainWindow;
+                qt_MainWindow MainWindow(nullptr, instructions_);
 
-                m_qMainWindow = &MainWindow;
+                mainWindow_ = &MainWindow;
 
                 if (attachToProcess(pid))
                 {
@@ -83,7 +85,7 @@ namespace dbg
                     result = QApplication::exec();
                 }
 
-                ::CloseHandle(m_hProcSyncEvent);
+                ::CloseHandle(hProcSyncEvent_);
             }
 
             return result;
@@ -109,7 +111,7 @@ namespace dbg
 
         bool const Debugger::DebuggerLoop()
         {
-            ::SetEvent(m_hProcSyncEvent);
+            ::SetEvent(hProcSyncEvent_);
 
             return dbg::svr::Debugger::DebuggerLoop();
         }
@@ -132,27 +134,28 @@ namespace dbg
 
         void Debugger::onEnableStepping()
         {
-            m_qMainWindow->setStatusText("Press F5 to continue, F10 to step over, F11 to step into, Shift+F11 to step out.");
-            m_qMainWindow->actionContinue()->setEnabled(true);
-            m_qMainWindow->actionStop()->setEnabled(false);
-            m_qMainWindow->actionStepInto()->setEnabled(true);
-            m_qMainWindow->actionStepOver()->setEnabled(true);
-            m_qMainWindow->actionStepOut()->setEnabled(true);
+            mainWindow_->setStatusText("Press F5 to continue, F10 to step over, F11 to step into, Shift+F11 to step out.");
+            mainWindow_->actionContinue()->setEnabled(true);
+            mainWindow_->actionStop()->setEnabled(false);
+            mainWindow_->actionStepInto()->setEnabled(true);
+            mainWindow_->actionStepOver()->setEnabled(true);
+            mainWindow_->actionStepOut()->setEnabled(true);
+            mainWindow_->updateAllViews();
         }
 
         void Debugger::onDisableStepping()
         {
-            m_qMainWindow->setStatusText("Press Shift+F5 to stop.");
-            m_qMainWindow->actionContinue()->setEnabled(false);
-            m_qMainWindow->actionStop()->setEnabled(true);
-            m_qMainWindow->actionStepInto()->setEnabled(false);
-            m_qMainWindow->actionStepOver()->setEnabled(false);
-            m_qMainWindow->actionStepOut()->setEnabled(false);
+            mainWindow_->setStatusText("Press Shift+F5 to stop.");
+            mainWindow_->actionContinue()->setEnabled(false);
+            mainWindow_->actionStop()->setEnabled(true);
+            mainWindow_->actionStepInto()->setEnabled(false);
+            mainWindow_->actionStepOver()->setEnabled(false);
+            mainWindow_->actionStepOut()->setEnabled(false);
         }
 
         void Debugger::onLog(const QString &text)
         {
-            m_qMainWindow->logView()->log(text);
+            mainWindow_->logView()->log(text);
         }
 
         void Debugger::OutputDebugStringA(char const message[])
@@ -163,6 +166,13 @@ namespace dbg
         void Debugger::OutputDebugStringW(wchar_t const message[])
         {
             emit log(QString::fromWCharArray(message));
+        }
+
+        void Debugger::OnAllegrexInstruction(u32 address, size_t address_x86_64, size_t size_x86_64)
+        {
+            static auto hint = instructions_->end();
+            auto data = *p32u32(address);
+            hint = instructions_->emplace_hint(hint, std::move(address), qt_Instruction{ address, data, 4, address_x86_64, size_x86_64 });
         }
     }
 }

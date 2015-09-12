@@ -13,6 +13,19 @@ Allegrex::ICache::ICache()
 {
 }
 
+void SetDebugAllegrexInstruction(DWORD dwAddr, BOOL bDelaySlot)
+{
+    ULONG_PTR info[4] = { dwAddr, bDelaySlot, 0, 0 };
+
+    __try
+    {
+        RaiseException(0x414CA449, 0, 4, (ULONG_PTR*)&info);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+    }
+}
+
 typedef enum _UNWIND_OP_CODES
 {
     UWOP_PUSH_NONVOL = 0, /* info == register number */
@@ -484,7 +497,9 @@ void Allegrex::ICache::CodeBlock::EmitProlog(u32 address, u32 opcode, bool delay
         {
             if (Allegrex::use_debug_server)
             {
-                switch (u64(opcode >> 26))
+                //::SetDebugAllegrexInstruction(address, false);
+
+                switch (opcode >> 26U)
                 {
                 case 0x00:
                     if (opcode == 03e00008 /* JR $RA */)
@@ -567,6 +582,10 @@ void Allegrex::ICache::CodeBlock::EmitProlog(u32 address, u32 opcode, bool delay
     }
     else
     {
+        if (Allegrex::use_debug_server)
+        {
+            //::SetDebugAllegrexInstruction(address, true);
+        }
         source(address);
     }
     if (TRACE_ALLEGREX_INSTRUCTION)

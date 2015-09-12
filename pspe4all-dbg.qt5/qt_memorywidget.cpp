@@ -28,7 +28,7 @@ qt_MemoryWidget::qt_MemoryWidget(QWidget *parent)
 
     setFocusPolicy(Qt::StrongFocus);
     QFont font("Courier");
-    font.setFixedPitch(1);
+    font.setFixedPitch(true);
     setFont(font);
     changeAddressRange(0);
     changeAddress(0x08800000);
@@ -415,7 +415,7 @@ void qt_MemoryWidget::setSelection(SelectionPos pos, int offset)
             QString data;
             for (int i = selectionStart(); i < selectionEnd(); ++i)
             {
-                data += Qt_Translate::ByteToHex(*p32u8(m_start + i));
+                data += qt_translate::ByteToHex(*p32u8(m_start + i));
             }
             emit selectionChanged(data);
         }
@@ -445,9 +445,9 @@ void qt_MemoryWidget::keyPressEvent(QKeyEvent *e)
             std::vector< u8 > chars;
 
             oldData.push_back(m_data[localByteOffset() ^ mask]);
-            Qt_Translate::ByteToChar(chars, oldData);
+            qt_translate::ByteToChar(chars, oldData);
             chars[0] = key;
-            Qt_Translate::CharToByte(newData, chars);
+            qt_translate::CharToByte(newData, chars);
             m_data[localByteOffset() ^ mask] = newData[0];
             cursorRight();
             setSelection(SelectionStart, -1);
@@ -467,9 +467,9 @@ void qt_MemoryWidget::keyPressEvent(QKeyEvent *e)
             std::vector< u8 > hex;
 
             oldData.push_back(m_data[localByteOffset() ^ mask]);
-            Qt_Translate::ByteToHex(hex, oldData);
+            qt_translate::ByteToHex(hex, oldData);
             hex[m_cursor.charOffset()] = key;
-            Qt_Translate::HexToByte(newData, hex);
+            qt_translate::HexToByte(newData, hex);
             m_data[localByteOffset() ^ mask] = newData[0];
             cursorRight();
             setSelection(SelectionStart, -1);
@@ -485,9 +485,9 @@ void qt_MemoryWidget::keyPressEvent(QKeyEvent *e)
             std::vector< u8 > octal;
 
             oldData.push_back(m_data[localByteOffset()]);
-            Qt_Translate::ByteToOctal(octal, oldData);
+            qt_translate::ByteToOctal(octal, oldData);
             octal[m_cursor.charOffset()] = key;
-            Qt_Translate::OctalToByte(newData, octal);
+            qt_translate::OctalToByte(newData, octal);
             m_data[localByteOffset()] = newData[0];
             cursorRight();
             setSelection(SelectionStart, -1);
@@ -503,9 +503,9 @@ void qt_MemoryWidget::keyPressEvent(QKeyEvent *e)
             std::vector< u8 > binary;
 
             oldData.push_back(m_data[localByteOffset() ^ mask]);
-            Qt_Translate::ByteToBinary(binary, oldData);
+            qt_translate::ByteToBinary(binary, oldData);
             binary[m_cursor.charOffset()] = key;
-            Qt_Translate::BinaryToByte(newData, binary);
+            qt_translate::BinaryToByte(newData, binary);
             m_data[localByteOffset() ^ mask] = newData[0];
             cursorRight();
             setSelection(SelectionStart, -1);
@@ -621,9 +621,10 @@ void qt_MemoryWidget::paintLabels(QPainter *p)
 
 void qt_MemoryWidget::paintEvent(QPaintEvent *e)
 {
-    QStyleOption option;
+    QStyleOptionFrame option;
+    option.features = QStyleOptionFrame::Flat;
+    option.frameShape = QFrame::StyledPanel;
     option.initFrom(this);
-    option.state = hasFocus() ? QStyle::State_HasFocus : QStyle::State_Enabled;
 
     QPainter p(this);
 
@@ -631,7 +632,7 @@ void qt_MemoryWidget::paintEvent(QPaintEvent *e)
     p.setBrush(qApp->palette().base());
 
     style()->drawPrimitive(QStyle::PE_FrameLineEdit, &option, &p, this);
-
+    
     if (m_labelBBox.intersects(e->rect()))
     {
         paintLabels(&p);
@@ -660,16 +661,16 @@ QString qt_MemoryWidget::getDisplayText()
     switch (m_base)
     {
     case 16:
-        Qt_Translate::ByteToHex(text, m_data + m_topLeft, size, mask);
+        qt_translate::ByteToHex(text, m_data + m_topLeft, size, mask);
         break;
     case 8:
-        Qt_Translate::ByteToOctal(text, m_data + m_topLeft, size, 0);
+        qt_translate::ByteToOctal(text, m_data + m_topLeft, size, 0);
         break;
     case 2:
-        Qt_Translate::ByteToBinary(text, m_data + m_topLeft, size, mask);
+        qt_translate::ByteToBinary(text, m_data + m_topLeft, size, mask);
         break;
     case -1:
-        Qt_Translate::ByteToChar(text, m_data + m_topLeft, size, mask);
+        qt_translate::ByteToChar(text, m_data + m_topLeft, size, mask);
         break;
     }
     return text;

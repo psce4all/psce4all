@@ -8,6 +8,8 @@
 qt_MemorySpinBox::qt_MemorySpinBox(QWidget *parent)
     : QSpinBox(parent)
 {
+    setDisplayIntegerBase(16);
+    setButtonSymbols(QAbstractSpinBox::PlusMinus);
 }
 
 qt_MemorySpinBox::~qt_MemorySpinBox()

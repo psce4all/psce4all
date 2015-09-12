@@ -4,10 +4,18 @@
 */
 
 #include "qt_mainwindow.h"
+#include "qt_instruction.h"
+#include "qt_instructionsmodel.h"
+#include "qt_webview.h"
 
-qt_MainWindow::qt_MainWindow(QWidget *parent)
+#include <QWebSettings>
+
+qt_MainWindow::qt_MainWindow(QWidget *parent, std::shared_ptr< qt_Instructions > instructions)
     : QMainWindow(parent)
+    , instructions_(instructions)
 {
+    setFont(QFont("Monospace", 8));
+
     setDockNestingEnabled(true);
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
@@ -22,7 +30,6 @@ qt_MainWindow::qt_MainWindow(QWidget *parent)
 
 qt_MainWindow::~qt_MainWindow()
 {
-
 }
 
 void qt_MainWindow::createWidgets()
@@ -37,23 +44,40 @@ void qt_MainWindow::createWidgets()
     statusBar()->addPermanentWidget(statusLabel_, 1);
     statusBar()->addPermanentWidget(statusProgressBar_, 0);
 
-    instructionsViewDock_ = new QDockWidget(tr("Instructions"), this);
-    instructionsViewDock_->setObjectName(QStringLiteral("InstructionsViewDock"));
-    instructionsViewWidget_ = new QWidget(this);
-    instructionsViewWidget_->setObjectName(QStringLiteral("InstructionsView"));
-    instructionsViewDock_->setWidget(instructionsViewWidget_);
-    addDockWidget(Qt::TopDockWidgetArea, instructionsViewDock_);
+    backwardItemDelegate_ = new qt_JumpDisplayDelegate(false, this);
+    forwardItemDelegate_ = new qt_JumpDisplayDelegate(true, this);
 
-    memoryViewDock_ = new QDockWidget(tr("Memory"), this);
-    memoryViewDock_->setObjectName(QStringLiteral("MemoryViewDock"));
-    memoryViewWidget_ = new qt_MemoryViewer();
-    memoryViewWidget_->setObjectName(QStringLiteral("MemoryView"));
-    memoryViewDock_->setWidget(memoryViewWidget_);
-    addDockWidget(Qt::TopDockWidgetArea, memoryViewDock_);
+    instructionsView_ = new qt_InstructionsView(this);
+    instructionsView_->setObjectName(QStringLiteral("InstructionsView"));
+    instructionsView_->treeView()->setItemDelegateForColumn(qt_InstructionsModel::IMC_BACKWARD_JUMP, backwardItemDelegate_);
+    instructionsView_->treeView()->setItemDelegateForColumn(qt_InstructionsModel::IMC_FORWARD_JUMP, forwardItemDelegate_);
+
+    addDockWidget(Qt::TopDockWidgetArea, instructionsView_);
+
+    memoryView_ = new qt_MemoryView(tr("Memory"), this);
+    memoryView_->setObjectName(QStringLiteral("MemoryView"));
+    addDockWidget(Qt::TopDockWidgetArea, memoryView_);
 
     logView_ = new qt_LogView(this);
     logView_->setObjectName(QStringLiteral("LogView"));
     addDockWidget(Qt::BottomDockWidgetArea, logView_);
+
+    instructionReferenceView_ = new qt_InstructionReferenceView(this);
+    instructionReferenceView_->setObjectName(QStringLiteral("InstructionReferenceView"));
+    addDockWidget(Qt::TopDockWidgetArea, instructionReferenceView_);
+
+    //qt_WebView * webView = new qt_WebView(tr("Markdown Test"), this);
+    //webView->setObjectName(QStringLiteral("MarkdownTest"));
+    //addDockWidget(Qt::TopDockWidgetArea, webView);
+    //QFile file("markdown.md");
+    //if (file.open(QIODevice::ReadOnly))
+    //{
+    //    webView->webView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("./assets/markdown.css"));
+    //    webView->setMarkdownDocument(QString::fromUtf8(file.readAll()));
+    //}
+
+    tabifyDockWidget(instructionReferenceView_, memoryView_);
+    //tabifyDockWidget(instructionReferenceView_, webView);
 
     mainToolBar_ = new QToolBar(this);
     mainToolBar_->setObjectName(QStringLiteral("MainToolBar"));
@@ -113,17 +137,21 @@ void qt_MainWindow::createActions()
     mainToolBar_->addAction(actionStepOver_);
     mainToolBar_->addAction(actionStepOut_);
 
-    instructionsViewAction_ = instructionsViewDock_->toggleViewAction();
+    instructionsViewAction_ = instructionsView_->toggleViewAction();
     instructionsViewAction_->setText(tr("&Instructions"));
     instructionsViewAction_->setShortcut(Qt::ALT + Qt::Key_I);
 
-    memoryViewAction_ = memoryViewDock_->toggleViewAction();
+    memoryViewAction_ = memoryView_->toggleViewAction();
     memoryViewAction_->setText(tr("&Memory"));
     memoryViewAction_->setShortcut(Qt::ALT + Qt::Key_M);
 
     logViewAction_ = logView_->toggleViewAction();
     logViewAction_->setText(tr("&Log"));
     logViewAction_->setShortcut(Qt::ALT + Qt::Key_L);
+
+    instructionReferenceViewAction_ = instructionReferenceView_->toggleViewAction();
+    instructionReferenceViewAction_->setText(tr("instruction &Reference"));
+    instructionReferenceViewAction_->setShortcut(Qt::ALT + Qt::Key_R);
 }
 
 void qt_MainWindow::createMenus()
@@ -135,6 +163,8 @@ void qt_MainWindow::createMenus()
     viewMenu->addAction(instructionsViewAction_);
     viewMenu->addAction(memoryViewAction_);
     viewMenu->addAction(logViewAction_);
+    viewMenu->addSeparator();
+    viewMenu->addAction(instructionReferenceViewAction_);
 }
 
 void qt_MainWindow::closeEvent(QCloseEvent *event)
@@ -159,6 +189,21 @@ void qt_MainWindow::loadSettings()
             {
                 textView->setDocumentFont(settings_->value(textView->objectName() + ".font", textView->documentFont()).value<QFont>());
             }
+            else
+            {
+                textView->setDocumentFont(QFont("Consolas", 8));
+            }
+        }
+        else if (auto treeView = qobject_cast< qt_TreeView * >(child))
+        {
+            if (!treeView->objectName().isEmpty())
+            {
+                treeView->setDocumentFont(settings_->value(treeView->objectName() + ".font", treeView->documentFont()).value<QFont>());
+            }
+            else
+            {
+                treeView->setDocumentFont(QFont("Consolas", 8));
+            }
         }
     }
 }
@@ -180,10 +225,25 @@ void qt_MainWindow::saveSettings()
                 settings_->setValue(textView->objectName() + ".font", textView->documentFont());
             }
         }
+        else if (auto treeView = qobject_cast< qt_TreeView * >(child))
+        {
+            if (!treeView->objectName().isEmpty())
+            {
+                settings_->setValue(treeView->objectName() + ".font", treeView->documentFont());
+            }
+        }
     }
 }
 
 void qt_MainWindow::setStatusText(const QString &text)
 {
     statusLabel_->setText(text);
+}
+
+void qt_MainWindow::updateAllViews()
+{
+    auto model = new qt_InstructionsModel(this, instructions_);
+    instructionsView_->setModel(model);
+    forwardItemDelegate_->update(model->getInstructions(), 60);
+    backwardItemDelegate_->update(model->getInstructions(), 60);
 }

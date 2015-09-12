@@ -21,9 +21,9 @@
 #include <QVBoxLayout>
 #include <QWheelEvent>
 
-//#include "GotoLineWidget.h"
-//#include "SearchWidget.h"
-//#include "TextEditSearcher.h"
+#include "qt_gotolinewidget.h"
+#include "qt_searchwidget.h"
+#include "qt_texteditsearcher.h"
 
 qt_TextView::qt_TextView(const QString &title, QWidget *parent)
     : QDockWidget(title, parent)
@@ -39,19 +39,19 @@ qt_TextView::qt_TextView(const QString &title, QWidget *parent)
     connect(textEdit_->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateExtraSelections()));
     connect(textEdit_->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateExtraSelections()));
 
-    //auto searchWidget = new SearchWidget(std::make_unique<TextEditSearcher>(textEdit_), this);
-    //searchWidget->hide();
+    auto searchWidget = new qt_SearchWidget(std::make_unique< qt_TextEditSearcher >(textEdit_), this);
+    searchWidget->hide();
 
-    //GotoLineWidget *gotoLineWidget = new GotoLineWidget(textEdit_, this);
-    //gotoLineWidget->hide();
+    qt_GotoLineWidget *gotoLineWidget = new qt_GotoLineWidget(textEdit_, this);
+    gotoLineWidget->hide();
 
     QWidget *widget = new QWidget(this);
 
     QVBoxLayout *layout = new QVBoxLayout(widget);
     layout->setContentsMargins(QMargins());
     layout->addWidget(textEdit_);
-    //layout->addWidget(searchWidget);
-    //layout->addWidget(gotoLineWidget);
+    layout->addWidget(searchWidget);
+    layout->addWidget(gotoLineWidget);
 
     setWidget(widget);
 
@@ -66,44 +66,44 @@ qt_TextView::qt_TextView(const QString &title, QWidget *parent)
     searchShortcuts.append(QKeySequence::Find);
     searchShortcuts.append(tr("/"));
 
-    //openSearchAction_ = new QAction(tr("Find..."), this);
-    //openSearchAction_->setShortcuts(searchShortcuts);
-    //openSearchAction_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    //addAction(openSearchAction_);
+    openSearchAction_ = new QAction(tr("Find..."), this);
+    openSearchAction_->setShortcuts(searchShortcuts);
+    openSearchAction_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    addAction(openSearchAction_);
 
-    //connect(openSearchAction_, SIGNAL(triggered()), searchWidget, SLOT(activate()));
+    connect(openSearchAction_, SIGNAL(triggered()), searchWidget, SLOT(activate()));
 
-    //findNextAction_ = new QAction(tr("Find Next"), this);
-    //findNextAction_->setShortcut(QKeySequence::FindNext);
-    //findNextAction_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    //addAction(findNextAction_);
+    findNextAction_ = new QAction(tr("Find Next"), this);
+    findNextAction_->setShortcut(QKeySequence::FindNext);
+    findNextAction_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    addAction(findNextAction_);
 
-    //connect(findNextAction_, SIGNAL(triggered()), searchWidget, SLOT(findNext()));
+    connect(findNextAction_, SIGNAL(triggered()), searchWidget, SLOT(findNext()));
 
-    //findPreviousAction_ = new QAction(tr("Find Previous"), this);
-    //findPreviousAction_->setShortcut(QKeySequence::FindPrevious);
-    //findPreviousAction_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    //addAction(findPreviousAction_);
+    findPreviousAction_ = new QAction(tr("Find Previous"), this);
+    findPreviousAction_->setShortcut(QKeySequence::FindPrevious);
+    findPreviousAction_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    addAction(findPreviousAction_);
 
-    //connect(findPreviousAction_, SIGNAL(triggered()), searchWidget, SLOT(findPrevious()));
+    connect(findPreviousAction_, SIGNAL(triggered()), searchWidget, SLOT(findPrevious()));
 
-    //QList<QKeySequence> gotoLineShortcuts;
-    //gotoLineShortcuts.append(Qt::CTRL + Qt::Key_G);
+    QList<QKeySequence> gotoLineShortcuts;
+    gotoLineShortcuts.append(Qt::CTRL + Qt::Key_G);
 
-    //openGotoLineAction_ = new QAction(tr("Go to Line..."), this);
-    //openGotoLineAction_->setShortcuts(gotoLineShortcuts);
-    //openGotoLineAction_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    //addAction(openGotoLineAction_);
+    openGotoLineAction_ = new QAction(tr("Go to Line..."), this);
+    openGotoLineAction_->setShortcuts(gotoLineShortcuts);
+    openGotoLineAction_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    addAction(openGotoLineAction_);
 
-    //connect(openGotoLineAction_, SIGNAL(triggered()), gotoLineWidget, SLOT(activate()));
+    connect(openGotoLineAction_, SIGNAL(triggered()), gotoLineWidget, SLOT(activate()));
 
     QAction *closeEverythingAction = new QAction(this);
     closeEverythingAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     closeEverythingAction->setShortcut(Qt::Key_Escape);
     addAction(closeEverythingAction);
 
-    //connect(closeEverythingAction, SIGNAL(triggered()), searchWidget, SLOT(deactivate()));
-    //connect(closeEverythingAction, SIGNAL(triggered()), gotoLineWidget, SLOT(deactivate()));
+    connect(closeEverythingAction, SIGNAL(triggered()), searchWidget, SLOT(deactivate()));
+    connect(closeEverythingAction, SIGNAL(triggered()), gotoLineWidget, SLOT(deactivate()));
     connect(closeEverythingAction, SIGNAL(triggered()), textEdit(), SLOT(setFocus()));
 
     selectFontAction_ = new QAction(tr("Select Font..."), this);
@@ -114,7 +114,7 @@ qt_TextView::qt_TextView(const QString &title, QWidget *parent)
 
 void qt_TextView::setDocument(QTextDocument *document)
 {
-    /* QTextEdit crashes when extra selections get out of range. */
+    // QTextEdit crashes when extra selections get out of range.
     textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
     highlighting_.clear();
 
@@ -147,12 +147,12 @@ void qt_TextView::populateContextMenu(QMenu *menu)
 {
     menu->addSeparator();
     menu->addAction(saveAsAction_);
-    //menu->addSeparator();
-    //menu->addAction(openSearchAction_);
-    //menu->addAction(findNextAction_);
-    //menu->addAction(findPreviousAction_);
-    //menu->addSeparator();
-    //menu->addAction(openGotoLineAction_);
+    menu->addSeparator();
+    menu->addAction(openSearchAction_);
+    menu->addAction(findNextAction_);
+    menu->addAction(findPreviousAction_);
+    menu->addSeparator();
+    menu->addAction(openGotoLineAction_);
     menu->addSeparator();
     menu->addAction(selectFontAction_);
     menu->addSeparator();
@@ -277,7 +277,7 @@ void qt_TextView::setDocumentFont(const QFont &font)
 
 void qt_TextView::selectFont()
 {
-    setDocumentFont(QFontDialog::getFont(nullptr, documentFont(), this));
+    setDocumentFont(QFontDialog::getFont(nullptr, documentFont(), this, QString(), QFontDialog::MonospacedFonts));
 }
 
 bool qt_TextView::eventFilter(QObject *watched, QEvent *event)

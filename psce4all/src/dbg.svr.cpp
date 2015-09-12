@@ -398,6 +398,14 @@ void dbg::svr::DebugExceptionHandler::Initialize()
             SetContinueStatus(DBG_EXCEPTION_NOT_HANDLED);
         }
     });
+
+    Register(DebugExceptions::AllegrexInstruction, [&](const DEBUG_EVENT &dbgEvent)
+    {
+        debugf(dbg, "DebugExceptions::AllegrexInstruction: Received Allegrex instruction");
+        auto &exceptionRecord = dbgEvent.u.Exception.ExceptionRecord;
+        m_pDebugger->OnAllegrexInstruction(u32(exceptionRecord.ExceptionInformation[0]), size_t(exceptionRecord.ExceptionInformation[2]), size_t(exceptionRecord.ExceptionInformation[3]));
+        SetContinueStatus(DBG_CONTINUE);
+    });
 }
 
 static bool EnableDebugPrivilege(bool Enable)
@@ -701,5 +709,9 @@ void dbg::svr::Debugger::OutputDebugStringA(char const message[])
 void dbg::svr::Debugger::OutputDebugStringW(wchar_t const message[])
 {
     debugf(L"DebugEvents::DebugString:  %s", message);
+}
+
+void dbg::svr::Debugger::OnAllegrexInstruction(u32 /*address*/, size_t /*address_x86_64*/, size_t /*size_x86_64*/)
+{
 }
 

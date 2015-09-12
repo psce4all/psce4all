@@ -203,8 +203,8 @@ namespace dbg
         enum DebugEvents
         {
             Exception     = EXCEPTION_DEBUG_EVENT,
-            StartThread  = CREATE_THREAD_DEBUG_EVENT,
-            StartProcess = CREATE_PROCESS_DEBUG_EVENT,
+            StartThread   = CREATE_THREAD_DEBUG_EVENT,
+            StartProcess  = CREATE_PROCESS_DEBUG_EVENT,
             ExitThread    = EXIT_THREAD_DEBUG_EVENT,
             ExitProcess   = EXIT_PROCESS_DEBUG_EVENT,
             LoadDll       = LOAD_DLL_DEBUG_EVENT,
@@ -271,6 +271,7 @@ namespace dbg
             GuardPage               = EXCEPTION_GUARD_PAGE,
             InvalidHandle           = EXCEPTION_INVALID_HANDLE,
             SetThreadName           = 0x406D1388,
+            AllegrexInstruction     = 0x414CA449,
         };
 
         struct DebugExceptionHandler final : hal::Observable < DebugExceptions, void, const DEBUG_EVENT & >
@@ -372,6 +373,7 @@ namespace dbg
             virtual bool const WaitForContinue();
             virtual void       OutputDebugStringA(char const message[]);
             virtual void       OutputDebugStringW(wchar_t const message[]);
+            virtual void       OnAllegrexInstruction(u32 address, size_t address_x86_64, size_t size_x86_64);
 
             SafeHandle         OpenCurrentThread();
 

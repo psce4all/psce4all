@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace Qt_Translate
+namespace qt_translate
 {
     const char *ByteToHex(u8 b);
     void ByteToHex(std::vector< u8 > &dst, const std::vector< u8 > &src, int mask = 0);

@@ -1799,6 +1799,24 @@ namespace Allegrex
                 return sources;
             }
 
+            std::map< size_t, std::pair< size_t, std::vector< u32 > > > GetSourcesInRange(size_t offset, size_t size)
+            {
+                std::map< size_t, std::pair< size_t, std::vector< u32 > > > sources;
+                auto b = sources_.lower_bound(offset);
+                auto e = sources_.upper_bound(offset + size - 1);
+                for (auto i = b; i != e;)
+                {
+                    auto address = i->second;
+                    auto lower = i->first;
+                    ++i;
+                    auto upper = (i != e) ? i->first : (offset + size - 1);
+                    auto & value = sources[lower + size_t(pbuff_)];
+                    value.first = upper - lower;
+                    value.second.push_back(address);
+                }
+                return sources;
+            }
+
             size_t GetSize() const
             {
                 return size_;
