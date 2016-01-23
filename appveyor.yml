@@ -1,8 +1,8 @@
 version: 1.0.{build}
 configuration: Debug
 platform: x64
+os: Visual Studio 2015
 environment:
-  VSVER: 14.0 # Visual Studio 2015
   QTDIR: C:\Qt\5.6\msvc2015_64_opengl
 install:
   - set PATH=%PATH%;%QTDIR%\bin
