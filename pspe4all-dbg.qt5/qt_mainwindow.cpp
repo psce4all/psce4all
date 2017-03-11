@@ -3,8 +3,8 @@
 * Released under GPL v2 license. Read LICENSE for more details.
 */
 
-#include "qt_mainwindow.h"
-#include "qt_instruction.h"
+#include "pspe4all-dbg.qt5.Debugger.h"
+
 #include "qt_instructionsmodel.h"
 #include "qt_webview.h"
 
@@ -88,7 +88,7 @@ void qt_MainWindow::createActions()
 {
     quitAction_ = new QAction(tr("&Quit"), this);
     quitAction_->setShortcuts(QKeySequence::Quit);
-    connect(quitAction_, SIGNAL(triggered()), this, SLOT(close()));
+    connect(quitAction_, &QAction::triggered, this, &QWidget::close);
 
     actionContinue_ = new QAction(this);
     actionContinue_->setObjectName(QStringLiteral("ActionContinue"));
@@ -96,7 +96,7 @@ void qt_MainWindow::createActions()
     icon0.addFile(QStringLiteral(":/pspe4alldbgqt5/res/PlayIcon.png"), QSize(), QIcon::Normal, QIcon::Off);
     actionContinue_->setIcon(icon0);
     actionContinue_->setShortcut(Qt::Key_F5);
-    connect(actionContinue_, SIGNAL(triggered()), qApp, SLOT(onContinue()));
+    connect(actionContinue_, &QAction::triggered, dbg::qt5::Debugger::application(), &dbg::qt5::Debugger::onContinue);
 
     actionStop_ = new QAction(this);
     actionStop_->setObjectName(QStringLiteral("ActionStop"));
@@ -104,7 +104,7 @@ void qt_MainWindow::createActions()
     icon1.addFile(QStringLiteral(":/pspe4alldbgqt5/res/PauseIcon.png"), QSize(), QIcon::Normal, QIcon::Off);
     actionStop_->setIcon(icon1);
     actionStop_->setShortcut(Qt::SHIFT + Qt::Key_F5);
-    connect(actionStop_, SIGNAL(triggered()), qApp, SLOT(onStop()));
+    connect(actionStop_, &QAction::triggered, dbg::qt5::Debugger::application(), &dbg::qt5::Debugger::onStop);
 
     actionStepInto_ = new QAction(this);
     actionStepInto_->setObjectName(QStringLiteral("ActionStepInto"));
@@ -112,7 +112,7 @@ void qt_MainWindow::createActions()
     icon2.addFile(QStringLiteral(":/pspe4alldbgqt5/res/StepIntoIcon.png"), QSize(), QIcon::Normal, QIcon::Off);
     actionStepInto_->setIcon(icon2);
     actionStepInto_->setShortcut(Qt::Key_F11);
-    connect(actionStepInto_, SIGNAL(triggered()), qApp, SLOT(onStepInto()));
+    connect(actionStepInto_, &QAction::triggered, dbg::qt5::Debugger::application(), &dbg::qt5::Debugger::onStepInto);
 
     actionStepOver_ = new QAction(this);
     actionStepOver_->setObjectName(QStringLiteral("ActionStepOver"));
@@ -120,7 +120,7 @@ void qt_MainWindow::createActions()
     icon3.addFile(QStringLiteral(":/pspe4alldbgqt5/res/StepOverIcon.png"), QSize(), QIcon::Normal, QIcon::Off);
     actionStepOver_->setIcon(icon3);
     actionStepOver_->setShortcut(Qt::Key_F10);
-    connect(actionStepOver_, SIGNAL(triggered()), qApp, SLOT(onStepOver()));
+    connect(actionStepOver_, &QAction::triggered, dbg::qt5::Debugger::application(), &dbg::qt5::Debugger::onStepOver);
 
     actionStepOut_ = new QAction(this);
     actionStepOut_->setObjectName(QStringLiteral("ActionStepOut"));
@@ -128,7 +128,7 @@ void qt_MainWindow::createActions()
     icon4.addFile(QStringLiteral(":/pspe4alldbgqt5/res/StepOutIcon.png"), QSize(), QIcon::Normal, QIcon::Off);
     actionStepOut_->setIcon(icon4);
     actionStepOut_->setShortcut(Qt::SHIFT + Qt::Key_F11);
-    connect(actionStepOut_, SIGNAL(triggered()), qApp, SLOT(onStepOut()));
+    connect(actionStepOut_, &QAction::triggered, dbg::qt5::Debugger::application(), &dbg::qt5::Debugger::onStepOut);
 
     mainToolBar_->addAction(actionContinue_);
     mainToolBar_->addAction(actionStop_);

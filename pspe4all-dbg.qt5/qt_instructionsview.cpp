@@ -34,7 +34,8 @@ void qt_InstructionsView::setModel(qt_InstructionsModel *model)
 
         zoomIn(0); // *sigh* too tired to understand why without doing that call I get wrong column width initially...
 
-        connect(treeView()->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(updateSelection()));
+        connect(treeView()->selectionModel(), &QItemSelectionModel::selectionChanged, this, [this](QItemSelection const &, QItemSelection const &) { updateSelection(); });
+
         updateSelection();
     }
 }
@@ -73,12 +74,12 @@ void qt_InstructionsView::updateSelection()
         }
         */
 
-        foreach (const QModelIndex &index, treeView()->selectionModel()->selectedIndexes())
+        foreach (QModelIndex const & index, treeView()->selectionModel()->selectedIndexes())
         {
             // Process every row only once.
             if (index.column() == 0)
             {
-                if (const qt_Instruction *instruction = model()->getInstruction(index))
+                if (qt_Instruction const * instruction = model()->getInstruction(index))
                 {
                     if (!instruction->checkData())
                     {
@@ -97,7 +98,7 @@ void qt_InstructionsView::updateSelection()
     }
 }
 
-void qt_InstructionsView::highlightInstructions(const std::vector< const qt_Instruction * > &instructions, bool ensureVisible)
+void qt_InstructionsView::highlightInstructions(std::vector< qt_Instruction const * > const & instructions, bool const ensureVisible)
 {
     if (model())
     {
@@ -110,7 +111,7 @@ void qt_InstructionsView::highlightInstructions(const std::vector< const qt_Inst
     }
 }
 
-void qt_InstructionsView::setDocumentFont(const QFont &font)
+void qt_InstructionsView::setDocumentFont(QFont const & font)
 {
     qt_TreeView::setDocumentFont(font);
 

@@ -55,13 +55,13 @@ qt_InstructionReferenceView::qt_InstructionReferenceView(QWidget *parent)
         comboBox4arch_->setModel(model);
         comboBox4arch_->setMaximumWidth(132);
         comboBox4arch_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
-        connect(comboBox4arch_, SIGNAL(activated(int)), this, SLOT(onArchitectureSelection(int)));
+        connect(comboBox4arch_, static_cast< void (QComboBox::*)(int) >(&QComboBox::activated), this, &qt_InstructionReferenceView::onArchitectureSelection);
 
         listView4insn_ = new QListView(this);
         listView4insn_->setResizeMode(QListView::Adjust);
         listView4insn_->setMaximumWidth(132);
         listView4insn_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        connect(listView4insn_, SIGNAL(activated(const QModelIndex &)), this, SLOT(onInstructionSelection(const QModelIndex &)));
+        connect(listView4insn_, &QListView::activated, this, &qt_InstructionReferenceView::onInstructionSelection);
 
         onArchitectureSelection(0);
 

@@ -30,6 +30,8 @@ namespace dbg
 
             bool const attachToProcess(DWORD pid);
 
+            static Debugger * application() { return static_cast<Debugger *>(qApp); }
+
         signals:
             void enableStepping();
             void disableStepping();

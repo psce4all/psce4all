@@ -17,7 +17,7 @@ class qt_MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    qt_MainWindow(QWidget *parent, std::shared_ptr< qt_Instructions > instructions);
+    qt_MainWindow(QWidget * parent, std::shared_ptr< qt_Instructions > instructions);
     ~qt_MainWindow();
 
     QAction * actionContinue() { return actionContinue_; }
@@ -31,7 +31,7 @@ public:
     void updateAllViews();
 
 protected:
-    virtual void closeEvent(QCloseEvent *event) override;
+    virtual void closeEvent(QCloseEvent * event) override;
 
 private:
     void createWidgets();
@@ -41,36 +41,36 @@ private:
     void saveSettings();
 
 public slots:
-    void setStatusText(const QString &text);
+    void setStatusText(QString const & text);
 
 private:
-    QAction                           *quitAction_;
+    QAction                           * quitAction_;
 
-    QAction                           *actionContinue_;
-    QAction                           *actionStop_;
-    QAction                           *actionStepInto_;
-    QAction                           *actionStepOver_;
-    QAction                           *actionStepOut_;
+    QAction                           * actionContinue_;
+    QAction                           * actionStop_;
+    QAction                           * actionStepInto_;
+    QAction                           * actionStepOver_;
+    QAction                           * actionStepOut_;
 
-    QAction                           *instructionsViewAction_;
-    QAction                           *memoryViewAction_;
-    QAction                           *logViewAction_;
-    QAction                           *instructionReferenceViewAction_;
+    QAction                           * instructionsViewAction_;
+    QAction                           * memoryViewAction_;
+    QAction                           * logViewAction_;
+    QAction                           * instructionReferenceViewAction_;
 
-    qt_InstructionsView               *instructionsView_;
-    qt_MemoryView                     *memoryView_;
-    qt_LogView                        *logView_;
-    qt_InstructionReferenceView       *instructionReferenceView_;
+    qt_InstructionsView               * instructionsView_;
+    qt_MemoryView                     * memoryView_;
+    qt_LogView                        * logView_;
+    qt_InstructionReferenceView       * instructionReferenceView_;
 
-    qt_JumpDisplayDelegate            *backwardItemDelegate_;
-    qt_JumpDisplayDelegate            *forwardItemDelegate_;
+    qt_JumpDisplayDelegate            * backwardItemDelegate_;
+    qt_JumpDisplayDelegate            * forwardItemDelegate_;
 
-    QMenuBar                          *menuBar_;
-    QToolBar                          *mainToolBar_;
-    QLabel                            *statusLabel_;
-    QProgressBar                      *statusProgressBar_;
-    QStatusBar                        *statusBar_;
+    QMenuBar                          * menuBar_;
+    QToolBar                          * mainToolBar_;
+    QLabel                            * statusLabel_;
+    QProgressBar                      * statusProgressBar_;
+    QStatusBar                        * statusBar_;
 
-    QSettings                         *settings_;
-    std::shared_ptr< qt_Instructions > instructions_;
+    QSettings                         * settings_;
+    std::shared_ptr< qt_Instructions >  instructions_;
 };

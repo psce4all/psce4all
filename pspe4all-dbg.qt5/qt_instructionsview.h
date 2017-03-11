@@ -15,28 +15,28 @@ class qt_InstructionsView : public qt_TreeView
 {
     Q_OBJECT
 
-    qt_InstructionsModel                 *model_;
-    std::vector< const qt_Instruction * > selectedInstructions_;
+    qt_InstructionsModel                 * model_;
+    std::vector< qt_Instruction const * >  selectedInstructions_;
 
 public:
-    qt_InstructionsView(QWidget *parent = 0);
+    qt_InstructionsView(QWidget * parent = 0);
 
-    qt_InstructionsModel *model() const
+    qt_InstructionsModel * model() const
     {
         return model_;
     }
 
-    void setModel(qt_InstructionsModel *model);
+    void setModel(qt_InstructionsModel * model);
 
-    const std::vector<const qt_Instruction *> &selectedInstructions() const
+    std::vector< qt_Instruction const * > const & selectedInstructions() const
     {
         return selectedInstructions_;
     }
 
 public slots:
-    void highlightInstructions(const std::vector< const qt_Instruction * > &instructions, bool ensureVisible = true);
+    void highlightInstructions(std::vector< qt_Instruction const * > const & instructions, bool const ensureVisible = true);
     
-    virtual void setDocumentFont(const QFont &font) override;
+    virtual void setDocumentFont(QFont const & font) override;
 
 signals:
     void instructionSelectionChanged();

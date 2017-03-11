@@ -17,11 +17,11 @@ namespace dbg
             : QApplication(argc, argv, flags)
             , instructions_(new qt_Instructions)
         {
-            connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(onAboutToQuit()));
+            connect(qApp, &QCoreApplication::aboutToQuit, this, &Debugger::onAboutToQuit);
 
-            connect(this, SIGNAL(log(QString)), this, SLOT(onLog(QString)), Qt::BlockingQueuedConnection);
-            connect(this, SIGNAL(enableStepping()), this, SLOT(onEnableStepping()), Qt::BlockingQueuedConnection);
-            connect(this, SIGNAL(disableStepping()), this, SLOT(onDisableStepping()), Qt::BlockingQueuedConnection);
+            connect(this, &Debugger::log, this, &Debugger::onLog, Qt::BlockingQueuedConnection);
+            connect(this, &Debugger::enableStepping, this, &Debugger::onEnableStepping, Qt::BlockingQueuedConnection);
+            connect(this, &Debugger::disableStepping, this, &Debugger::onDisableStepping, Qt::BlockingQueuedConnection);
         }
 
         void Debugger::onAboutToQuit()
