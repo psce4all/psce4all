@@ -149,7 +149,7 @@ struct u64le
 };
 
 #if defined(__msvc__)
-#   pragma warning(disable:4100;disable:4127;disable:4200;disable:4706;disable:4714;disable:4996)
+#   pragma warning(disable:4091;disable:4100;disable:4127;disable:4200;disable:4302;disable:4311;disable:4312;disable:4458;disable:4459;disable:4505;disable:4706;disable:4714;disable:4996)
 #   define __weaksymbol         __declspec(selectany)
 #   define __aligned(n)       __declspec(align(n))
 #   define aligned__(n)

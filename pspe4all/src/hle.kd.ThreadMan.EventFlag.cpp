@@ -66,16 +66,16 @@ int hle::kd::EventFlag::Set(SceUInt pattern, int is_intr_context, int intr)
             }
 
             int matched;
-            int pattern  = this_thread->m_cb_arg1;
+            int pattern_ = this_thread->m_cb_arg1;
             int waitmode = this_thread->m_cb_arg2;
 
             if (waitmode & WAITMODE_OR)
             {
-                matched = this->m_current_pattern & pattern;
+                matched = this->m_current_pattern & pattern_;
             }
             else
             {
-                matched = (this->m_current_pattern & pattern) == pattern;
+                matched = (this->m_current_pattern & pattern_) == int(pattern);
             }
 
             if (matched)

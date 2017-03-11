@@ -65,9 +65,9 @@ size_t hle::kd::ElfLoader::LoadIntoAddress(u32 addr)
 #if 1
             if (p->p_flags & 1)
             {
-                for (u32 i = 0; i < dstSize / 4; ++i)
+                for (u32 j = 0; j < dstSize / 4; ++j)
                 {
-                    auto va = writeAddr + 4 * i;
+                    auto va = writeAddr + 4 * j;
                     va_array.push_back(va);
                 }
             }

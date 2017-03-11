@@ -279,8 +279,8 @@ namespace hle
                 ::memcpy(name, that->GetName(), 32);
 
                 FreePartitionBlock(that);
-                int result = AllocatePartitionBlock(name, 2, new_address, new_size, that);
-                if (result != SCE_KERNEL_ERROR_OK)
+                int error = AllocatePartitionBlock(name, 2, new_address, new_size, that);
+                if (error != SCE_KERNEL_ERROR_OK)
                 {
                     result = AllocatePartitionBlock(name, 2, old_address, old_size, that);
                 }

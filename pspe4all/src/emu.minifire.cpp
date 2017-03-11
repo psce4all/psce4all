@@ -310,7 +310,10 @@ void lle::cpu::Context::CrossInterpret_(u32 address)
 
     if (must_compare)
     {
-        if (memcmp(cross_context[0].gpr + 1, Context::gpr + 1, sizeof(u32[31])))
+
+#define XREG(i) gpr[(i)], cross_context[0].gpr[(i)] 
+		
+		if (memcmp(cross_context[0].gpr + 1, Context::gpr + 1, sizeof(u32[31])))
         {
             char       buffer[1024];
             static u32 count = 0;
@@ -327,18 +330,21 @@ void lle::cpu::Context::CrossInterpret_(u32 address)
                                                    ++count,
                                                    address,
                                                    cross_interpreter_last_pc,
-                                                   gpr[+0], cross_context[0].gpr[+0], gpr[+1], cross_context[0].gpr[+1], gpr[+2], cross_context[0].gpr[+2], gpr[+3], cross_context[0].gpr[+3],
-                                                   gpr[+4], cross_context[0].gpr[+4], gpr[+5], cross_context[0].gpr[+5], gpr[+6], cross_context[0].gpr[+6], gpr[+7], cross_context[0].gpr[+7],
-                                                   gpr[+8], cross_context[0].gpr[+8], gpr[+9], cross_context[0].gpr[+9], gpr[10], cross_context[0].gpr[10], gpr[11], cross_context[0].gpr[11],
-                                                   gpr[12], cross_context[0].gpr[12], gpr[13], cross_context[0].gpr[13], gpr[14], cross_context[0].gpr[14], gpr[15], cross_context[0].gpr[15],
-                                                   gpr[16], cross_context[0].gpr[16], gpr[17], cross_context[0].gpr[17], gpr[18], cross_context[0].gpr[18], gpr[19], cross_context[0].gpr[19],
-                                                   gpr[20], cross_context[0].gpr[20], gpr[21], cross_context[0].gpr[21], gpr[22], cross_context[0].gpr[22], gpr[23], cross_context[0].gpr[23],
-                                                   gpr[24], cross_context[0].gpr[24], gpr[25], cross_context[0].gpr[25], gpr[26], cross_context[0].gpr[26], gpr[27], cross_context[0].gpr[27],
-                                                   gpr[28], cross_context[0].gpr[28], gpr[29], cross_context[0].gpr[29], gpr[30], cross_context[0].gpr[30], gpr[31], cross_context[0].gpr[31]);
+                                                   XREG(+0), XREG(+1), XREG(+2), XREG(+3),
+                                                   XREG(+8), XREG(+9), XREG(10), XREG(11),
+                                                   XREG(+4), XREG(+5), XREG(+6), XREG(+7),
+                                                   XREG(12), XREG(13), XREG(14), XREG(15),
+                                                   XREG(16), XREG(17), XREG(18), XREG(19),
+                                                   XREG(20), XREG(21), XREG(22), XREG(23),
+                                                   XREG(24), XREG(25), XREG(26), XREG(27),
+                                                   XREG(28), XREG(29), XREG(30), XREG(31));
             async_file->Write(buffer, length);
 
             __debugbreak();
         }
+
+#undef XREG
+#define XREG(i) *((u32 *)&fpr[(i)]), *((u32 *)&cross_context[0].fpr[(i)]) 
 
         if (memcmp(cross_context[0].fpr, Context::fpr, sizeof(f32[32])))
         {
@@ -357,20 +363,22 @@ void lle::cpu::Context::CrossInterpret_(u32 address)
                                             ++count,
                                             address,
                                             cross_interpreter_last_pc,
-                                            fpr[+0], cross_context[0].fpr[+0], fpr[+1], cross_context[0].fpr[+1], fpr[+2], cross_context[0].fpr[+2], fpr[+3], cross_context[0].fpr[+3],
-                                            fpr[+4], cross_context[0].fpr[+4], fpr[+5], cross_context[0].fpr[+5], fpr[+6], cross_context[0].fpr[+6], fpr[+7], cross_context[0].fpr[+7],
-                                            fpr[+8], cross_context[0].fpr[+8], fpr[+9], cross_context[0].fpr[+9], fpr[10], cross_context[0].fpr[10], fpr[11], cross_context[0].fpr[11],
-                                            fpr[12], cross_context[0].fpr[12], fpr[13], cross_context[0].fpr[13], fpr[14], cross_context[0].fpr[14], fpr[15], cross_context[0].fpr[15],
-                                            fpr[16], cross_context[0].fpr[16], fpr[17], cross_context[0].fpr[17], fpr[18], cross_context[0].fpr[18], fpr[19], cross_context[0].fpr[19],
-                                            fpr[20], cross_context[0].fpr[20], fpr[21], cross_context[0].fpr[21], fpr[22], cross_context[0].fpr[22], fpr[23], cross_context[0].fpr[23],
-                                            fpr[24], cross_context[0].fpr[24], fpr[25], cross_context[0].fpr[25], fpr[26], cross_context[0].fpr[26], fpr[27], cross_context[0].fpr[27],
-                                            fpr[28], cross_context[0].fpr[28], fpr[29], cross_context[0].fpr[29], fpr[30], cross_context[0].fpr[30], fpr[31], cross_context[0].fpr[31]);
+											XREG(+0), XREG(+1), XREG(+2), XREG(+3),
+											XREG(+8), XREG(+9), XREG(10), XREG(11),
+											XREG(+4), XREG(+5), XREG(+6), XREG(+7),
+											XREG(12), XREG(13), XREG(14), XREG(15),
+											XREG(16), XREG(17), XREG(18), XREG(19),
+											XREG(20), XREG(21), XREG(22), XREG(23),
+											XREG(24), XREG(25), XREG(26), XREG(27),
+											XREG(28), XREG(29), XREG(30), XREG(31));
             async_file->Write(buffer, length);
 
             __debugbreak();
         }
 
-        cross_interpreter_last_pc = address;
+#undef XREG
+
+		cross_interpreter_last_pc = address;
     }
 
     memcpy(&cross_context[1], (Allegrex::Context$base *)this, sizeof(cross_context[1]));

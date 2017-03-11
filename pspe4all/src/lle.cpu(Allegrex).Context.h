@@ -3032,17 +3032,17 @@ namespace Allegrex
             loadVs<vsize>(vs);
             for (int i = 0; i < vsize; ++i)
             {
-                float vs = v1[i];
-                float vr = round_ieee_754(ldexpf(vs,imm5));
-                int   vo = int(vr);
-                if (vo == 0x80000000)
+                float vs_ = v1[i];
+                float vr_ = round_ieee_754(ldexpf(vs_,imm5));
+                int   vo_ = int(vr_);
+                if (vo_ == 0x80000000)
                 {
-                    if (isNaN(vs) || vs > 0.0f)
+                    if (isNaN(vs_) || vs_ > 0.0f)
                     {
-                        vo = 0x7FFFFFFF;
+                        vo_ = 0x7FFFFFFF;
                     }
                 }
-                v3[i] = intBitsToFloat(vo);
+                v3[i] = intBitsToFloat(vo_);
             }
             saveVd<vsize>(vd, v3);
 
@@ -3053,17 +3053,17 @@ namespace Allegrex
             loadVs<vsize>(vs);
             for (int i = 0; i < vsize; ++i)
             {
-                float vs = v1[i];
-                float vr = (vs >= 0 ? floorf(ldexpf(vs,imm5)) : ceilf(ldexpf(vs,imm5)));
-                int   vo = int(vr);
-                if (vo == 0x80000000)
+                float vs_ = v1[i];
+                float vr_ = (vs_ >= 0 ? floorf(ldexpf(vs_,imm5)) : ceilf(ldexpf(vs_,imm5)));
+                int   vo_ = int(vr_);
+                if (vo_ == 0x80000000)
                 {
-                    if (isNaN(vs) || vs > 0.0f)
+                    if (isNaN(vs_) || vs_ > 0.0f)
                     {
-                        vo = 0x7FFFFFFF;
+                        vo_ = 0x7FFFFFFF;
                     }
                 }
-                v3[i] = intBitsToFloat(vo);
+                v3[i] = intBitsToFloat(vo_);
             }
             saveVd<vsize>(vd, v3);
         }
@@ -3073,17 +3073,17 @@ namespace Allegrex
             loadVs<vsize>(vs);
             for (int i = 0; i < vsize; ++i)
             {
-                float vs = v1[i];
-                float vr = ceil(ldexpf(vs,imm5));
-                int   vo = int(vr);
-                if (vo == 0x80000000)
+                float vs_ = v1[i];
+                float vr_ = ceil(ldexpf(vs_,imm5));
+                int   vo_ = int(vr_);
+                if (vo_ == 0x80000000)
                 {
-                    if (isNaN(vs) || vs > 0.0f)
+                    if (isNaN(vs_) || vs_ > 0.0f)
                     {
-                        vo = 0x7FFFFFFF;
+                        vo_ = 0x7FFFFFFF;
                     }
                 }
-                v3[i] = intBitsToFloat(vo);
+                v3[i] = intBitsToFloat(vo_);
             }
             saveVd<vsize>(vd, v3);
         }
@@ -3093,17 +3093,17 @@ namespace Allegrex
             loadVs<vsize>(vs);
             for (int i = 0; i < vsize; ++i)
             {
-                float vs = v1[i];
-                float vr = floorf(ldexpf(vs,imm5));
-                int   vo = int(vr);
-                if (vo == 0x80000000)
+                float vs_ = v1[i];
+                float vr_ = floorf(ldexpf(vs_,imm5));
+                int   vo_ = int(vr_);
+                if (vo_ == 0x80000000)
                 {
-                    if (isNaN(vs) || vs > 0.0f)
+                    if (isNaN(vs_) || vs_ > 0.0f)
                     {
-                        vo = 0x7FFFFFFF;
+                        vo_ = 0x7FFFFFFF;
                     }
                 }
-                v3[i] = intBitsToFloat(vo);
+                v3[i] = intBitsToFloat(vo_);
             }
             saveVd<vsize>(vd, v3);
 

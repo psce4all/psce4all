@@ -15,7 +15,7 @@ Allegrex::ICache::ICache()
 
 void SetDebugAllegrexInstruction(DWORD dwAddr, BOOL bDelaySlot)
 {
-    ULONG_PTR info[4] = { dwAddr, bDelaySlot, 0, 0 };
+    ULONG_PTR info[4] = { dwAddr, ULONG_PTR(bDelaySlot), 0, 0 };
 
     __try
     {
@@ -338,20 +338,20 @@ __noinline u64 lle::cpu::Context::Recompile(Context * that, u32 address)
     if (ICACHE_SLOW_MODE)
     {
         auto pc_start = pc & -64;
-        for (auto pc = pc_start; pc < pc_start + 64; pc += 4)
+        for (auto i = pc_start; i < pc_start + 64; i += 4)
         {
-            auto & block = icache.blocks[pc];
+            auto & block = icache.blocks[i];
             if (block)
             {
-                if (*p32u32(pc) != block->opcode)
+                if (*p32u32(i) != block->opcode)
                 {
                     delete block;
-                    block = new ICache::CodeBlock(pc, 4);
+                    block = new ICache::CodeBlock(i, 4);
                 }
             }
             else
             {
-                block = new ICache::CodeBlock(pc, 4);
+                block = new ICache::CodeBlock(i, 4);
             }
         }
     }

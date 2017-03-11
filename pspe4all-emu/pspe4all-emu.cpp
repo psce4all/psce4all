@@ -631,7 +631,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE /*hinstDLL*/, DWORD fdwReason, LPVOID /
                     break;
                 case ':':
                     /* missing option argument */
-                    fprintf(stderr, "option --%s requires an argument\n", argv[0], long_options[option_index].name);
+                    fprintf(stderr, "option --%ls requires an argument\n", long_options[option_index].name);
                     break;
                 case '?':
                     break;

@@ -31,7 +31,7 @@ namespace capstone
 
         for (size_t i = 0; i < insn.size; ++i)
         {
-            p += sprintf(p, "%02X", size_t(insn.bytes[insn.size - i - 1]));
+            p += sprintf(p, "%02zX", size_t(insn.bytes[insn.size - i - 1]));
         }
 
         char tmp[32];
@@ -965,7 +965,7 @@ namespace Allegrex
                                 {
                                     fprintf(
                                         cfgout,
-                                        "        \"Node 0\":s -> \"Node %d\":n [style = bold]\n",
+                                        "        \"Node 0\":s -> \"Node %zd\":n [style = bold]\n",
                                         link.first);
                                     started = true;
                                 }
@@ -974,7 +974,7 @@ namespace Allegrex
                                 {
                                     fprintf(
                                         cfgout,
-                                        "        \"Node %d\":s -> \"Node %d\":n\n",
+                                        "        \"Node %zd\":s -> \"Node %zd\":n\n",
                                         link.first,
                                         link.second.first);
                                 }
@@ -982,7 +982,7 @@ namespace Allegrex
                                 {
                                     fprintf(
                                         cfgout,
-                                        "        \"Node %d\":s -> \"Node %d\":n [style = bold]\n",
+                                        "        \"Node %zd\":s -> \"Node %zd\":n [style = bold]\n",
                                         link.first,
                                         link.second.first);
                                 }
@@ -991,7 +991,7 @@ namespace Allegrex
                             {
                                 fprintf(
                                     cfgout,
-                                    "        \"Node %d\":se -> \"Node %d\":ne [style = dashed]\n",
+                                    "        \"Node %zd\":se -> \"Node %zd\":ne [style = dashed]\n",
                                     link.first,
                                     link.second.second);
                             }
@@ -1174,8 +1174,8 @@ namespace Allegrex
                                     cfgout,
                                     "                              <TR><TD colspan=\"3\">Node %d</TD></TR></TABLE>>];\n"
                                     "        }\n"
-                                    "        node_%d -> \"Node %d\" [style = invis]\n"
-                                    "        node_%d:s -> node_%d:n [style = invis]\n"
+                                    "        node_%zd -> \"Node %d\" [style = invis]\n"
+                                    "        node_%zd:s -> node_%d:n [style = invis]\n"
                                     ,
                                     node,
                                     previous_node,
@@ -1215,7 +1215,7 @@ namespace Allegrex
 
             static void SetDebugAllegrexInstruction(DWORD dwAddr, BOOL bDelaySlot, UINT_PTR qwAddr, UINT_PTR qwSize)
             {
-                ULONG_PTR info[4] = { dwAddr, bDelaySlot, qwAddr, qwSize };
+                ULONG_PTR info[4] = { dwAddr, ULONG_PTR(bDelaySlot), qwAddr, qwSize };
 
                 __try
                 {

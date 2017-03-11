@@ -51,12 +51,12 @@ namespace hal
             template< typename F, typename A >
             /**/     Thread(F function, A argument)      { Start(__new Function1$< F, A >(function, argument)); }
             /**/     Thread() : m_handle(0)              { }
-            /**/     Thread(Thread const &) /*= delete*/;
+            /**/     Thread(Thread const &) = delete;
             /**/     Thread(Thread && rhs) : m_handle(0) { Swap(rhs); }
 
             virtual ~Thread()                            { if (Joinable()) Detach(); }
 
-            Thread & operator = (Thread const &) /*= delete*/;
+            Thread & operator = (Thread const &) = delete;
             Thread & operator = (Thread && rhs)
             {
                 if (Joinable()) Detach();
@@ -187,14 +187,14 @@ namespace hal
 
         struct ScopedThreadPriority
         {
-            /**/        ScopedThreadPriority(int new_priority = THREAD_PRIORITY_TIME_CRITICAL) : old_priority(::GetThreadPriority((HANDLE)0xFFFFFFFE))
+            /**/        ScopedThreadPriority(int new_priority = THREAD_PRIORITY_TIME_CRITICAL) : old_priority(::GetThreadPriority((HANDLE)0xFFFFFFFEull))
             {
-                ::SetThreadPriority((HANDLE)0xFFFFFFFE, new_priority);
+                ::SetThreadPriority((HANDLE)0xFFFFFFFEull, new_priority);
             }
 
             /**/       ~ScopedThreadPriority()
             {
-                ::SetThreadPriority((HANDLE)0xFFFFFFFE, old_priority);
+                ::SetThreadPriority((HANDLE)0xFFFFFFFEull, old_priority);
             }
 
             operator bool() const { return true; }
