@@ -247,7 +247,9 @@ void qt_JumpTargetDisplay::calculateLanes(const std::vector< const qt_Instructio
         for (auto start : srcs)
         {
             auto insn = start->insn();
-            auto target = (insn->flags & INSN_UNCOND_BRANCH_DELAY) ? (((start->addr() + 4) & 0xF0000000) + (start->data() & 0x03FFFFFF) << 2) : start->addr() + 4 + short(start->data());
+            auto target = (insn->flags & INSN_UNCOND_BRANCH_DELAY)
+				        ? (((start->addr() + 4) & 0xF0000000) + (start->data() & 0x03FFFFFF) << 2)
+				        : (start->addr() + 4*(1 + short(start->data())));
             auto end = insnMap[target];
 
             if (end)

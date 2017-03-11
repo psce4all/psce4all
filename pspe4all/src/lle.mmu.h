@@ -5,7 +5,7 @@
 
 #pragma once
 
-#if 0 // 1 for WIN8, 0 for WIN7 or later
+#if 1 // 1 for WIN8, 0 for WIN7 or later
 #define DCACHE_MEMORY_ADDRESS 0x000000007FFF0000ULL // 4   Gbyte: [07FFF0000,18FFF0000[
 #define ICACHE_MEMORY_ADDRESS 0x0000000000000000ULL // 2   Gbyte: [000000000,080000000[
 #define JITASM_MEMORY_ADDRESS 0x0000000000040000ULL // 127 Mbyte: [000040000,007F40000[ fits a gap in ICACHE_MEMORY_ADDRESS range
@@ -20,7 +20,7 @@
 static void * const lle_mmu$dcache = (void *)DCACHE_MEMORY_ADDRESS;
 static void * const lle_mmu$icache = (void *)ICACHE_MEMORY_ADDRESS;
 
-using p32u64 = u64 __based(lle_mmu$dcache) * __ptr32 __uptr;
+using p32u64 = u64 __based(lle_mmu$dcache)* __ptr32 __uptr;
 using p32s64 = s64 __based(lle_mmu$dcache)* __ptr32 __uptr;
 
 using p32u32 = u32 __based(lle_mmu$dcache)* __ptr32 __uptr;
