@@ -29,13 +29,13 @@ namespace capstone
     {
         char address[32];
 
-        sprintf(address, "%08llX(%2d):", insn.address, insn.size);
+        sprintf(address, "%08zX(%2d):", insn.address, insn.size);
 
         char bytes[64], *p = bytes;
 
         for (size_t i = 0; i < insn.size; ++i)
         {
-            p += sprintf(p, "%02X", size_t(insn.bytes[insn.size - i - 1]));
+            p += sprintf(p, "%02zX", size_t(insn.bytes[insn.size - i - 1]));
         }
 
         if (use_underscore)
