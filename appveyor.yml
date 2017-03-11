@@ -2,7 +2,6 @@ version: 1.0.{build}
 branches:
   only: master
 skip_tags: true
-os: Visual Studio 2015
 image: Visual Studio 2015
 configuration: Debug
 platform: x64
@@ -17,9 +16,10 @@ init:
   - echo PROCESSOR_IDENTIFIER=%PROCESSOR_IDENTIFIER%
   - echo QTDIR=%QTDIR%
 install:
-  - set PATH=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin;%QTDIR%\bin;%PATH%
-  - echo %PATH%
-  - mklink /j C:\Qt\Qt5.8.0 C:\Qt
+  - cmd: set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+  - cmd: set PATH=%QTDIR%\bin;%PATH%
+  - cmd: echo %PATH%
+  - cmd: mklink /j C:\Qt\Qt5.8.0 C:\Qt
 build:
   parallel: true
   verbosity: minimal
