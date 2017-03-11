@@ -137,7 +137,7 @@
       <StringPooling>true</StringPooling>
       <MinimalRebuild>false</MinimalRebuild>
       <PrecompiledHeaderFile>pspe4all-run.h</PrecompiledHeaderFile>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <ForcedIncludeFiles>pspe4all-run.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>.;..\pspe4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -162,7 +162,7 @@
       <StringPooling>true</StringPooling>
       <MinimalRebuild>false</MinimalRebuild>
       <PrecompiledHeaderFile>pspe4all-run.h</PrecompiledHeaderFile>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <ForcedIncludeFiles>pspe4all-run.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>.;..\pspe4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -187,7 +187,7 @@
       <StringPooling>true</StringPooling>
       <MinimalRebuild>false</MinimalRebuild>
       <PrecompiledHeaderFile>pspe4all-run.h</PrecompiledHeaderFile>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <ForcedIncludeFiles>pspe4all-run.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>.;..\pspe4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -212,7 +212,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
       <PrecompiledHeaderFile>pspe4all-run.h</PrecompiledHeaderFile>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <ForcedIncludeFiles>pspe4all-run.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>.;..\pspe4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -239,7 +239,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
       <PrecompiledHeaderFile>pspe4all-run.h</PrecompiledHeaderFile>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <ForcedIncludeFiles>pspe4all-run.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>.;..\pspe4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -266,7 +266,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
       <PrecompiledHeaderFile>pspe4all-run.h</PrecompiledHeaderFile>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <ForcedIncludeFiles>pspe4all-run.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>.;..\pspe4all\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
