@@ -311,7 +311,7 @@
     <ClInclude Include="..\psce4all\src\hal.Observable.h" />
     <CustomBuild Include="qt_textview.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing qt_textview.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing qt_textview.h... %(QTDIR) %(FullPath)</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\tmp\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\tmp\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -DQT_CONCURRENT_LIB -DQT_SQL_LIB -DQT_WEBENGINEWIDGETS_LIB -D_UNICODE  "-I." "-I$(SolutionDir)src" "-I$(SolutionDir)..\pspe4all\src" "-I$(SolutionDir)..\psce4all\ext\capstone\include" "-I$(SolutionDir)..\psce4all\ext\markdown" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I.\tmp\$(ConfigurationName)\." "-I.\tmp" "-I$(QTDIR)\include\QtConcurrent" "-I$(QTDIR)\include\QtSql" "-I$(QTDIR)\include\QtWebkitWidgets" "-I$(QTDIR)\include\QtWebKit"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
