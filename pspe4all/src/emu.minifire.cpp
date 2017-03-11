@@ -126,8 +126,8 @@ void CCpu::Interpret()
     Context::Interpret();
 }
 
-static hal::npa::Event cpu_event1("CPU Interpreter");
-static hal::npa::Event cpu_event2("CPU Waiting");
+static hal::npa::Event cpu_event1("CPU Interpreter", true);
+static hal::npa::Event cpu_event2("CPU Waiting", true);
 
 void CCpu::Run()
 {

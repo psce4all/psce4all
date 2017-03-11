@@ -162,10 +162,10 @@ void dbg::svr::DebugEventHandler::Initialize()
     {
         auto &exception = dbgEvent.u.Exception;
         debugf(dbg, "DebugEvents::Exception: First chance exception: %X, Exception code: %X, Exception flags: %X, Exception address: %p, Number parameters (associated with exception): %X",
-        exception.dwFirstChance, exception.ExceptionRecord.ExceptionCode,
-        exception.ExceptionRecord.ExceptionFlags, exception.ExceptionRecord.ExceptionAddress,
-        exception.ExceptionRecord.NumberParameters);
-        m_pDebugger->m_pExceptionHandler->Notify((DebugExceptions)dbgEvent.u.Exception.ExceptionRecord.ExceptionCode, dbgEvent);
+                    exception.dwFirstChance, exception.ExceptionRecord.ExceptionCode,
+                    exception.ExceptionRecord.ExceptionFlags, exception.ExceptionRecord.ExceptionAddress,
+                    exception.ExceptionRecord.NumberParameters);
+                    m_pDebugger->m_pExceptionHandler->Notify((DebugExceptions)dbgEvent.u.Exception.ExceptionRecord.ExceptionCode, dbgEvent);
         SetContinueStatus(m_pDebugger->m_pExceptionHandler->ContinueStatus());
     });
 }

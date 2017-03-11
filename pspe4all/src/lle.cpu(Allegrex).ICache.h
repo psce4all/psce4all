@@ -29,7 +29,7 @@ namespace Allegrex
             void * GetCode() { return GetFragment(); }
         };
 
-        struct UnwindInfoFrame0 :DataFragment
+        struct UnwindInfoFrame0 : DataFragment
         {
             virtual void InternalMain() override;
         } unwind_info_frame0;

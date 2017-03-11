@@ -133,7 +133,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;_DEBUG;_WINDOWS;_USRDLL;GLEW_STATIC;EMU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
@@ -160,7 +160,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;_DEBUG;_WINDOWS;_USRDLL;GLEW_STATIC;EMU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
@@ -187,7 +187,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;_DEBUG;_WINDOWS;_USRDLL;GLEW_STATIC;EMU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
@@ -216,7 +216,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;NDEBUG;_WINDOWS;_USRDLL;GLEW_STATIC;EMU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
@@ -254,7 +254,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;NDEBUG;_WINDOWS;_USRDLL;GLEW_STATIC;EMU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
@@ -292,7 +292,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;NDEBUG;_WINDOWS;_USRDLL;GLEW_STATIC;EMU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pspe4all\src;..\psce4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\ntdll\include;..\psce4all\ext\dia\include;..\psce4all\ext\capstone\include;..\psce4all\ext\getopt\include;..\psce4all\ext\tinyxml2;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>

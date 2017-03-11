@@ -628,3 +628,5 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE /*hinstDLL*/, DWORD fdwReason, LPVOID /
 
     return TRUE;
 }
+
+#include "Remotery.c"

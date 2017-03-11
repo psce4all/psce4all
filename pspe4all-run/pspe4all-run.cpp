@@ -3,6 +3,21 @@
 * Released under GPL v2 license. Read LICENSE for more details.
 */
 
+#include "../psce4all/ext/Remotery/Remotery.c"
+
+double delay()
+{
+    int i, end;
+    double j = 0;
+
+    rmt_BeginCPUSample(delay);
+    for (i = 0, end = rand() / 100; i < end; ++i) {
+        j += sin(i);
+    }
+    rmt_EndCPUSample();
+    return j;
+}
+
 extern "C" { _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001; }
 
 int _tmain(int argc, _TCHAR* argv[])

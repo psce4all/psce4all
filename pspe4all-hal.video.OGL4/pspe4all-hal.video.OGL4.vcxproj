@@ -134,7 +134,7 @@
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;GLEW_STATIC;_DEBUG;_WINDOWS;_USRDLL;PSPE4ALLHALVIDEOOGL4_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
@@ -159,7 +159,7 @@
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;GLEW_STATIC;_DEBUG;_WINDOWS;_USRDLL;PSPE4ALLHALVIDEOOGL4_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
@@ -184,7 +184,7 @@
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;GLEW_STATIC;_DEBUG;_WINDOWS;_USRDLL;PSPE4ALLHALVIDEOOGL4_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
@@ -211,7 +211,7 @@
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;GLEW_STATIC;NDEBUG;_WINDOWS;_USRDLL;PSPE4ALLHALVIDEOOGL4_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -246,7 +246,7 @@
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;GLEW_STATIC;NDEBUG;_WINDOWS;_USRDLL;PSPE4ALLHALVIDEOOGL4_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -281,7 +281,7 @@
       <PreprocessorDefinitions>WIN32;PSPE4ALL_EMU;GLEW_STATIC;NDEBUG;_WINDOWS;_USRDLL;PSPE4ALLHALVIDEOOGL4_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pspe4all.pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pspe4all.pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\psce4all\src;..\pspe4all\src;..\psce4all\ext\glew\include;..\psce4all\ext\dia\include;..\psce4all\ext\Remotery;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
       <FloatingPointModel>Fast</FloatingPointModel>

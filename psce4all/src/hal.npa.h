@@ -10,6 +10,8 @@
 #include "hal.Atomic.h"
 #include "hal.os.h"
 
+#include "Remotery.h"
+
 namespace hal
 {
     namespace npa
@@ -23,7 +25,9 @@ namespace hal
         {
             int                         m_index;
             char const                * m_name;
-            /**/                        Event(char const * name);
+            rmtU32 mutable              m_hash;
+            bool const                  m_rmt;
+            /**/                        Event(char const * name, bool const rmt = false);
             /**/                       ~Event();
         };
 
@@ -32,10 +36,10 @@ namespace hal
 
         struct Interface : emu::Interface
         {
-            /**/     Interface()
+            /**/            Interface()
             {
             }
-            virtual ~Interface()
+            virtual        ~Interface()
             {
             }
 
@@ -104,7 +108,7 @@ __forceinline hal::npa::Interface * hal::npa::Proxy::operator->()
     return that;
 }
 
-__forceinline hal::npa::Event::Event(char const * name) : m_index(proxy->AllocateIndex()), m_name(name)
+__forceinline hal::npa::Event::Event(char const * name, bool const rmt) : m_index(proxy->AllocateIndex()), m_name(name), m_hash(0), m_rmt(rmt)
 {
 }
 

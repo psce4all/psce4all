@@ -10,6 +10,8 @@
 #include "hal.npa.h"
 #include "hal.dbg.h"
 
+#include "Remotery.c"
+
 /** version info */
 #define AG_PERFMON_VERSION 0x06121900
 
@@ -234,6 +236,7 @@ namespace hal
             };
 
             /**/                        Implementation();
+            virtual                    ~Implementation();
 
             /* interface v 1.0 */
             virtual bool                DllProcessAttach();
@@ -262,6 +265,7 @@ namespace hal
             Atomic< int        > m_count;
             Atomic< AgPmHANDLE > m_handle;
             AgEventID            m_id_array[EventMax];
+            Remotery           * m_rmt;
         };
     }
 }
@@ -297,6 +301,12 @@ void hal::npa::Cleanup()
 
 hal::npa::Implementation::Implementation()
 {
+    rmt_CreateGlobalInstance(&m_rmt);
+}
+
+hal::npa::Implementation::~Implementation()
+{
+    rmt_DestroyGlobalInstance(m_rmt);
 }
 
 bool hal::npa::Implementation::DllProcessAttach()
@@ -366,6 +376,7 @@ __forceinline u8 hal::npa::Implementation::GetProcId()
 
 void hal::npa::Implementation::StartEvent(Event const & event, u16 data /*= 0*/)
 {
+    if (event.m_rmt) RMT_OPTIONAL(RMT_ENABLED, _rmt_BeginCPUSample(event.m_name, &event.m_hash));
     StartEvent(GetEventId(event), data);
 }
 
@@ -373,6 +384,7 @@ void hal::npa::Implementation::StartEvent(Event const & event, u16 data /*= 0*/)
 void hal::npa::Implementation::StopEvent(Event const & event, u16 data /*= 0*/)
 {
     StopEvent(GetEventId(event), data);
+    if (event.m_rmt) RMT_OPTIONAL(RMT_ENABLED, _rmt_EndCPUSample());
 }
 
 
