@@ -8,7 +8,7 @@
 #include "qt_instructionsmodel.h"
 #include "qt_webview.h"
 
-#include <QWebSettings>
+//#include <QWebSettings>
 
 qt_MainWindow::qt_MainWindow(QWidget *parent, std::shared_ptr< qt_Instructions > instructions)
     : QMainWindow(parent)

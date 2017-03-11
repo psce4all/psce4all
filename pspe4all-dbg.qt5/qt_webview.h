@@ -6,17 +6,17 @@
 #pragma once
 
 #include <QDockWidget>
-#include <QWebView>
+//#include <QWebEngineView>
 
 class qt_WebView : public QDockWidget
 {
     Q_OBJECT
 
-    QWebView *webView_;
+	//QWebEngineView *webView_;
 public:
     qt_WebView(const QString &title, QWidget *parent = 0);
 
-    QWebView *webView() const { return webView_; }
+	//QWebEngineView *webView() const { return webView_; }
 
 public slots:
     void setMarkdownDocument(const QString & text);
