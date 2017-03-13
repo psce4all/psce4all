@@ -502,7 +502,7 @@ void Allegrex::ICache::CodeBlock::EmitProlog(u32 address, u32 opcode, bool delay
                 switch (opcode >> 26U)
                 {
                 case 0x00:
-                    if (opcode == 03e00008 /* JR $RA */)
+                    if (opcode == 0x03e00008 /* JR $RA */)
                     {
                         goto return_instruction;
                     }
@@ -530,27 +530,28 @@ void Allegrex::ICache::CodeBlock::EmitProlog(u32 address, u32 opcode, bool delay
                 return_instruction:
                     mov(eax, dword_ptr[rdi]);
                     test(eax, eax);
-                    dw(0x0175); // jnz($+1)
+					dw(0x0175); // jnz($+1)
                     int3();
-                    movsx(eax, byte_ptr[rdi + 6]);
-                    sub(dword_ptr[rdi], eax);
-                    dw(0x0475); // jnz($+4)
-                    mov(byte_ptr[rdi + 5], 0);
-                    break;
+					movsx(eax, byte_ptr[rdi + 6]);
+					sub(dword_ptr[rdi], eax);
+                    //dw(0x0475); // jnz($+4)
+					//mov(byte_ptr[rdi + 6], 0);
+					break;
                 call_instruction:
                 case 0x03: /* JAL */
-                    movsx(eax, byte_ptr[rdi + 5]);
-                    add(dword_ptr[rdi], eax);
-                    dw(0x0175); // jnz($+1)
+					mov(eax, dword_ptr[rdi]);
+					test(eax, eax);
+					dw(0x0175); // jnz($+1)
                     int3();
-                    mov(byte_ptr[rdi + 6], 1);
+					movsx(eax, byte_ptr[rdi + 6]);
+					add(dword_ptr[rdi], eax);
                     break;
                 default_instruction:
                 default:
-                    movsx(eax, byte_ptr[rdi + 4]);
-                    sub(dword_ptr[rdi], eax);
-                    dw(0x0175); // jnz($+1)
-                    int3();
+					mov(eax, dword_ptr[rdi]);
+					test(eax, eax);
+					dw(0x0175); // jnz($+1)
+					int3();
                     break;
                 }
             }

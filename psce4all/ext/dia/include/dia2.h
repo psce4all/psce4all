@@ -392,7 +392,8 @@ enum __MIDL___MIDL_itf_dia2_0000_0000_0001
         E_PDB_DEBUG_INFO_NOT_IN_PDB	= ( E_PDB_RESERVED + 1 ) ,
         E_PDB_SYMSRV_BAD_CACHE_PATH	= ( E_PDB_DEBUG_INFO_NOT_IN_PDB + 1 ) ,
         E_PDB_SYMSRV_CACHE_FULL	= ( E_PDB_SYMSRV_BAD_CACHE_PATH + 1 ) ,
-        E_PDB_MAX	= ( E_PDB_SYMSRV_CACHE_FULL + 1 ) 
+        E_PDB_OBJECT_DISPOSED	= ( E_PDB_SYMSRV_CACHE_FULL + 1 ) ,
+        E_PDB_MAX	= ( E_PDB_OBJECT_DISPOSED + 1 ) 
     } ;
 typedef void ( __cdecl *PfnPDBDebugDirV )( 
     BOOL __MIDL____MIDL_itf_dia2_0000_00000000,
@@ -2848,7 +2849,7 @@ EXTERN_C const IID IID_IDiaSession;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("6FC5D63F-011E-40C2-8DD2-E6486E9D6B68")
+    MIDL_INTERFACE("2F609EE1-D1C8-4E24-8288-3326BADCD211")
     IDiaSession : public IUnknown
     {
     public:
@@ -3118,6 +3119,40 @@ EXTERN_C const IID IID_IDiaSession;
             /* [in] */ DWORD cb,
             /* [out] */ DWORD *pcb,
             /* [size_is][out] */ BYTE *pb) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE getNumberOfFunctionFragments_VA( 
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [out] */ DWORD *pNumFragments) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE getNumberOfFunctionFragments_RVA( 
+            /* [in] */ DWORD rvaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [out] */ DWORD *pNumFragments) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE getFunctionFragments_VA( 
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [in] */ DWORD cFragments,
+            /* [size_is][out] */ ULONGLONG *pVaFragment,
+            /* [size_is][out] */ DWORD *pLenFragment) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE getFunctionFragments_RVA( 
+            /* [in] */ DWORD rvaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [in] */ DWORD cFragments,
+            /* [size_is][out] */ DWORD *pRvaFragment,
+            /* [size_is][out] */ DWORD *pLenFragment) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE getExports( 
+            /* [out] */ IDiaEnumSymbols **ppResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE getHeapAllocationSites( 
+            /* [out] */ IDiaEnumSymbols **ppResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE findInputAssemblyFile( 
+            /* [in] */ IDiaSymbol *pSymbol,
+            /* [out] */ IDiaInputAssemblyFile **ppResult) = 0;
         
     };
     
@@ -3459,6 +3494,47 @@ EXTERN_C const IID IID_IDiaSession;
             /* [out] */ DWORD *pcb,
             /* [size_is][out] */ BYTE *pb);
         
+        HRESULT ( STDMETHODCALLTYPE *getNumberOfFunctionFragments_VA )( 
+            IDiaSession * This,
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [out] */ DWORD *pNumFragments);
+        
+        HRESULT ( STDMETHODCALLTYPE *getNumberOfFunctionFragments_RVA )( 
+            IDiaSession * This,
+            /* [in] */ DWORD rvaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [out] */ DWORD *pNumFragments);
+        
+        HRESULT ( STDMETHODCALLTYPE *getFunctionFragments_VA )( 
+            IDiaSession * This,
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [in] */ DWORD cFragments,
+            /* [size_is][out] */ ULONGLONG *pVaFragment,
+            /* [size_is][out] */ DWORD *pLenFragment);
+        
+        HRESULT ( STDMETHODCALLTYPE *getFunctionFragments_RVA )( 
+            IDiaSession * This,
+            /* [in] */ DWORD rvaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [in] */ DWORD cFragments,
+            /* [size_is][out] */ DWORD *pRvaFragment,
+            /* [size_is][out] */ DWORD *pLenFragment);
+        
+        HRESULT ( STDMETHODCALLTYPE *getExports )( 
+            IDiaSession * This,
+            /* [out] */ IDiaEnumSymbols **ppResult);
+        
+        HRESULT ( STDMETHODCALLTYPE *getHeapAllocationSites )( 
+            IDiaSession * This,
+            /* [out] */ IDiaEnumSymbols **ppResult);
+        
+        HRESULT ( STDMETHODCALLTYPE *findInputAssemblyFile )( 
+            IDiaSession * This,
+            /* [in] */ IDiaSymbol *pSymbol,
+            /* [out] */ IDiaInputAssemblyFile **ppResult);
+        
         END_INTERFACE
     } IDiaSessionVtbl;
 
@@ -3637,6 +3713,27 @@ EXTERN_C const IID IID_IDiaSession;
 
 #define IDiaSession_getTypeMDTokenMap(This,cb,pcb,pb)	\
     ( (This)->lpVtbl -> getTypeMDTokenMap(This,cb,pcb,pb) ) 
+
+#define IDiaSession_getNumberOfFunctionFragments_VA(This,vaFunc,cbFunc,pNumFragments)	\
+    ( (This)->lpVtbl -> getNumberOfFunctionFragments_VA(This,vaFunc,cbFunc,pNumFragments) ) 
+
+#define IDiaSession_getNumberOfFunctionFragments_RVA(This,rvaFunc,cbFunc,pNumFragments)	\
+    ( (This)->lpVtbl -> getNumberOfFunctionFragments_RVA(This,rvaFunc,cbFunc,pNumFragments) ) 
+
+#define IDiaSession_getFunctionFragments_VA(This,vaFunc,cbFunc,cFragments,pVaFragment,pLenFragment)	\
+    ( (This)->lpVtbl -> getFunctionFragments_VA(This,vaFunc,cbFunc,cFragments,pVaFragment,pLenFragment) ) 
+
+#define IDiaSession_getFunctionFragments_RVA(This,rvaFunc,cbFunc,cFragments,pRvaFragment,pLenFragment)	\
+    ( (This)->lpVtbl -> getFunctionFragments_RVA(This,rvaFunc,cbFunc,cFragments,pRvaFragment,pLenFragment) ) 
+
+#define IDiaSession_getExports(This,ppResult)	\
+    ( (This)->lpVtbl -> getExports(This,ppResult) ) 
+
+#define IDiaSession_getHeapAllocationSites(This,ppResult)	\
+    ( (This)->lpVtbl -> getHeapAllocationSites(This,ppResult) ) 
+
+#define IDiaSession_findInputAssemblyFile(This,pSymbol,ppResult)	\
+    ( (This)->lpVtbl -> findInputAssemblyFile(This,pSymbol,ppResult) ) 
 
 #endif /* COBJMACROS */
 
@@ -4363,6 +4460,60 @@ EXTERN_C const IID IID_IDiaSymbol;
         
         virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_hasControlFlowCheck( 
             /* [retval][out] */ BOOL *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_constantExport( 
+            /* [retval][out] */ BOOL *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_dataExport( 
+            /* [retval][out] */ BOOL *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_privateExport( 
+            /* [retval][out] */ BOOL *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_noNameExport( 
+            /* [retval][out] */ BOOL *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_exportHasExplicitlyAssignedOrdinal( 
+            /* [retval][out] */ BOOL *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_exportIsForwarder( 
+            /* [retval][out] */ BOOL *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ordinal( 
+            /* [retval][out] */ DWORD *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_frameSize( 
+            /* [retval][out] */ DWORD *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_exceptionHandlerAddressSection( 
+            /* [retval][out] */ DWORD *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_exceptionHandlerAddressOffset( 
+            /* [retval][out] */ DWORD *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_exceptionHandlerRelativeVirtualAddress( 
+            /* [retval][out] */ DWORD *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_exceptionHandlerVirtualAddress( 
+            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE findInputAssemblyFile( 
+            /* [out] */ IDiaInputAssemblyFile **ppResult) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_characteristics( 
+            /* [retval][out] */ DWORD *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_coffGroup( 
+            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_bindID( 
+            /* [retval][out] */ DWORD *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_bindSpace( 
+            /* [retval][out] */ DWORD *pRetVal) = 0;
+        
+        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_bindSlot( 
+            /* [retval][out] */ DWORD *pRetVal) = 0;
         
     };
     
@@ -5303,6 +5454,78 @@ EXTERN_C const IID IID_IDiaSymbol;
             IDiaSymbol * This,
             /* [retval][out] */ BOOL *pRetVal);
         
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_constantExport )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ BOOL *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataExport )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ BOOL *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_privateExport )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ BOOL *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_noNameExport )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ BOOL *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_exportHasExplicitlyAssignedOrdinal )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ BOOL *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_exportIsForwarder )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ BOOL *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ordinal )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ DWORD *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_frameSize )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ DWORD *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_exceptionHandlerAddressSection )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ DWORD *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_exceptionHandlerAddressOffset )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ DWORD *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_exceptionHandlerRelativeVirtualAddress )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ DWORD *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_exceptionHandlerVirtualAddress )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ ULONGLONG *pRetVal);
+        
+        HRESULT ( STDMETHODCALLTYPE *findInputAssemblyFile )( 
+            IDiaSymbol * This,
+            /* [out] */ IDiaInputAssemblyFile **ppResult);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_characteristics )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ DWORD *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_coffGroup )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ IDiaSymbol **pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_bindID )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ DWORD *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_bindSpace )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ DWORD *pRetVal);
+        
+        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_bindSlot )( 
+            IDiaSymbol * This,
+            /* [retval][out] */ DWORD *pRetVal);
+        
         END_INTERFACE
     } IDiaSymbolVtbl;
 
@@ -5979,6 +6202,60 @@ EXTERN_C const IID IID_IDiaSymbol;
 
 #define IDiaSymbol_get_hasControlFlowCheck(This,pRetVal)	\
     ( (This)->lpVtbl -> get_hasControlFlowCheck(This,pRetVal) ) 
+
+#define IDiaSymbol_get_constantExport(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_constantExport(This,pRetVal) ) 
+
+#define IDiaSymbol_get_dataExport(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_dataExport(This,pRetVal) ) 
+
+#define IDiaSymbol_get_privateExport(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_privateExport(This,pRetVal) ) 
+
+#define IDiaSymbol_get_noNameExport(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_noNameExport(This,pRetVal) ) 
+
+#define IDiaSymbol_get_exportHasExplicitlyAssignedOrdinal(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_exportHasExplicitlyAssignedOrdinal(This,pRetVal) ) 
+
+#define IDiaSymbol_get_exportIsForwarder(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_exportIsForwarder(This,pRetVal) ) 
+
+#define IDiaSymbol_get_ordinal(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_ordinal(This,pRetVal) ) 
+
+#define IDiaSymbol_get_frameSize(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_frameSize(This,pRetVal) ) 
+
+#define IDiaSymbol_get_exceptionHandlerAddressSection(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_exceptionHandlerAddressSection(This,pRetVal) ) 
+
+#define IDiaSymbol_get_exceptionHandlerAddressOffset(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_exceptionHandlerAddressOffset(This,pRetVal) ) 
+
+#define IDiaSymbol_get_exceptionHandlerRelativeVirtualAddress(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_exceptionHandlerRelativeVirtualAddress(This,pRetVal) ) 
+
+#define IDiaSymbol_get_exceptionHandlerVirtualAddress(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_exceptionHandlerVirtualAddress(This,pRetVal) ) 
+
+#define IDiaSymbol_findInputAssemblyFile(This,ppResult)	\
+    ( (This)->lpVtbl -> findInputAssemblyFile(This,ppResult) ) 
+
+#define IDiaSymbol_get_characteristics(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_characteristics(This,pRetVal) ) 
+
+#define IDiaSymbol_get_coffGroup(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_coffGroup(This,pRetVal) ) 
+
+#define IDiaSymbol_get_bindID(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_bindID(This,pRetVal) ) 
+
+#define IDiaSymbol_get_bindSpace(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_bindSpace(This,pRetVal) ) 
+
+#define IDiaSymbol_get_bindSlot(This,pRetVal)	\
+    ( (This)->lpVtbl -> get_bindSlot(This,pRetVal) ) 
 
 #endif /* COBJMACROS */
 
@@ -7117,6 +7394,222 @@ void __RPC_STUB IDiaSymbol_get_phaseName_Stub(
 
 
 void __RPC_STUB IDiaSymbol_get_hasControlFlowCheck_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_constantExport_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ BOOL *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_constantExport_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_dataExport_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ BOOL *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_dataExport_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_privateExport_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ BOOL *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_privateExport_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_noNameExport_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ BOOL *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_noNameExport_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_exportHasExplicitlyAssignedOrdinal_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ BOOL *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_exportHasExplicitlyAssignedOrdinal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_exportIsForwarder_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ BOOL *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_exportIsForwarder_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_ordinal_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ DWORD *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_ordinal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_frameSize_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ DWORD *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_frameSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_exceptionHandlerAddressSection_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ DWORD *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_exceptionHandlerAddressSection_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_exceptionHandlerAddressOffset_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ DWORD *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_exceptionHandlerAddressOffset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_exceptionHandlerRelativeVirtualAddress_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ DWORD *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_exceptionHandlerRelativeVirtualAddress_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_exceptionHandlerVirtualAddress_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ ULONGLONG *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_exceptionHandlerVirtualAddress_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IDiaSymbol_findInputAssemblyFile_Proxy( 
+    IDiaSymbol * This,
+    /* [out] */ IDiaInputAssemblyFile **ppResult);
+
+
+void __RPC_STUB IDiaSymbol_findInputAssemblyFile_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_characteristics_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ DWORD *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_characteristics_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_coffGroup_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ IDiaSymbol **pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_coffGroup_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_bindID_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ DWORD *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_bindID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_bindSpace_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ DWORD *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_bindSpace_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_bindSlot_Proxy( 
+    IDiaSymbol * This,
+    /* [retval][out] */ DWORD *pRetVal);
+
+
+void __RPC_STUB IDiaSymbol_get_bindSlot_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -8996,7 +9489,7 @@ EXTERN_C const CLSID CLSID_DiaSource;
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("3bfcea48-620f-4b6b-81f7-b9af75454c7d")
+class DECLSPEC_UUID("e6756135-1e65-4d17-8576-610761398c3c")
 DiaSource;
 #endif
 
@@ -9004,7 +9497,7 @@ EXTERN_C const CLSID CLSID_DiaSourceAlt;
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("83ab22c8-993a-4d14-a0e0-37bc0aaea793")
+class DECLSPEC_UUID("91904831-49ca-4766-b95c-25397e2dd6dc")
 DiaSourceAlt;
 #endif
 
@@ -9012,7 +9505,7 @@ EXTERN_C const CLSID CLSID_DiaStackWalker;
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("20cea761-83c2-44f4-a6f7-5cc4577198ca")
+class DECLSPEC_UUID("ce4a85db-5768-475b-a4e1-c0bca2112a6b")
 DiaStackWalker;
 #endif
 #endif /* __Dia2Lib_LIBRARY_DEFINED__ */
@@ -9604,6 +10097,18 @@ EXTERN_C const IID IID_IDiaStackWalkHelper;
             /* [out] */ DWORD *pISect,
             /* [out] */ DWORD *pOffset) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE numberOfFunctionFragmentsForVA( 
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [out] */ DWORD *pNumFragments) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE functionFragmentsForVA( 
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [in] */ DWORD cFragments,
+            /* [out] */ ULONGLONG *pVaFragment,
+            /* [out] */ DWORD *pLenFragment) = 0;
+        
     };
     
     
@@ -9682,6 +10187,20 @@ EXTERN_C const IID IID_IDiaStackWalkHelper;
             /* [out] */ DWORD *pISect,
             /* [out] */ DWORD *pOffset);
         
+        HRESULT ( STDMETHODCALLTYPE *numberOfFunctionFragmentsForVA )( 
+            IDiaStackWalkHelper * This,
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [out] */ DWORD *pNumFragments);
+        
+        HRESULT ( STDMETHODCALLTYPE *functionFragmentsForVA )( 
+            IDiaStackWalkHelper * This,
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [in] */ DWORD cFragments,
+            /* [out] */ ULONGLONG *pVaFragment,
+            /* [out] */ DWORD *pLenFragment);
+        
         END_INTERFACE
     } IDiaStackWalkHelperVtbl;
 
@@ -9734,6 +10253,12 @@ EXTERN_C const IID IID_IDiaStackWalkHelper;
 
 #define IDiaStackWalkHelper_addressForVA(This,va,pISect,pOffset)	\
     ( (This)->lpVtbl -> addressForVA(This,va,pISect,pOffset) ) 
+
+#define IDiaStackWalkHelper_numberOfFunctionFragmentsForVA(This,vaFunc,cbFunc,pNumFragments)	\
+    ( (This)->lpVtbl -> numberOfFunctionFragmentsForVA(This,vaFunc,cbFunc,pNumFragments) ) 
+
+#define IDiaStackWalkHelper_functionFragmentsForVA(This,vaFunc,cbFunc,cFragments,pVaFragment,pLenFragment)	\
+    ( (This)->lpVtbl -> functionFragmentsForVA(This,vaFunc,cbFunc,cFragments,pVaFragment,pLenFragment) ) 
 
 #endif /* COBJMACROS */
 
@@ -9935,6 +10460,20 @@ EXTERN_C const IID IID_IDiaStackWalkHelper2;
             /* [out] */ DWORD *pISect,
             /* [out] */ DWORD *pOffset);
         
+        HRESULT ( STDMETHODCALLTYPE *numberOfFunctionFragmentsForVA )( 
+            IDiaStackWalkHelper2 * This,
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [out] */ DWORD *pNumFragments);
+        
+        HRESULT ( STDMETHODCALLTYPE *functionFragmentsForVA )( 
+            IDiaStackWalkHelper2 * This,
+            /* [in] */ ULONGLONG vaFunc,
+            /* [in] */ DWORD cbFunc,
+            /* [in] */ DWORD cFragments,
+            /* [out] */ ULONGLONG *pVaFragment,
+            /* [out] */ DWORD *pLenFragment);
+        
         END_INTERFACE
     } IDiaStackWalkHelper2Vtbl;
 
@@ -9987,6 +10526,12 @@ EXTERN_C const IID IID_IDiaStackWalkHelper2;
 
 #define IDiaStackWalkHelper2_addressForVA(This,va,pISect,pOffset)	\
     ( (This)->lpVtbl -> addressForVA(This,va,pISect,pOffset) ) 
+
+#define IDiaStackWalkHelper2_numberOfFunctionFragmentsForVA(This,vaFunc,cbFunc,pNumFragments)	\
+    ( (This)->lpVtbl -> numberOfFunctionFragmentsForVA(This,vaFunc,cbFunc,pNumFragments) ) 
+
+#define IDiaStackWalkHelper2_functionFragmentsForVA(This,vaFunc,cbFunc,cFragments,pVaFragment,pLenFragment)	\
+    ( (This)->lpVtbl -> functionFragmentsForVA(This,vaFunc,cbFunc,cFragments,pVaFragment,pLenFragment) ) 
 
 
 #endif /* COBJMACROS */

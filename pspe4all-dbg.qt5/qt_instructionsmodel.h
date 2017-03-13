@@ -28,7 +28,7 @@ public:
         IMC_COUNT
     };
 
-    qt_InstructionsModel(QObject *parent = nullptr, std::shared_ptr< const qt_Instructions > instructions = nullptr);
+    qt_InstructionsModel(QObject *parent = nullptr, std::shared_ptr< const qt_Instructions > instructions = nullptr, std::shared_ptr< u32 > pc = nullptr);
 
     void setHighlightedInstructions(std::vector< const qt_Instruction * > instructions);
 
@@ -45,6 +45,7 @@ public:
 
 private:
     std::shared_ptr< const qt_Instructions > instructions_;
-    std::vector< const qt_Instruction *    > instructionsVector_;
+	std::shared_ptr< u32                   > pc_;
+	std::vector< const qt_Instruction *    > instructionsVector_;
     std::vector< const qt_Instruction *    > highlightedInstructions_;
 };

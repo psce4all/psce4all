@@ -56,11 +56,14 @@ namespace dbg
             virtual bool const WaitForContinue() override;
             virtual void       OutputDebugStringA(char const message[]) override;
             virtual void       OutputDebugStringW(wchar_t const message[]) override;
-            virtual void       OnAllegrexInstruction(u32 address, size_t address_x86_64, size_t size_x86_64) override;
-        private:
+            virtual void       OnNewGuestInstruction(u32 address, size_t address_x86_64, size_t size_x86_64) override;
+			virtual void       OnCurrentGuestInstruction(u32 address) override;
+		
+		private:
             qt_MainWindow                     *mainWindow_;
             HANDLE                             hProcSyncEvent_;
             std::shared_ptr< qt_Instructions > instructions_;
-        };
+			std::shared_ptr< u32 >             pc_;
+		};
     }
 }

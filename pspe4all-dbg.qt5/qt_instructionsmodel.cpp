@@ -9,9 +9,10 @@
 
 #include <QColor>
 
-qt_InstructionsModel::qt_InstructionsModel(QObject *parent, std::shared_ptr< const qt_Instructions > instructions)
+qt_InstructionsModel::qt_InstructionsModel(QObject *parent, std::shared_ptr< const qt_Instructions > instructions, std::shared_ptr< u32 > pc)
     : QAbstractItemModel(parent)
     , instructions_(std::move(instructions))
+	, pc_(std::move(pc))
 {
     std::vector< const qt_Instruction * > vector;
 
@@ -23,7 +24,14 @@ qt_InstructionsModel::qt_InstructionsModel(QObject *parent, std::shared_ptr< con
         {
             instructionsVector_.push_back(&instruction.second);
         }
-    }
+
+		if (instructions_->size() && pc_)
+		{
+			auto const * instruction = &((*instructions_.get()).at(*pc_.get()));
+
+			setHighlightedInstructions(std::vector< const qt_Instruction * >{ instruction });
+		}
+	}
 }
 
 void qt_InstructionsModel::setHighlightedInstructions(std::vector< const qt_Instruction * > instructions)
@@ -96,11 +104,11 @@ QModelIndex qt_InstructionsModel::parent(const QModelIndex & /*index*/) const
 
 QVariant qt_InstructionsModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::DisplayRole)
-    {
-        auto instruction = getInstruction(index);
-        assert(instruction);
+	auto instruction = getInstruction(index);
+	assert(instruction);
 
+	if (role == Qt::DisplayRole)
+    {
         switch (index.column())
         {
         case IMC_ADDRESS:
@@ -119,23 +127,17 @@ QVariant qt_InstructionsModel::data(const QModelIndex &index, int role) const
     }
     else if (role == Qt::BackgroundRole)
     {
-        auto instruction = getInstruction(index);
-        assert(instruction);
-
-        if (std::binary_search(highlightedInstructions_.begin(), highlightedInstructions_.end(), instruction))
-        {
-            return QColor(Qt::lightGray);
-        }
-        else if (index.column() == IMC_ADDRESS)
+		if (std::binary_search(highlightedInstructions_.begin(), highlightedInstructions_.end(), instruction))
+		{
+			return QColor(Qt::lightGray);
+		}
+		else if (index.column() == IMC_ADDRESS)
         {
             return QColor(Qt::lightGray);
         }
     }
     else if (role == Qt::ToolTipRole)
     {
-        auto instruction = getInstruction(index);
-        assert(instruction);
-
         if (index.column() == IMC_INSTRUCTION)
         {
             QString tooltip;

@@ -17,7 +17,7 @@ class qt_MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    qt_MainWindow(QWidget * parent, std::shared_ptr< qt_Instructions > instructions);
+    qt_MainWindow(QWidget * parent, std::shared_ptr< qt_Instructions > instructions, std::shared_ptr< u32 > pc);
     ~qt_MainWindow();
 
     QAction * actionContinue() { return actionContinue_; }
@@ -26,7 +26,8 @@ public:
     QAction * actionStepOver() { return actionStepOver_; }
     QAction * actionStepOut()  { return actionStepOut_; }
 
-    qt_LogView * logView() { return logView_; }
+    qt_LogView          * logView() { return logView_; }
+	qt_InstructionsView * instructionsView() { return instructionsView_; }
 
     void updateAllViews();
 
@@ -73,4 +74,5 @@ private:
 
     QSettings                         * settings_;
     std::shared_ptr< qt_Instructions >  instructions_;
+	std::shared_ptr< u32 >              pc_;
 };

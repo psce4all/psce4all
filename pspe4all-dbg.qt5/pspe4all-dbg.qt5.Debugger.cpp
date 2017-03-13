@@ -5,6 +5,7 @@
 
 #include "pspe4all-dbg.qt5.Debugger.h"
 #include "qt_mainwindow.h"
+#include "qt_instructionsmodel.h"
 
 #include <synchapi.h>
 #pragma comment(lib, "synchronization.lib")
@@ -16,6 +17,7 @@ namespace dbg
         Debugger::Debugger(int &argc, char **argv, int flags)
             : QApplication(argc, argv, flags)
             , instructions_(new qt_Instructions)
+			, pc_(new u32)
         {
             connect(qApp, &QCoreApplication::aboutToQuit, this, &Debugger::onAboutToQuit);
 
@@ -72,7 +74,7 @@ namespace dbg
             hProcSyncEvent_ = ::OpenEventA(EVENT_MODIFY_STATE, FALSE, procsync_name);
             if (hProcSyncEvent_)
             {
-                qt_MainWindow MainWindow(nullptr, instructions_);
+                qt_MainWindow MainWindow(nullptr, instructions_, pc_);
 
                 mainWindow_ = &MainWindow;
 
@@ -168,11 +170,16 @@ namespace dbg
             emit log(QString::fromWCharArray(message));
         }
 
-        void Debugger::OnAllegrexInstruction(u32 address, size_t address_x86_64, size_t size_x86_64)
+        void Debugger::OnNewGuestInstruction(u32 address, size_t address_x86_64, size_t size_x86_64)
         {
             static auto hint = instructions_->end();
             auto data = *p32u32(address);
             hint = instructions_->emplace_hint(hint, std::move(address), qt_Instruction{ address, data, 4, address_x86_64, size_x86_64 });
         }
-    }
+
+		void Debugger::OnCurrentGuestInstruction(u32 address)
+		{
+			*pc_ = address;
+		}
+	}
 }

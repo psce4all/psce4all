@@ -271,7 +271,7 @@ namespace dbg
             GuardPage               = EXCEPTION_GUARD_PAGE,
             InvalidHandle           = EXCEPTION_INVALID_HANDLE,
             SetThreadName           = 0x406D1388,
-            AllegrexInstruction     = 0x414CA449,
+            GuestInstruction     = 0x414CA449,
         };
 
         struct DebugExceptionHandler final : hal::Observable < DebugExceptions, void, const DEBUG_EVENT & >
@@ -313,7 +313,7 @@ namespace dbg
             {
                 ContinueMode = 0x0000000000000002ULL,  // F5
                 StopMode     = 0x0100000000000000ULL,  // Shift+F5
-                StepOverMode = 0x0200010000000000ULL,  // F10
+                StepOverMode = 0x0201000000000000ULL,  // F10
                 StepIntoMode = 0x0300000000000000ULL,  // F11
                 StepOutMode  = 0x0401000000000001ULL   // Shift+F11
             };
@@ -373,7 +373,8 @@ namespace dbg
             virtual bool const WaitForContinue();
             virtual void       OutputDebugStringA(char const message[]);
             virtual void       OutputDebugStringW(wchar_t const message[]);
-            virtual void       OnAllegrexInstruction(u32 address, size_t address_x86_64, size_t size_x86_64);
+            virtual void       OnNewGuestInstruction(u32 address, size_t address_x86_64, size_t size_x86_64);
+			virtual void       OnCurrentGuestInstruction(u32 address);
 
             SafeHandle         OpenCurrentThread();
 

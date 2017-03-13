@@ -19,11 +19,11 @@ bool const dbg::svr::InterruptBreakpoint::EnableBreakpoint()
 #else
     if (size_t(m_dwAddress) - JITASM_MEMORY_ADDRESS < size_t(JITASM_MEMORY_SIZE))
     {
-        if (*((u8 *)m_dwAddress) == 0xCC)
+        if (*((u8 *)m_dwAddress) == 0xCC) // int3
         {
-            if (*((u16 *)(m_dwAddress - 2)) == 0x0175)
+            if (*((u16 *)(m_dwAddress - 2)) == 0x0175) // jnz $+1 (skip int3)
             {
-                *((u8 *)(m_dwAddress - 1)) = 0x00;
+                *((u8 *)(m_dwAddress - 1)) = 0x00; // jnz $+0 (execute int3)
                 return true;
             }
         }
@@ -49,11 +49,11 @@ bool const dbg::svr::InterruptBreakpoint::DisableBreakpoint()
 #else
     if (size_t(m_dwAddress) - JITASM_MEMORY_ADDRESS < size_t(JITASM_MEMORY_SIZE))
     {
-        if (*((u8 *)m_dwAddress) == 0xCC)
+        if (*((u8 *)m_dwAddress) == 0xCC) // int3
         {
-            if (*((u16 *)(m_dwAddress - 2)) == 0x0075)
+            if (*((u16 *)(m_dwAddress - 2)) == 0x0075) // jnz $+0 (execute int3)
             {
-                *((u8 *)(m_dwAddress - 1)) = 0x01;
+                *((u8 *)(m_dwAddress - 1)) = 0x01; // jnz $+1 (skip int3)
                 return true;
             }
         }
@@ -205,34 +205,35 @@ void dbg::svr::DebugExceptionHandler::Initialize()
                 auto icache_pc = (u32 *)ctx.Rdx;
                 //auto jitasm_ip = (u32 *)Context.Rbp;
                 m_pDebugger->m_eStepMode = (Debugger::StepMode *)ctx.Rdi;
+				m_pDebugger->OnCurrentGuestInstruction(u32(size_t(icache_pc) - ICACHE_MEMORY_ADDRESS));
 
                 if (*((u8 *)rip) == 0xCC)
                 {
                     switch (*((u16 *)(rip - 2)))
                     {
                     case 0x0075: // user breakpoint
-                    {
-                        Breakpoint *pBreakpoint = m_pDebugger->FindBreakpoint(dwExceptionAddress);
-                        if (pBreakpoint != nullptr)
-                        {
-                            if (pBreakpoint->Disable())
-                            {
-                                ctx.Rip++;
-                                if (m_pDebugger->SetExecutingContext(ctx))
-                                {
-                                    debugf(dbg, "<<<<<<<<<<<<<< breakpoint at 0x%08X... >>>>>>>>>>>>>>>", (size_t(icache_pc) - ICACHE_MEMORY_ADDRESS));
-                                    (void)m_pDebugger->WaitForContinue();
-                                }
-                                SetContinueStatus(DBG_CONTINUE);
-                                return;
-                            }
-                            else
-                            {
-                                errorf(dbg, "DebugExceptions::SoftBreakpoint: Could not remove breakpoint at address %p.", dwExceptionAddress);
-                            }
-                        }
-                    }
-                    break;
+						{
+							Breakpoint *pBreakpoint = m_pDebugger->FindBreakpoint(dwExceptionAddress);
+							if (pBreakpoint != nullptr)
+							{
+								if (pBreakpoint->Disable())
+								{
+									ctx.Rip++;
+									if (m_pDebugger->SetExecutingContext(ctx))
+									{
+										debugf(dbg, "<<<<<<<<<<<<<< breakpoint at 0x%08X... >>>>>>>>>>>>>>>", (size_t(icache_pc) - ICACHE_MEMORY_ADDRESS));
+										(void)m_pDebugger->WaitForContinue();
+									}
+									SetContinueStatus(DBG_CONTINUE);
+									return;
+								}
+								else
+								{
+									errorf(dbg, "DebugExceptions::SoftBreakpoint: Could not remove breakpoint at address %p.", dwExceptionAddress);
+								}
+							}
+						}
+						break;
 
                     case 0x0175: // single-step
                         ctx.Rip++;
@@ -399,11 +400,11 @@ void dbg::svr::DebugExceptionHandler::Initialize()
         }
     });
 
-    Register(DebugExceptions::AllegrexInstruction, [&](const DEBUG_EVENT &dbgEvent)
+    Register(DebugExceptions::GuestInstruction, [&](const DEBUG_EVENT &dbgEvent)
     {
-        debugf(dbg, "DebugExceptions::AllegrexInstruction: Received Allegrex instruction");
+        debugf(dbg, "DebugExceptions::GuestInstruction: Received Allegrex instruction");
         auto &exceptionRecord = dbgEvent.u.Exception.ExceptionRecord;
-        m_pDebugger->OnAllegrexInstruction(u32(exceptionRecord.ExceptionInformation[0]), size_t(exceptionRecord.ExceptionInformation[2]), size_t(exceptionRecord.ExceptionInformation[3]));
+        m_pDebugger->OnNewGuestInstruction(u32(exceptionRecord.ExceptionInformation[0]), size_t(exceptionRecord.ExceptionInformation[2]), size_t(exceptionRecord.ExceptionInformation[3]));
         SetContinueStatus(DBG_CONTINUE);
     });
 }
@@ -711,7 +712,10 @@ void dbg::svr::Debugger::OutputDebugStringW(wchar_t const message[])
     debugf(L"DebugEvents::DebugString:  %s", message);
 }
 
-void dbg::svr::Debugger::OnAllegrexInstruction(u32 /*address*/, size_t /*address_x86_64*/, size_t /*size_x86_64*/)
+void dbg::svr::Debugger::OnNewGuestInstruction(u32 /*address*/, size_t /*address_x86_64*/, size_t /*size_x86_64*/)
 {
 }
 
+void dbg::svr::Debugger::OnCurrentGuestInstruction(u32 /*address*/)
+{
+}

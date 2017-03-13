@@ -10,9 +10,10 @@
 
 //#include <QWebSettings>
 
-qt_MainWindow::qt_MainWindow(QWidget *parent, std::shared_ptr< qt_Instructions > instructions)
+qt_MainWindow::qt_MainWindow(QWidget *parent, std::shared_ptr< qt_Instructions > instructions, std::shared_ptr< u32 > pc)
     : QMainWindow(parent)
     , instructions_(instructions)
+	, pc_(pc)
 {
     setFont(QFont("Monospace", 8));
 
@@ -242,7 +243,7 @@ void qt_MainWindow::setStatusText(const QString &text)
 
 void qt_MainWindow::updateAllViews()
 {
-    auto model = new qt_InstructionsModel(this, instructions_);
+    auto model = new qt_InstructionsModel(this, instructions_, pc_);
     instructionsView_->setModel(model);
     forwardItemDelegate_->update(model->getInstructions(), 60);
     backwardItemDelegate_->update(model->getInstructions(), 60);

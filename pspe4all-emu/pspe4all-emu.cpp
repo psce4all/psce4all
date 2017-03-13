@@ -320,8 +320,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return ::DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-#if 0 // just a way to force a leak
-struct Int : hal::MPSCQueue< Int >::Node, hal::heap::Allocator< Int > {};
+#if 1 // just a way to force a leak
+struct Int : hal::MPSCQueue< Int >::Node, hal::hmm::Allocator< Int > {};
 
 hal::MPSCQueue< Int > myQueue;
 #endif
@@ -357,7 +357,7 @@ extern "C" __noinline __declspec(dllexport) int Run(int argc, wchar_t * argv[])
 
     BOOL done = FALSE;
 
-#if 0 // just a way to force a leak
+#if 1 // just a way to force a leak
     myQueue.Enqueue(new Int);
 #endif
 

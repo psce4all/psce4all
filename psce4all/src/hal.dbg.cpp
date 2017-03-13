@@ -25,14 +25,13 @@ namespace emu
 #include "cvconst.h"
 #include "dia2.h"
 
-class __declspec(uuid("E60AFBEE-502D-46AE-858F-8272A09BD707")) DiaSource71_;
-class __declspec(uuid("BCE36434-2C24-499E-BF49-8BD99B0EEB68")) DiaSource80_;
-class __declspec(uuid("4C41678E-887B-4365-A09E-925D28DB33C2")) DiaSource90_;
 class __declspec(uuid("B86AE24D-BF2F-4ac9-B5A2-34B14E4CE11D")) DiaSource100;
 class __declspec(uuid("761D3BCD-1304-41D5-94E8-EAC54E4AC172")) DiaSource110;
 class __declspec(uuid("3BFCEA48-620F-4B6B-81F7-B9AF75454C7D")) DiaSource120;
+class __declspec(uuid("E6756135-1E65-4D17-8576-610761398C3C")) DiaSource140;
 
 class __declspec(uuid("83AB22C8-993A-4D14-A0E0-37BC0AAEA793")) DiaSource120_Alternative;
+class __declspec(uuid("91904831-49ca-4766-b95c-25397e2dd6dc")) DiaSource140_Alternative;
 
 static HRESULT __stdcall CoCreateInstance(wchar_t const * dllName, REFCLSID rclsid, REFIID riid, void ** ppv)
 {
@@ -40,7 +39,8 @@ static HRESULT __stdcall CoCreateInstance(wchar_t const * dllName, REFCLSID rcls
     HMODULE hDIADll = ::LoadLibraryW(dllName);
     if (hDIADll)
     {
-        typedef HRESULT __stdcall PDllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppvObj);
+		IID_IDiaDataSource;
+		typedef HRESULT __stdcall PDllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppvObj);
         auto DllGetClassObject = (PDllGetClassObject *)::GetProcAddress(hDIADll, "DllGetClassObject");
         if (DllGetClassObject)
         {
@@ -90,13 +90,12 @@ struct DiaModule
             this->Name = Name;
             this->FileName = ModFileName;
 
-            Result = /*******/ (S_OK == CoCreateInstance(/**************/ __uuidof(DiaSource120), 0, CLSCTX_INPROC_SERVER, __uuidof(IDiaDataSource), (void**)&DataSource));
-            Result = Result || (S_OK == CoCreateInstance(L"msdia120.dll", __uuidof(DiaSource120_Alternative), /**********/ __uuidof(IDiaDataSource), (void**)&DataSource));
-            Result = Result || (S_OK == CoCreateInstance(/**************/ __uuidof(DiaSource110), 0, CLSCTX_INPROC_SERVER, __uuidof(IDiaDataSource), (void**)&DataSource));
+            Result = /*******/ (S_OK == CoCreateInstance(/**************/ __uuidof(DiaSource140), 0, CLSCTX_INPROC_SERVER, __uuidof(IDiaDataSource), (void**)&DataSource));
+			Result = Result || (S_OK == CoCreateInstance(L"msdia140.dll", __uuidof(DiaSource140_Alternative), /**********/ __uuidof(IDiaDataSource), (void**)&DataSource));
+			Result = Result || (S_OK == CoCreateInstance(/**************/ __uuidof(DiaSource120), 0, CLSCTX_INPROC_SERVER, __uuidof(IDiaDataSource), (void**)&DataSource));
+			Result = Result || (S_OK == CoCreateInstance(L"msdia120.dll", __uuidof(DiaSource120_Alternative), /**********/ __uuidof(IDiaDataSource), (void**)&DataSource));
+			Result = Result || (S_OK == CoCreateInstance(/**************/ __uuidof(DiaSource110), 0, CLSCTX_INPROC_SERVER, __uuidof(IDiaDataSource), (void**)&DataSource));
             Result = Result || (S_OK == CoCreateInstance(/**************/ __uuidof(DiaSource100), 0, CLSCTX_INPROC_SERVER, __uuidof(IDiaDataSource), (void**)&DataSource));
-            Result = Result || (S_OK == CoCreateInstance(/**************/ __uuidof(DiaSource90_), 0, CLSCTX_INPROC_SERVER, __uuidof(IDiaDataSource), (void**)&DataSource));
-            Result = Result || (S_OK == CoCreateInstance(/**************/ __uuidof(DiaSource80_), 0, CLSCTX_INPROC_SERVER, __uuidof(IDiaDataSource), (void**)&DataSource));
-            Result = Result || (S_OK == CoCreateInstance(/**************/ __uuidof(DiaSource71_), 0, CLSCTX_INPROC_SERVER, __uuidof(IDiaDataSource), (void**)&DataSource));
             if (Result)
             {
                 Result = Result && (S_OK == DataSource->loadDataForExe(ModFileName, L".;SRV*C:\\Temp\\symbols*http://msdl.microsoft.com/download/symbols", 0));
